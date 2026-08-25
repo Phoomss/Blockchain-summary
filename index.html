@@ -93,18 +93,22 @@
   <span class="nav-brand">&#9939; Blockchain Tech</span>
   <div class="nav-links">
     <a href="#intro">บทนำ</a><a href="#dlt">DLT</a><a href="#crypto">Cryptography</a>
-    <a href="#blockchain">Blockchain</a><a href="#solidity">Solidity</a>
-    <a href="#workshop">Workshop</a><a href="#video">วิดีโอ</a>
+    <a href="#blockchain">Blockchain</a><a href="#bitcoin">Bitcoin</a>
+    <a href="#ethereum">Ethereum</a><a href="#wallet">Wallet</a>
+    <a href="#solidity">Solidity</a><a href="#workshop">Workshop</a>
+    <a href="#erc">ERC Standards</a><a href="#nft">NFT</a>
+    <a href="#exam">แนวข้อสอบ</a><a href="#video">วิดีโอ</a>
   </div>
 </nav>
 
 <div class="hero">
   <div class="hero-badge">&#128218; สรุปเนื้อหาครบจบในที่เดียว</div>
   <h1>Blockchain Technology</h1>
-  <p>สรุปเนื้อหาจากสไลด์บรรยายและ Smart Contract ทั้งหมด ครอบคลุมตั้งแต่พื้นฐาน Blockchain, Cryptography ไปจนถึงการเขียน Solidity</p>
+  <p>สรุปเนื้อหาครบถ้วน ครอบคลุมตั้งแต่ Blockchain, Bitcoin, Ethereum, Wallet, Smart Contract, ERC Token Standards ไปจนถึง NFT พร้อมแนวข้อเขียนสำหรับสอบกลางภาค</p>
   <div class="hero-sources">
     <div class="source-chip">&#128196; [69] of BC-1.pdf</div>
     <div class="source-chip">&#128196; Smart Contract (Cont.).pdf</div>
+    <div class="source-chip">&#128196; สรุปสอบกลางภาค_Blockchain_SmartContract_Bitcoin.docx</div>
     <div class="source-chip">&#9654; "How does a blockchain work" — Simply Explained</div>
   </div>
 </div>
@@ -401,7 +405,444 @@
   </div>
 </section>
 
-<!-- ===== SECTION 8 ===== -->
+
+<!-- ===== SECTION 8 — BITCOIN ===== -->
+<section id="bitcoin">
+  <div class="section-header">
+    <div class="section-label">ส่วนที่ 8</div>
+    <h2>&#8383; Bitcoin และ Blockchain 1.0</h2>
+    <p>Bitcoin คือระบบเงินดิจิทัลแบบ Peer-to-Peer ที่เปิดตัวปี 2009 บน Blockchain — ไม่ต้องมีธนาคารกลาง</p>
+  </div>
+
+  <div class="grid grid-2" style="margin-bottom:1.5rem;">
+    <div class="card card-orange">
+      <div class="card-icon">&#128200;</div>
+      <h3>UTXO Model</h3>
+      <p style="margin-bottom:.75rem;">Bitcoin ใช้ <strong>Unspent Transaction Output (UTXO)</strong> แทนยอดคงเหลือแบบบัญชี</p>
+      <ul>
+        <li>เปรียบเหมือนการหยิบธนบัตรมาจ่ายแล้วรับเงินทอน</li>
+        <li>Input = UTXO ที่เป็นของผู้ส่ง</li>
+        <li>Output = UTXO ใหม่ให้ผู้รับ + เงินทอนกลับผู้ส่ง</li>
+      </ul>
+      <div style="margin-top:.75rem;font-size:.82rem;color:var(--text-muted);">ต่างจาก Ethereum ที่ใช้ Account-based Model (ยอดเงินในบัญชี)</div>
+    </div>
+    <div class="card card-red">
+      <div class="card-icon">&#128296;</div>
+      <h3>Proof of Work & Mining</h3>
+      <p style="margin-bottom:.75rem;"><strong>Proof of Work (PoW)</strong> ให้ Miner แข่งกันค้นหาค่า nonce ที่ทำให้ hash ผ่าน difficulty</p>
+      <ul>
+        <li>ผู้สำเร็จเสนอ Block ใหม่และรับ Block Reward</li>
+        <li>ทำให้การแก้ประวัติย้อนหลังต้องใช้พลังประมวลผลสูงมาก</li>
+        <li>Bitcoin ใช้ SHA-256 ในกระบวนการ Mining</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 style="margin-bottom:.75rem;font-size:1.1rem;">&#128337; Bitcoin Halving</h3>
+  <div class="highlight" style="margin-bottom:1.5rem;">
+    <p>Block Reward ลดลงครึ่งหนึ่งทุก <strong>210,000 blocks (~4 ปี)</strong> เพื่อควบคุมอุปทาน BTC สูงสุดที่ <strong>21 ล้าน BTC</strong></p>
+  </div>
+  <div class="grid grid-4" style="margin-bottom:1.5rem;">
+    <div class="card"><h3>2009</h3><p style="font-size:1.2rem;font-weight:700;color:var(--accent4);">50 BTC</p><p>Block Reward เริ่มต้น</p></div>
+    <div class="card"><h3>2012</h3><p style="font-size:1.2rem;font-weight:700;color:var(--accent4);">25 BTC</p><p>Halving ครั้งที่ 1</p></div>
+    <div class="card"><h3>2016</h3><p style="font-size:1.2rem;font-weight:700;color:var(--accent4);">12.5 BTC</p><p>Halving ครั้งที่ 2</p></div>
+    <div class="card"><h3>2020</h3><p style="font-size:1.2rem;font-weight:700;color:var(--accent4);">6.25 BTC</p><p>Halving ครั้งที่ 3</p></div>
+  </div>
+  <div class="card card-orange" style="margin-bottom:1.5rem;"><h3>2024: 3.125 BTC — Halving ครั้งที่ 4</h3></div>
+
+  <h3 style="margin:1.5rem 0 .75rem;font-size:1.1rem;">&#128202; Bitcoin vs Ethereum</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>หัวข้อ</th><th>Bitcoin</th><th>Ethereum</th></tr></thead>
+    <tbody>
+      <tr><td>เป้าหมายเด่น</td><td>เงินดิจิทัล/การโอนมูลค่า</td><td>แพลตฟอร์ม Smart Contract & dApp</td></tr>
+      <tr><td>หน่วยหลัก</td><td>BTC</td><td>ETH</td></tr>
+      <tr><td>แบบบัญชี</td><td>UTXO</td><td>Account-based</td></tr>
+      <tr><td>Consensus</td><td>Proof of Work</td><td>Proof of Stake</td></tr>
+      <tr><td>โปรแกรมบนเชน</td><td>Script แบบจำกัด</td><td>EVM + Smart Contract</td></tr>
+      <tr><td>Token Standards</td><td>ไม่ใช่มาตรฐาน ERC</td><td>ERC-20, ERC-721, ERC-1155</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ===== SECTION 9 — ETHEREUM ===== -->
+<section id="ethereum">
+  <div class="section-header">
+    <div class="section-label">ส่วนที่ 9</div>
+    <h2>&#9830; Ethereum, EVM, ABI & Gas</h2>
+    <p>Ethereum คือ Blockchain ที่ออกแบบให้รัน Smart Contract และ dApp ได้อย่างสมบูรณ์</p>
+  </div>
+
+  <div class="grid grid-3" style="margin-bottom:1.5rem;">
+    <div class="card card-blue">
+      <div class="card-icon">&#128176;</div>
+      <h3>ETH, Wei & Gwei</h3>
+      <div class="table-wrap" style="margin-top:.5rem;"><table>
+        <thead><tr><th>หน่วย</th><th>ค่า</th><th>ใช้กับ</th></tr></thead>
+        <tbody>
+          <tr><td><code>Wei</code></td><td>1 ETH = 10<sup>18</sup> Wei</td><td>หน่วยเล็กสุด</td></tr>
+          <tr><td><code>Gwei</code></td><td>1 Gwei = 10<sup>9</sup> Wei</td><td>แสดง Gas Price</td></tr>
+          <tr><td><code>ETH</code></td><td>หน่วยหลัก</td><td>ยอดเงิน/โอนมูลค่า</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="card card-purple">
+      <div class="card-icon">&#9881;</div>
+      <h3>EVM (Ethereum Virtual Machine)</h3>
+      <p>สภาพแวดล้อมเสมือนที่โหนด Ethereum ใช้ประมวลผล Smart Contract ให้ได้ผลลัพธ์ตามกฎเดียวกัน</p>
+      <ul style="margin-top:.75rem;">
+        <li>รัน EVM Bytecode ไม่ใช่ Solidity source code โดยตรง</li>
+        <li>ทุกโหนดรันโค้ดเดียวกันและได้ผลเหมือนกัน</li>
+      </ul>
+    </div>
+    <div class="card card-green">
+      <div class="card-icon">&#128220;</div>
+      <h3>ABI (Application Binary Interface)</h3>
+      <p>คำอธิบาย interface ของ contract เช่น function, parameter, return type, event เพื่อให้โปรแกรมภายนอกสื่อสารกับ contract ได้</p>
+      <ul style="margin-top:.75rem;">
+        <li>Remix, Web3.js, ethers.js ต้องใช้ ABI</li>
+        <li>สร้างอัตโนมัติตอน compile Solidity</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 style="margin-bottom:.75rem;font-size:1.1rem;">&#128260; Solidity → EVM Bytecode Flow</h3>
+  <div class="steps" style="margin-bottom:1.5rem;">
+    <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Solidity Source Code (.sol)</h4><p>เขียนด้วยภาษา Solidity ที่มนุษย์อ่านได้</p></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Solidity Compiler (solc / Remix)</h4><p>แปลง source code เป็น EVM Bytecode + ABI</p></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Deploy Bytecode → Contract Address</h4><p>Bytecode ถูก deploy สร้าง Contract Address บนเครือข่าย</p></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-body"><h4>Web/Remix/dApp ใช้ ABI เรียก Function</h4><p>ผู้ใช้ interact ผ่าน ABI โดยไม่ต้องรู้ Bytecode</p></div></div>
+  </div>
+
+  <div class="grid grid-2">
+    <div class="card card-blue">
+      <div class="card-icon">&#128137;</div>
+      <h3>Gas คืออะไร?</h3>
+      <p style="margin-bottom:.75rem;">Gas คือหน่วยวัดปริมาณงานคำนวณที่ EVM ต้องทำ</p>
+      <div class="highlight"><p><strong>Transaction Fee = Gas Used × Gas Price</strong></p></div>
+      <ul style="margin-top:.75rem;">
+        <li>เขียนข้อมูลลง Blockchain ใช้ Gas มากกว่าการอ่าน</li>
+        <li>Code ที่ซับซ้อนหรือเขียน Storage มากใช้ Gas มากขึ้น</li>
+        <li>ผู้ส่ง Transaction จ่าย Gas เป็น ETH</li>
+      </ul>
+    </div>
+    <div class="card card-orange">
+      <div class="card-icon">&#128203;</div>
+      <h3>คำศัพท์สำคัญ</h3>
+      <div class="table-wrap" style="margin-top:.5rem;"><table>
+        <thead><tr><th>คำ</th><th>ความหมาย</th></tr></thead>
+        <tbody>
+          <tr><td><code>Bytecode</code></td><td>รหัสระดับต่ำที่ EVM รัน</td></tr>
+          <tr><td><code>ABI</code></td><td>Interface ของ Contract สำหรับโปรแกรมภายนอก</td></tr>
+          <tr><td><code>Contract Address</code></td><td>Address ของ Smart Contract หลัง Deploy</td></tr>
+          <tr><td><code>Transaction Hash</code></td><td>รหัสอ้างอิงธุรกรรม ตรวจสอบบน Block Explorer</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 10 — WALLET ===== -->
+<section id="wallet">
+  <div class="section-header">
+    <div class="section-label">ส่วนที่ 10</div>
+    <h2>&#128273; Digital Wallet, MetaMask & SepoliaETH</h2>
+    <p>Wallet ไม่ได้เก็บเหรียญโดยตรง — แต่เก็บ "กุญแจ" ที่ใช้เข้าถึงสิทธิ์ในการสั่งธุรกรรม</p>
+  </div>
+
+  <div class="highlight" style="margin-bottom:1.5rem;">
+    <p>&#128161; <strong>เหรียญ/Token อยู่บน Blockchain</strong> ส่วน Wallet ทำหน้าที่เก็บและจัดการ "กุญแจ" เพื่อสร้าง address, แสดงยอดจาก Blockchain และลงนามธุรกรรม</p>
+  </div>
+
+  <h3 style="margin-bottom:.75rem;font-size:1.1rem;">&#128220; สิ่งสำคัญใน Wallet</h3>
+  <div class="table-wrap" style="margin-bottom:1.5rem;"><table>
+    <thead><tr><th>สิ่งที่พบ</th><th>คืออะไร</th><th>ถ้ารั่วเกิดอะไร</th></tr></thead>
+    <tbody>
+      <tr><td><code>Wallet Address</code></td><td>ที่อยู่สาธารณะสำหรับรับเหรียญ/Token</td><td><span class="badge badge-green">ปลอดภัย</span> คนอื่นเห็นได้</td></tr>
+      <tr><td><code>Public Key</code></td><td>กุญแจสาธารณะสำหรับตรวจสอบทาง Cryptography</td><td><span class="badge badge-green">เปิดเผยได้</span></td></tr>
+      <tr><td><code>Private Key</code></td><td>กุญแจลับที่ใช้เซ็นธุรกรรมของ account</td><td><span class="badge badge-red">อันตราย!</span> ผู้ที่ได้ไปควบคุม account ได้</td></tr>
+      <tr><td><code>Secret Recovery Phrase</code></td><td>12 คำ ใช้กู้/สร้าง HD Wallet</td><td><span class="badge badge-red">อันตรายสูงสุด!</span> กู้หลาย account ได้</td></tr>
+      <tr><td><code>MetaMask Password</code></td><td>รหัสปลดล็อกข้อมูล wallet บนอุปกรณ์นั้น</td><td>ไม่ใช่ตัวแทนของ SRP</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="grid grid-3" style="margin-bottom:1.5rem;">
+    <div class="card card-red">
+      <div class="card-icon">&#128274;</div>
+      <h3>Password</h3>
+      <p>ปกป้องไฟล์/ข้อมูล wallet ในอุปกรณ์หนึ่งเครื่อง เปลี่ยนได้ ไม่ใช่กุญแจบน Blockchain</p>
+    </div>
+    <div class="card card-orange">
+      <div class="card-icon">&#128272;</div>
+      <h3>Private Key</h3>
+      <p>ควบคุม account หนึ่งบัญชี ใช้ลงนามธุรกรรม — ห้ามเปิดเผย!</p>
+    </div>
+    <div class="card card-purple">
+      <div class="card-icon">&#128220;</div>
+      <h3>Secret Recovery Phrase (12 คำ)</h3>
+      <p>รากของ HD Wallet ใช้ derive Private Keys หลาย account ได้ — อันตรายสูงสุดถ้ารั่ว!</p>
+    </div>
+  </div>
+
+  <div class="highlight" style="margin-bottom:1.5rem;">
+    <p>&#128683; <strong>ข้อผิดพลาดที่ชอบออกสอบ:</strong> MetaMask Secret Recovery Phrase คือ <strong>"12 คำ"</strong> ไม่ใช่รหัสผ่าน 12 ตัวอักษร และ <strong>ไม่เหมือน MetaMask Password</strong> — Password ปลดล็อกแอปบนเครื่อง แต่ SRP ใช้กู้ wallet ได้ทุกเครื่อง</p>
+  </div>
+
+  <h3 style="margin-bottom:.75rem;font-size:1.1rem;">&#127981; MetaMask & Sepolia Workflow</h3>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-body"><h4>เพิ่ม Sepolia Network ใน MetaMask</h4><p>สลับ network เป็น Sepolia Testnet</p></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body"><h4>รับ SepoliaETH จาก Faucet</h4><p>SepoliaETH = Test ETH สำหรับ Gas ไม่มีมูลค่าจริง รับจาก Chainlink Faucet ฟรี</p></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body"><h4>เชื่อม MetaMask กับ Remix / dApp</h4><p>อนุมัติการ deploy และ transaction ผ่าน MetaMask</p></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-body"><h4>ตรวจสอบบน Sepolia Etherscan</h4><p>Block Explorer ใช้ค้นหา TX Hash, Contract Address, Gas, From/To</p></div></div>
+  </div>
+</section>
+
+<!-- ===== SECTION 11 — ERC STANDARDS ===== -->
+<section id="erc">
+  <div class="section-header">
+    <div class="section-label">ส่วนที่ 11</div>
+    <h2>&#128176; ERC Token Standards: ERC-20 / ERC-721 / ERC-1155</h2>
+    <p>ERC (Ethereum Request for Comments) คือมาตรฐาน interface ของ Smart Contract บน Ethereum สำหรับ Token</p>
+  </div>
+
+  <div class="grid grid-3" style="margin-bottom:1.5rem;">
+    <div class="card card-blue">
+      <div class="card-icon">&#128176;</div>
+      <h3>ERC-20 — Fungible Token</h3>
+      <p style="margin-bottom:.75rem;">Token แต่ละหน่วย <strong>ทดแทนกันได้</strong> เช่น 1 Token A = 1 Token A</p>
+      <p style="margin-bottom:.5rem;font-size:.85rem;color:var(--primary);">Functions หลัก:</p>
+      <ul>
+        <li><code>totalSupply()</code> — จำนวน Token ทั้งหมด</li>
+        <li><code>balanceOf(address)</code> — ยอด Token ของ address</li>
+        <li><code>transfer(to, amount)</code> — โอน Token</li>
+        <li><code>approve(spender, amount)</code> — อนุญาต spender</li>
+        <li><code>transferFrom(from, to, amount)</code> — โอนตาม allowance</li>
+      </ul>
+      <div style="margin-top:.75rem;font-size:.82rem;color:var(--accent4);">&#9758; เหรียญ, utility token, governance token, คะแนน</div>
+    </div>
+    <div class="card card-purple">
+      <div class="card-icon">&#127912;</div>
+      <h3>ERC-721 — Non-Fungible Token</h3>
+      <p style="margin-bottom:.75rem;">แต่ละ Token มี <strong>tokenId เฉพาะ</strong> และมีเจ้าของชัดเจน — ทดแทนกันไม่ได้</p>
+      <p style="margin-bottom:.5rem;font-size:.85rem;color:var(--primary);">Functions หลัก:</p>
+      <ul>
+        <li><code>ownerOf(tokenId)</code> — เจ้าของ Token ID นั้น</li>
+        <li><code>balanceOf(owner)</code> — นับ NFT ที่ owner ถือ</li>
+        <li><code>safeTransferFrom(...)</code> — โอน NFT อย่างปลอดภัย</li>
+        <li><code>tokenURI(tokenId)</code> — ชี้ไปยัง Metadata</li>
+      </ul>
+      <div style="margin-top:.75rem;font-size:.82rem;color:var(--accent3);">&#9758; งานศิลป์, ของสะสม, ใบรับรอง</div>
+    </div>
+    <div class="card card-green">
+      <div class="card-icon">&#127918;</div>
+      <h3>ERC-1155 — Multi Token Standard</h3>
+      <p style="margin-bottom:.75rem;">Contract เดียวรองรับ Token <strong>หลายชนิด</strong> แต่ละ tokenId มีจำนวนมากกว่า 1 ได้</p>
+      <ul>
+        <li>Fungible, Non-Fungible, Semi-Fungible ในที่เดียว</li>
+        <li>รองรับ <strong>Batch Transfer</strong> ช่วยลดจำนวน Transaction</li>
+        <li>ตัวอย่าง: <code>_mint(msg.sender, 1, 10, "")</code> = mint tokenId=1 จำนวน 10 หน่วย</li>
+      </ul>
+      <div style="margin-top:.75rem;font-size:.82rem;color:var(--accent2);">&#9758; เกม, ไอเทมหลายชนิด, Gold Coin, Sword, Ticket ใน contract เดียว</div>
+    </div>
+  </div>
+
+  <h3 style="margin-bottom:.75rem;font-size:1.1rem;">&#128202; ตารางเปรียบเทียบ ERC</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>หัวข้อ</th><th>ERC-20</th><th>ERC-721</th><th>ERC-1155</th></tr></thead>
+    <tbody>
+      <tr><td>ประเภท</td><td><span class="badge badge-blue">Fungible</span></td><td><span class="badge badge-purple">Non-Fungible</span></td><td><span class="badge badge-green">Multi-token</span></td></tr>
+      <tr><td>แต่ละหน่วยเหมือนกัน?</td><td>&#9989; ใช่</td><td>&#10060; ไม่ใช่</td><td>ขึ้นกับ tokenId</td></tr>
+      <tr><td>Token ID</td><td>ไม่เน้น tokenId รายชิ้น</td><td>ทุก NFT มี tokenId</td><td>ทุกชนิดใช้ tokenId</td></tr>
+      <tr><td>จำนวนต่อ ID</td><td>ยอดรวมทั้งหมด</td><td>ปกติ 1 เจ้าของต่อ tokenId</td><td>1 หรือหลายหน่วยต่อ tokenId</td></tr>
+      <tr><td>Batch Transfer</td><td>—</td><td>—</td><td><span class="badge badge-green">&#9989; รองรับ</span></td></tr>
+      <tr><td>เหมาะกับ</td><td>เหรียญ/คะแนน</td><td>งานศิลป์/ของสะสม</td><td>เกม/ไอเทมจำนวนมาก</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="highlight" style="margin-top:1rem;">
+    <p>&#128161; <strong>Mnemonic จำง่าย:</strong> <strong>20</strong> = Money (เหรียญเหมือนกัน) &nbsp;|&nbsp; <strong>721</strong> = One-by-one NFT (แต่ละ tokenId เฉพาะ) &nbsp;|&nbsp; <strong>1155</strong> = Many-in-one (หลายชนิดใน contract เดียว)</p>
+  </div>
+</section>
+
+<!-- ===== SECTION 12 — NFT ===== -->
+<section id="nft">
+  <div class="section-header">
+    <div class="section-label">ส่วนที่ 12</div>
+    <h2>&#127912; NFT และ Metadata</h2>
+    <p>NFT (Non-Fungible Token) คือ Token ที่ใช้แทนสิทธิ์หรือรายการดิจิทัลที่มีเอกลักษณ์เฉพาะ</p>
+  </div>
+
+  <div class="highlight" style="margin-bottom:1.5rem;">
+    <p>&#128683; <strong>จุดที่มักเข้าใจผิด:</strong> NFT ไม่จำเป็นต้องเป็น "รูปภาพที่เก็บอยู่บน Blockchain" — ตัว Token บนเชนมักเก็บเพียง tokenId, owner และ URI ส่วนรูป, ชื่อ, description มักอยู่ใน <strong>metadata ภายนอก</strong> เช่น IPFS หรือ Web Server</p>
+  </div>
+
+  <div class="grid grid-2" style="margin-bottom:1.5rem;">
+    <div class="card card-purple">
+      <div class="card-icon">&#128196;</div>
+      <h3>Metadata JSON</h3>
+      <p style="margin-bottom:.75rem;">Metadata อยู่ในรูป JSON ที่ Smart Contract ใช้ URI ชี้ไป</p>
+      <div class="code-block" style="font-size:.82rem;">{
+  <span class="str">"name"</span>: <span class="str">"MaiyNFT"</span>,
+  <span class="str">"description"</span>: <span class="str">"My first NFT"</span>,
+  <span class="str">"image"</span>: <span class="str">"https://.../image.png"</span>
+}</div>
+    </div>
+    <div class="card card-blue">
+      <div class="card-icon">&#128247;</div>
+      <h3>On-chain vs Off-chain Metadata</h3>
+      <div class="table-wrap" style="margin-top:.5rem;"><table>
+        <thead><tr><th>แบบ</th><th>ข้อดี</th><th>ข้อควรระวัง</th></tr></thead>
+        <tbody>
+          <tr><td>On-chain</td><td>คงอยู่ตาม Blockchain</td><td>ใช้ Gas/Storage สูง</td></tr>
+          <tr><td>IPFS</td><td>ลดค่าใช้จ่าย เก็บไฟล์ใหญ่ได้</td><td>ต้องดูแล URI และ pin ข้อมูล</td></tr>
+          <tr><td>Web/GitHub</td><td>ทำง่าย เหมาะทดลอง</td><td>เจ้าของอาจแก้/ลบไฟล์ได้</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <h3 style="margin-bottom:.75rem;font-size:1.1rem;">&#128640; Workflow สร้าง NFT (ERC-1155) จากใบงาน</h3>
+  <div class="steps" style="margin-bottom:1.5rem;">
+    <div class="step"><div class="step-num">1</div><div class="step-body"><h4>สร้าง ERC-1155 Contract ใน Remix / OpenZeppelin</h4><p>ใช้ OpenZeppelin เป็น Base เพื่อความปลอดภัย</p></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body"><h4>เตรียมรูป NFT และ Metadata JSON ใน GitHub</h4><p>ใช้ Raw URL ของรูปใน JSON และ Raw URL ของ JSON เป็น URI</p></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Mint Token</h4><p><code>_mint(msg.sender, 1, 10, "")</code> = mint tokenId=1 จำนวน 10 หน่วย</p></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-body"><h4>Compile & Deploy บน Sepolia ผ่าน MetaMask</h4><p>ยืนยัน Transaction จ่าย Gas ด้วย SepoliaETH</p></div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-body"><h4>Verify Source Code บน Sepolia Etherscan</h4><p>ช่วยให้ผู้ใช้ตรวจสอบว่า source code ตรงกับ bytecode ที่ deploy ไว้</p></div></div>
+    <div class="step"><div class="step-num">6</div><div class="step-body"><h4>Import NFT & ทดสอบส่งไปยัง Wallet อื่น</h4><p>ตรวจสอบผ่าน MetaMask และ Sepolia Etherscan</p></div></div>
+  </div>
+</section>
+
+<!-- ===== SECTION 13 — EXAM Q&A ===== -->
+<section id="exam">
+  <div class="section-header">
+    <div class="section-label">ส่วนที่ 13</div>
+    <h2>&#128221; แนวข้อเขียนสำหรับสอบกลางภาค</h2>
+    <p>16 ข้อที่ควรตอบได้ — พร้อมแนวคำตอบสำหรับใช้ตอบในห้องสอบ</p>
+  </div>
+
+  <div class="grid grid-2" style="margin-bottom:1.5rem;">
+    <div class="card card-blue">
+      <h3>&#10067; ข้อ 1: Blockchain คืออะไร และหลักการทำงานเป็นอย่างไร?</h3>
+      <p style="margin-top:.5rem;">Blockchain คือระบบบันทึกข้อมูลแบบกระจาย (DLT) โดยข้อมูลธุรกรรมถูกกระจายไปยังหลายโหนดในเครือข่าย P2P ใช้ cryptography ยืนยันตัวตนและตรวจสอบข้อมูล จากนั้นใช้ consensus ให้โหนดเห็นพ้องกัน ธุรกรรมที่ยืนยันแล้วถูกบันทึกเป็น block เชื่อมกับ block ก่อนหน้าด้วย hash ทำให้การแก้ข้อมูลย้อนหลังทำได้ยากมาก</p>
+    </div>
+    <div class="card card-green">
+      <h3>&#10067; ข้อ 2: DLT กับ Blockchain ต่างกันอย่างไร?</h3>
+      <p style="margin-top:.5rem;">DLT เป็นแนวคิดกว้างของสมุดบัญชีแบบกระจายที่มีข้อมูลสำเนาหลายจุดและอัปเดตร่วมกัน ส่วน Blockchain เป็น DLT ชนิดหนึ่งที่จัดข้อมูลเป็นบล็อกและเชื่อมบล็อกต่อกันเป็นลำดับ ดังนั้น <strong>Blockchain ทุกระบบเป็น DLT แต่ DLT บางระบบอาจไม่ได้จัดข้อมูลเป็น chain of blocks</strong></p>
+    </div>
+    <div class="card card-purple">
+      <h3>&#10067; ข้อ 3: Cryptography และ Hash มีบทบาทต่อ Blockchain อย่างไร?</h3>
+      <p style="margin-top:.5rem;">Public-key cryptography ให้ผู้ใช้ใช้ private key ลงนามธุรกรรมพิสูจน์สิทธิ์ ส่วน hash function รับข้อมูลแล้วสร้างค่าความยาวคงที่แบบ one-way ใช้ตรวจ integrity และเชื่อม block หากข้อมูลเดิมถูกแก้ hash จะเปลี่ยน ทำให้เครือข่ายตรวจพบความผิดปกติได้</p>
+    </div>
+    <div class="card card-orange">
+      <h3>&#10067; ข้อ 4: Bitcoin คืออะไร และทำงานอย่างไร?</h3>
+      <p style="margin-top:.5rem;">Bitcoin คือระบบเงินดิจิทัล P2P ที่ใช้ Blockchain บันทึกการโอน BTC ผู้ส่งใช้ private key ลงนาม broadcast ไปยังเครือข่าย โหนดตรวจสอบกฎ จากนั้น miner ใช้ Proof of Work สร้าง block ใหม่ Bitcoin ใช้โมเดล UTXO และมี block reward ที่ลดลงตาม halving</p>
+    </div>
+    <div class="card card-red">
+      <h3>&#10067; ข้อ 5: Bitcoin Halving คืออะไร และมีเหตุผลอะไร?</h3>
+      <p style="margin-top:.5rem;">Bitcoin Halving คือการลด block reward ลงครึ่งหนึ่งทุก 210,000 blocks (~4 ปี) มีวัตถุประสงค์เพื่อควบคุมอัตราการออก BTC ใหม่ ทำให้อุปทานเพิ่มช้าลง และรักษาข้อจำกัดอุปทานสูงสุดประมาณ 21 ล้าน BTC</p>
+    </div>
+    <div class="card card-blue">
+      <h3>&#10067; ข้อ 6: Wallet คืออะไร? Password, Private Key และ SRP ต่างกันอย่างไร?</h3>
+      <p style="margin-top:.5rem;"><strong>Password</strong> ปลดล็อกข้อมูล wallet ในอุปกรณ์ &nbsp;|&nbsp; <strong>Private Key</strong> ควบคุมและเซ็นธุรกรรมของ account หนึ่ง &nbsp;|&nbsp; <strong>Secret Recovery Phrase (12 คำ)</strong> เป็นข้อมูลรากที่ใช้กู้ wallet และ derive private keys หลายบัญชี — SRP และ private key ต้องเก็บเป็นความลับสูงสุด</p>
+    </div>
+    <div class="card card-green">
+      <h3>&#10067; ข้อ 7: MetaMask, Sepolia และ SepoliaETH คืออะไร?</h3>
+      <p style="margin-top:.5rem;">MetaMask คือ self-custody wallet ที่ผู้ใช้ถือกุญแจเอง เชื่อม Ethereum/EVM รวมถึง Remix/dApp &nbsp;|&nbsp; Sepolia คือ Ethereum Testnet ทดลองก่อนขึ้น Mainnet &nbsp;|&nbsp; SepoliaETH คือ ETH ทดสอบสำหรับจ่าย Gas บน Sepolia ไม่มีมูลค่าจริง รับได้จาก faucet</p>
+    </div>
+    <div class="card card-purple">
+      <h3>&#10067; ข้อ 8: Smart Contract คืออะไร? ขั้นตอนตั้งแต่เขียนจนใช้งาน?</h3>
+      <p style="margin-top:.5rem;">Smart Contract คือโปรแกรมที่ deploy บน Blockchain ทำงานตาม logic อัตโนมัติ ขั้นตอน: เขียน Solidity → compile ได้ Bytecode + ABI → deploy สร้าง Contract Address → Call เพื่ออ่าน (ฟรี) หรือ Send Transaction เพื่อแก้ state (เสีย Gas)</p>
+    </div>
+    <div class="card card-orange">
+      <h3>&#10067; ข้อ 9: EVM, Bytecode และ ABI คืออะไร?</h3>
+      <p style="margin-top:.5rem;"><strong>EVM</strong> คือสภาพแวดล้อมเสมือนที่โหนด Ethereum ใช้รัน Smart Contract ให้ได้ผลเหมือนกัน &nbsp;|&nbsp; <strong>Bytecode</strong> คือรหัสที่ compiler สร้างจาก Solidity ให้ EVM รัน &nbsp;|&nbsp; <strong>ABI</strong> คือคำอธิบาย interface ของ contract เพื่อให้ Remix, Web3.js, dApp เรียกใช้ได้</p>
+    </div>
+    <div class="card card-red">
+      <h3>&#10067; ข้อ 10: Call Function กับ Transaction Function ต่างกันอย่างไร?</h3>
+      <div class="table-wrap" style="margin-top:.5rem;"><table>
+        <thead><tr><th>Call</th><th>Transaction (Send)</th></tr></thead>
+        <tbody>
+          <tr><td>ไม่เปลี่ยน state บน Blockchain</td><td>มีการเปลี่ยน state</td></tr>
+          <tr><td>คืนผลได้เร็ว</td><td>คืน TX Hash รอยืนยัน</td></tr>
+          <tr><td><span class="badge badge-green">ฟรี</span></td><td><span class="badge badge-orange">เสีย Gas</span></td></tr>
+          <tr><td>view / pure function</td><td>transfer, mint, deploy</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="card card-blue">
+      <h3>&#10067; ข้อ 11: อธิบาย msg.sender, msg.value, view, payable และ modifier</h3>
+      <p style="margin-top:.5rem;"><code>msg.sender</code> = address ผู้เรียก function &nbsp;|&nbsp; <code>msg.value</code> = Wei ที่ส่งมากับ transaction &nbsp;|&nbsp; <code>view</code> = อ่าน state ได้แต่ห้ามแก้ &nbsp;|&nbsp; <code>payable</code> = รับ ETH ได้ &nbsp;|&nbsp; <code>modifier</code> = กำหนดเงื่อนไข/พฤติกรรมของ function เช่น onlyOwner</p>
+    </div>
+    <div class="card card-green">
+      <h3>&#10067; ข้อ 12: ERC-20 คืออะไร?</h3>
+      <p style="margin-top:.5rem;">ERC-20 เป็นมาตรฐาน Fungible Token บน Ethereum — Token แต่ละหน่วยทดแทนกันได้ มาตรฐานกำหนด interface สำคัญ: <code>totalSupply</code>, <code>balanceOf</code>, <code>transfer</code>, <code>approve</code>, <code>allowance</code>, <code>transferFrom</code> ทำให้ wallet, exchange และ dApp รองรับ Token ต่าง ๆ ด้วยวิธีเดียวกัน</p>
+    </div>
+    <div class="card card-purple">
+      <h3>&#10067; ข้อ 13: ERC-721 กับ ERC-1155 ต่างกันอย่างไร?</h3>
+      <p style="margin-top:.5rem;">ERC-721 เน้น NFT ที่แต่ละ tokenId เป็นรายการเฉพาะมีเจ้าของหนึ่งชุด เหมาะของสะสม/งานศิลป์ &nbsp;|&nbsp; ERC-1155 เป็น multi-token standard ที่ contract เดียวมี tokenId หลายชนิด แต่ละ ID มีจำนวนหลายหน่วยได้ รองรับ batch transfer เหมาะกับเกม</p>
+    </div>
+    <div class="card card-orange">
+      <h3>&#10067; ข้อ 14: NFT คืออะไร และรูปภาพอยู่บน Blockchain หรือไม่?</h3>
+      <p style="margin-top:.5rem;">NFT คือ Non-Fungible Token ที่ใช้แทนสิทธิ์หรือรายการที่มีเอกลักษณ์ ตัว Token บน Blockchain มักเก็บ tokenId, owner และ URI ส่วนรูปภาพและรายละเอียดมักเก็บใน metadata ภายนอก เช่น IPFS หรือ Web URL — <strong>NFT ≠ รูปภาพเก็บ on-chain เสมอไป</strong></p>
+    </div>
+    <div class="card card-red">
+      <h3>&#10067; ข้อ 15: ขั้นตอนสร้าง NFT แบบ ERC-1155</h3>
+      <p style="margin-top:.5rem;">สร้าง ERC-1155 contract ใน Remix/OpenZeppelin → เตรียมรูปและ metadata JSON → ใช้ URL ของ metadata เป็น URI → mint: <code>_mint(msg.sender, 1, 10, "")</code> → compile + เชื่อม MetaMask → deploy บน Sepolia จ่าย Gas ด้วย SepoliaETH → verify source code บน Sepolia Etherscan → import NFT เข้า wallet</p>
+    </div>
+    <div class="card card-blue">
+      <h3>&#10067; ข้อ 16: Gas คืออะไร และเกี่ยวข้องกับ Smart Contract อย่างไร?</h3>
+      <p style="margin-top:.5rem;">Gas คือหน่วยวัดงานคำนวณที่ EVM ต้องทำ การ deploy contract, แก้ state, mint หรือ transfer ต้องใช้ Gas ผู้ส่ง transaction จ่ายเป็น ETH &nbsp;|&nbsp; <strong>Transaction Fee = Gas Used × Gas Price</strong> &nbsp;|&nbsp; code ที่ซับซ้อนหรือเขียน storage มากใช้ Gas มากขึ้น</p>
+    </div>
+  </div>
+
+  <h3 style="margin-bottom:.75rem;font-size:1.1rem;">&#128308; ข้อผิดพลาดที่ไม่ควรเขียนในข้อสอบ</h3>
+  <div class="grid grid-2">
+    <div class="card card-red">
+      <ul>
+        <li>Blockchain = Bitcoin ❌ (Bitcoin เป็นแค่หนึ่งระบบที่ใช้ Blockchain)</li>
+        <li>Wallet เก็บเหรียญไว้ในเครื่อง ❌ (Wallet เก็บกุญแจ ยอดอยู่บน Blockchain)</li>
+        <li>12-word SRP คือ Password ของ MetaMask ❌</li>
+        <li>SepoliaETH มีมูลค่าเท่ากับ ETH Mainnet ❌</li>
+      </ul>
+    </div>
+    <div class="card card-red">
+      <ul>
+        <li>NFT คือไฟล์รูปโดยตรง ❌ (Token กับ metadata/image เป็นคนละส่วน)</li>
+        <li>ERC-20 เป็น NFT ❌ (ERC-20 เป็น Fungible Token)</li>
+        <li>view function แก้ state ได้ ❌</li>
+        <li>Call function เสีย Gas ❌ (เฉพาะ Transaction เท่านั้นที่เสีย Gas)</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 style="margin:1.75rem 0 .75rem;font-size:1.1rem;">&#9889; สรุปจำก่อนเข้าห้องสอบ (1 บรรทัดต่อหัวข้อ)</h3>
+  <div class="grid grid-2" style="margin-bottom:1.5rem;">
+    <div class="card card-blue"><h3>Blockchain</h3><p>Distributed ledger + P2P + Cryptography + Consensus → โปร่งใส ตรวจสอบได้ แก้ย้อนหลังยาก</p></div>
+    <div class="card card-orange"><h3>Bitcoin</h3><p>เงินดิจิทัล P2P ใช้ UTXO + Proof of Work + Mining; มี Halving ลด Block Reward ครึ่งหนึ่งทุก ~4 ปี</p></div>
+    <div class="card card-purple"><h3>Ethereum</h3><p>Blockchain รัน Smart Contract ผ่าน EVM; Solidity compile เป็น Bytecode + ABI; Transaction ที่แก้ state เสีย Gas</p></div>
+    <div class="card card-green"><h3>Wallet</h3><p>Wallet จัดการ Keys ไม่ได้เก็บเหรียญ; Private Key คุม account, SRP 12 คำกู้ wallet, Password แค่ปลดล็อก MetaMask ในเครื่อง</p></div>
+    <div class="card card-blue"><h3>Token Standards</h3><p>ERC-20 = fungible, ERC-721 = NFT เฉพาะ tokenId, ERC-1155 = multi-token + batch + หลายหน่วยต่อ ID</p></div>
+    <div class="card card-purple"><h3>NFT</h3><p>NFT คือ Token/สิทธิ์ที่มีเอกลักษณ์; รูปและรายละเอียดมักอยู่ใน Metadata URI ไม่ได้อยู่บนเชนทั้งหมด</p></div>
+  </div>
+
+  <h3 style="margin-bottom:.75rem;font-size:1.1rem;">&#9889; 10 คำที่เห็นแล้วต้องตอบได้ทันที</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>คำ</th><th>คีย์เวิร์ดตอบ</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Hash</strong></td><td>fixed-size, one-way, integrity</td></tr>
+      <tr><td><strong>Consensus</strong></td><td>กลไกให้โหนดเห็นพ้องสถานะ</td></tr>
+      <tr><td><strong>Private Key</strong></td><td>ลับ, เซ็นธุรกรรม, คุม account</td></tr>
+      <tr><td><strong>SRP 12 words</strong></td><td>กู้ wallet / derive keys, ห้ามแชร์</td></tr>
+      <tr><td><strong>Sepolia</strong></td><td>Ethereum Testnet</td></tr>
+      <tr><td><strong>SepoliaETH</strong></td><td>Test ETH สำหรับ Gas</td></tr>
+      <tr><td><strong>EVM</strong></td><td>รัน Smart Contract</td></tr>
+      <tr><td><strong>ABI</strong></td><td>Interface contract</td></tr>
+      <tr><td><strong>Gas</strong></td><td>ค่าทรัพยากรคำนวณ</td></tr>
+      <tr><td><strong>Mint</strong></td><td>สร้าง Token ใหม่</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ===== SECTION 14 — VIDEO ===== -->
 <section id="video">
   <div class="section-header">
     <div class="section-label">แหล่งอ้างอิงวิดีโอ</div>
@@ -435,7 +876,7 @@
 </div>
 
 <footer>
-  <p>สรุปเนื้อหาจาก <strong>[69] of BC-1.pdf</strong> &middot; <strong>Smart Contract (Cont.).pdf</strong> &middot; <a href="https://youtu.be/SSo_EIwHSd4" target="_blank">How does a blockchain work &mdash; Simply Explained</a></p>
+  <p>สรุปเนื้อหาจาก <strong>[69] of BC-1.pdf</strong> &middot; <strong>Smart Contract (Cont.).pdf</strong> &middot; <strong>สรุปสอบกลางภาค_Blockchain_SmartContract_Bitcoin.docx</strong> &middot; <a href="https://youtu.be/SSo_EIwHSd4" target="_blank">How does a blockchain work &mdash; Simply Explained</a></p>
   <p style="margin-top:.4rem;font-size:.8rem;">Blockchain Technology Course &middot; Generated by Antigravity AI</p>
 </footer>
 
