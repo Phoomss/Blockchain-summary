@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blockchain Technology — สรุปเนื้อหา</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d1117; --surface: #161b22; --card: #1c2230; --border: #30363d;
+      --primary: #58a6ff; --primary-glow: rgba(88,166,255,0.15);
+      --accent: #f78166; --accent2: #3fb950; --accent3: #d2a8ff; --accent4: #ffa657;
+      --text: #e6edf3; --text-muted: #8b949e; --radius: 12px;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI','Noto Sans Thai',system-ui,sans-serif; line-height: 1.7; font-size: 16px; }
+    ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: var(--bg); } ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(13,17,23,0.9); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0.75rem 2rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+    .nav-brand { font-weight: 700; font-size: 1.1rem; background: linear-gradient(90deg,var(--primary),var(--accent3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; }
+    .nav-links { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-left: auto; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; padding: 0.3rem 0.7rem; border-radius: 20px; transition: all 0.2s; }
+    .nav-links a:hover { color: var(--primary); background: var(--primary-glow); }
+    .hero { text-align: center; padding: 5rem 2rem 3rem; background: radial-gradient(ellipse 80% 60% at 50% 0%,rgba(88,166,255,0.12) 0%,transparent 70%); }
+    .hero-badge { display: inline-block; background: var(--primary-glow); border: 1px solid var(--primary); color: var(--primary); border-radius: 20px; padding: 0.3rem 1rem; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1.5rem; }
+    .hero h1 { font-size: clamp(2rem,5vw,3.5rem); font-weight: 800; line-height: 1.2; background: linear-gradient(135deg,#fff 30%,var(--primary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
+    .hero p { color: var(--text-muted); font-size: 1.1rem; max-width: 620px; margin: 0 auto 2rem; }
+    .hero-sources { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+    .source-chip { display: flex; align-items: center; gap: 0.5rem; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; font-size: 0.85rem; color: var(--text-muted); }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+    section { padding: 3rem 0; }
+    section + section { border-top: 1px solid var(--border); }
+    .section-header { margin-bottom: 2rem; }
+    .section-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--primary); margin-bottom: 0.4rem; }
+    .section-header h2 { font-size: 1.8rem; font-weight: 700; }
+    .section-header p { color: var(--text-muted); margin-top: 0.5rem; }
+    .grid { display: grid; gap: 1.25rem; }
+    .grid-2 { grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); }
+    .grid-3 { grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); }
+    .grid-4 { grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; transition: border-color 0.2s, transform 0.2s; }
+    .card:hover { border-color: var(--primary); transform: translateY(-2px); }
+    .card-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .card p, .card li { color: var(--text-muted); font-size: 0.9rem; }
+    .card ul { padding-left: 1.2rem; } .card li { margin-bottom: 0.25rem; }
+    .card-blue  { border-left: 3px solid var(--primary); }
+    .card-red   { border-left: 3px solid var(--accent); }
+    .card-green { border-left: 3px solid var(--accent2); }
+    .card-purple{ border-left: 3px solid var(--accent3); }
+    .card-orange{ border-left: 3px solid var(--accent4); }
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before { content:''; position:absolute; left:0.45rem; top:0; bottom:0; width:2px; background:var(--border); }
+    .tl-item { position: relative; padding-bottom: 2rem; }
+    .tl-item:last-child { padding-bottom: 0; }
+    .tl-dot { position: absolute; left: -2rem; width: 14px; height: 14px; border-radius: 50%; background: var(--primary); border: 2px solid var(--bg); top: 0.35rem; }
+    .tl-item h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .tl-item p { color: var(--text-muted); font-size: 0.9rem; }
+    .code-block { background: #010409; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; font-family: 'Fira Code','Cascadia Code',monospace; font-size: 0.85rem; overflow-x: auto; margin-top: 1rem; line-height: 1.6; white-space: pre; }
+    .kw{color:#ff7b72;} .ty{color:#79c0ff;} .fn{color:#d2a8ff;} .cm{color:#8b949e;font-style:italic;} .str{color:#a5d6ff;} .nm{color:#ffa657;}
+    .table-wrap { overflow-x: auto; margin-top: 1rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th { background: var(--card); color: var(--primary); font-weight: 700; text-align: left; padding: 0.7rem 1rem; border-bottom: 2px solid var(--border); }
+    td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--border); color: var(--text-muted); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+    .badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+    .badge-blue   { background: rgba(88,166,255,0.15); color: var(--primary); }
+    .badge-green  { background: rgba(63,185,80,0.15); color: var(--accent2); }
+    .badge-orange { background: rgba(255,166,87,0.15); color: var(--accent4); }
+    .badge-red    { background: rgba(247,129,102,0.15); color: var(--accent); }
+    .badge-purple { background: rgba(210,168,255,0.15); color: var(--accent3); }
+    .yt-wrap { position: relative; padding-bottom: 56.25%; height: 0; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
+    .yt-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+    .highlight { background: var(--primary-glow); border: 1px solid rgba(88,166,255,0.3); border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-top: 1rem; }
+    .highlight p { font-size: 0.95rem; }
+    .highlight strong { color: var(--primary); }
+    .steps { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem; }
+    .step { display: flex; gap: 1rem; align-items: flex-start; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; }
+    .step-num { min-width: 2rem; height: 2rem; background: var(--primary); color: #000; border-radius: 50%; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; }
+    .step-body h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .step-body p { color: var(--text-muted); font-size: 0.88rem; }
+    footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; color: var(--text-muted); font-size: 0.85rem; }
+    footer a { color: var(--primary); text-decoration: none; }
+    code { background: rgba(88,166,255,0.1); color: var(--primary); padding: 0.1em 0.4em; border-radius: 4px; font-size: 0.88em; font-family: monospace; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+    .hero > * { animation: fadeUp 0.6s ease both; }
+    .hero > *:nth-child(1){animation-delay:.1s} .hero > *:nth-child(2){animation-delay:.2s} .hero > *:nth-child(3){animation-delay:.3s} .hero > *:nth-child(4){animation-delay:.4s}
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-brand">&#9939; Blockchain Tech</span>
+  <div class="nav-links">
+    <a href="#intro">บทนำ</a><a href="#dlt">DLT</a><a href="#crypto">Cryptography</a>
+    <a href="#blockchain">Blockchain</a><a href="#solidity">Solidity</a>
+    <a href="#workshop">Workshop</a><a href="#video">วิดีโอ</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">&#128218; สรุปเนื้อหาครบจบในที่เดียว</div>
+  <h1>Blockchain Technology</h1>
+  <p>สรุปเนื้อหาจากสไลด์บรรยายและ Smart Contract ทั้งหมด ครอบคลุมตั้งแต่พื้นฐาน Blockchain, Cryptography ไปจนถึงการเขียน Solidity</p>
+  <div class="hero-sources">
+    <div class="source-chip">&#128196; [69] of BC-1.pdf</div>
+    <div class="source-chip">&#128196; Smart Contract (Cont.).pdf</div>
+    <div class="source-chip">&#9654; "How does a blockchain work" — Simply Explained</div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ===== SECTION 1 ===== -->
+<section id="intro">
+  <div class="section-header">
+    <div class="section-label">ส่วนที่ 1</div>
+    <h2>ปัญหาของ Centralized Technology</h2>
+    <p>ระบบศูนย์กลางมีจุดอ่อน 4 ประการที่เป็นแรงผลักดันให้เกิด Blockchain</p>
+  </div>
+  <div class="grid grid-4">
+    <div class="card card-red"><div class="card-icon">&#128274;</div><h3>01 Security</h3><p>ข้อมูลทั้งหมดรวมอยู่ที่ศูนย์กลาง เสี่ยงต่อการถูกโจมตีหรือขโมย</p></div>
+    <div class="card card-orange"><div class="card-icon">&#10060;</div><h3>02 Single Point of Failure</h3><p>ถ้าเซิร์ฟเวอร์กลางล่ม ระบบทั้งหมดหยุดทำงานทันที</p></div>
+    <div class="card card-purple"><div class="card-icon">&#128373;</div><h3>03 Data Privacy</h3><p>ผู้ควบคุมศูนย์กลางสามารถเข้าถึงข้อมูลส่วนตัวของผู้ใช้ได้</p></div>
+    <div class="card card-blue"><div class="card-icon">&#128065;</div><h3>04 Transparency</h3><p>ผู้ใช้ทั่วไปไม่สามารถตรวจสอบหรือยืนยันข้อมูลได้โดยตรง</p></div>
+  </div>
+</section>
+
+<!-- ===== SECTION 2 ===== -->
+<section>
+  <div class="section-header">
+    <div class="section-label">ส่วนที่ 2</div>
+    <h2>เทคโนโลยีที่อยู่เบื้องหลัง Blockchain</h2>
+    <p>Blockchain ประกอบด้วย 3 เทคโนโลยีหลัก</p>
+  </div>
+  <div class="grid grid-3">
+    <div class="card card-blue"><div class="card-icon">&#127760;</div><h3>01 Peer-to-Peer Network</h3><p>ทุก Node เชื่อมต่อกันโดยตรง ไม่มีเซิร์ฟเวอร์กลาง แต่ละ Peer รับ-ส่งข้อมูลได้เท่าเทียมกัน</p></div>
+    <div class="card card-green"><div class="card-icon">&#128220;</div><h3>02 Distributed Ledger Technology</h3><p>บันทึกธุรกรรมออนไลน์ที่จัดเก็บข้อมูลพร้อมกันในหลายที่ในเวลาเดียวกัน</p></div>
+    <div class="card card-purple"><div class="card-icon">&#128272;</div><h3>03 Cryptography</h3><p>เทคนิคการเข้ารหัสข้อมูลเพื่อปกป้องความเป็นส่วนตัวและความสมบูรณ์ของข้อมูล</p></div>
+  </div>
+  <div class="section-header" style="margin-top:2.5rem;"><h2>Centralized vs Decentralized vs Distributed</h2></div>
+  <div class="grid grid-3">
+    <div class="card"><div class="card-icon">&#127970;</div><h3>Centralized</h3><p>ควบคุมโดยจุดศูนย์กลางเดียว ถ้าล่มระบบทั้งหมดพัง</p></div>
+    <div class="card"><div class="card-icon">&#128376;</div><h3>Decentralized</h3><p>กระจายการควบคุมออกไปหลายจุด แต่ยังมีลำดับชั้นบ้าง</p></div>
+    <div class="card"><div class="card-icon">&#9889;</div><h3>Distributed</h3><p>กระจายทั้งข้อมูลและการประมวลผลทุก Node อย่างสมบูรณ์</p></div>
+  </div>
+</section>
+
+<!-- ===== SECTION 3 ===== -->
+<section id="dlt">
+  <div class="section-header">
+    <div class="section-label">ส่วนที่ 3</div>
+    <h2>Distributed Ledger Technology (DLT)</h2>
+    <p>DLT คือการบันทึกข้อมูลแบบออนไลน์ที่จัดเก็บไว้หลายที่พร้อมกัน</p>
+  </div>
+  <div class="grid grid-4">
+    <div class="card card-blue"><div class="card-icon">&#128256;</div><h3>Decentralization</h3><p>กระจายข้อมูลไปหลายโหนด ไม่มีจุดควบคุมกลาง</p></div>
+    <div class="card card-green"><div class="card-icon">&#129309;</div><h3>Consensus</h3><p>ทุก Node ต้องตกลงยืนยันธุรกรรมก่อนจึงจะบันทึกได้</p></div>
+    <div class="card card-orange"><div class="card-icon">&#128270;</div><h3>Transparency</h3><p>ทุกคนสามารถตรวจสอบธุรกรรมได้</p></div>
+    <div class="card card-red"><div class="card-icon">&#128737;</div><h3>Security</h3><p>ข้อมูลถูกป้องกันด้วยการเข้ารหัส</p></div>
+  </div>
+  <div class="highlight"><p><strong>Blockchain</strong> คือ ระบบการเก็บข้อมูลแบบกระจาย (แบบหนึ่งของ DLT) ที่มีความน่าเชื่อถือ โปร่งใส และ <strong>ไม่ต้องอาศัยคนกลาง</strong> — ข้อมูลที่บันทึกใน Blockchain ไม่สามารถเปลี่ยนแปลงหรือแก้ไขได้ <strong>(Immutability)</strong></p></div>
+</section>
+
+<!-- ===== SECTION 4 ===== -->
+<section id="crypto">
+  <div class="section-header">
+    <div class="section-label">ส่วนที่ 4</div>
+    <h2>Cryptography (การเข้ารหัส)</h2>
+    <p>เทคนิคการเข้ารหัสที่ใช้ใน Blockchain มี 2 ประเภทหลัก</p>
+  </div>
+  <div class="grid grid-2">
+    <div class="card card-blue">
+      <div class="card-icon">&#128505;</div>
+      <h3>1) Public-Key Cryptography (Asymmetric)</h3>
+      <p style="margin-bottom:.75rem;">ใช้กุญแจคู่:</p>
+      <ul>
+        <li><strong>Public Key</strong> — แจกได้ทั่วไป ใช้สำหรับเข้ารหัส</li>
+        <li><strong>Private Key</strong> — เก็บเป็นความลับ ใช้สำหรับถอดรหัส</li>
+      </ul>
+      <div style="margin-top:.75rem;padding:.5rem .75rem;background:rgba(88,166,255,.08);border-radius:8px;font-size:.85rem;color:var(--text-muted);">เปรียบได้กับกล่องล็อกที่ทุกคนหยอดจดหมายได้ (Public Key) แต่มีแค่เจ้าของที่เปิดได้ (Private Key)</div>
+    </div>
+    <div class="card card-purple">
+      <div class="card-icon">&#128279;</div>
+      <h3>2) Hash Function</h3>
+      <p style="margin-bottom:.75rem;">รับข้อมูลอะไรก็ได้และสร้าง output เป็นสตริงความยาวคงที่</p>
+      <ul>
+        <li>ไม่ว่า input จะมีขนาดเท่าไร output จะมีขนาดเท่ากันเสมอ</li>
+        <li><strong>One-way function</strong> — ไม่สามารถย้อนกลับข้อมูลเดิมได้</li>
+        <li>เปลี่ยน input แม้ 1 ตัว → hash เปลี่ยนหมด</li>
+      </ul>
+      <div style="margin-top:.75rem;font-size:.82rem;color:var(--text-muted);">ตัวอย่าง: SHA-256 (ใช้ใน Bitcoin)</div>
+    </div>
+  </div>
+  <div class="section-header" style="margin-top:2rem;"><h2>Symmetric vs Asymmetric Encryption</h2></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>คุณสมบัติ</th><th>Symmetric</th><th>Asymmetric</th></tr></thead>
+    <tbody>
+      <tr><td>จำนวนกุญแจ</td><td>1 กุญแจ (ใช้ร่วมกัน)</td><td>2 กุญแจ (Public + Private)</td></tr>
+      <tr><td>ความเร็ว</td><td><span class="badge badge-green">เร็ว</span></td><td><span class="badge badge-orange">ช้ากว่า</span></td></tr>
+      <tr><td>ความปลอดภัย</td><td>ต้องแชร์กุญแจ เสี่ยงถูกดักฟัง</td><td><span class="badge badge-green">ปลอดภัยกว่า</span></td></tr>
+      <tr><td>ตัวอย่าง</td><td>AES, DES</td><td>RSA, ECC (ใช้ใน Blockchain)</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ===== SECTION 5 ===== -->
+<section id="blockchain">
+  <div class="section-header">
+    <div class="section-label">ส่วนที่ 5</div>
+    <h2>วิวัฒนาการของ Blockchain</h2>
+    <p>Blockchain พัฒนาผ่านหลาย Generation ตั้งแต่ cryptocurrency จนถึง Smart Contract</p>
+  </div>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-dot" style="background:var(--accent4);"></div><h3>Blockchain 1.0 — Cryptocurrency</h3><p>Bitcoin ถือกำเนิดในปี 2009 ใช้สำหรับโอนเงินแบบ Peer-to-Peer โดยไม่ต้องใช้ธนาคาร</p></div>
+    <div class="tl-item"><div class="tl-dot" style="background:var(--primary);"></div><h3>Blockchain 2.0 — Smart Contracts</h3><p>Ethereum นำ Smart Contract มาสู่ Blockchain โปรแกรมที่ทำงานอัตโนมัติตามเงื่อนไขที่กำหนด ไม่ต้องมีคนกลาง</p></div>
+    <div class="tl-item"><div class="tl-dot" style="background:var(--accent2);"></div><h3>Blockchain 3.0 — DApps &amp; Beyond</h3><p>การพัฒนา Decentralized Applications (DApps), DeFi, NFT และนวัตกรรมอื่นๆ</p></div>
+  </div>
+  <div class="section-header" style="margin-top:2.5rem;"><h2>คุณสมบัติหลักของ Blockchain</h2></div>
+  <div class="grid grid-3">
+    <div class="card card-green"><div class="card-icon">&#128274;</div><h3>Immutability</h3><p>ข้อมูลที่บันทึกแล้วไม่สามารถเปลี่ยนแปลงหรือลบได้ เพราะทุก Block เชื่อมกันด้วย Hash</p></div>
+    <div class="card card-blue"><div class="card-icon">&#128270;</div><h3>Transparency</h3><p>ทุกธุรกรรมตรวจสอบได้สาธารณะผ่าน Block Explorer</p></div>
+    <div class="card card-orange"><div class="card-icon">&#128225;</div><h3>Reliability</h3><p>น่าเชื่อถือสูง เพราะข้อมูลเดียวกันเก็บไว้ใน Node หลายพันแห่งทั่วโลก</p></div>
+  </div>
+</section>
+
+<!-- ===== SECTION 6 ===== -->
+<section id="solidity">
+  <div class="section-header">
+    <div class="section-label">ส่วนที่ 6</div>
+    <h2>Smart Contract &amp; Solidity</h2>
+    <p>ภาษาโปรแกรมหลักสำหรับเขียน Smart Contract บน Ethereum</p>
+  </div>
+
+  <div class="grid grid-2" style="margin-bottom:1.5rem;">
+    <div class="card card-blue">
+      <div class="card-icon">&#9881;</div>
+      <h3>Solidity → EVM Bytecode</h3>
+      <div class="timeline" style="margin-top:.75rem;">
+        <div class="tl-item"><div class="tl-dot"></div><h3 style="font-size:.9rem;">Solidity Source Code</h3><p>เขียนด้วยภาษา Solidity (.sol)</p></div>
+        <div class="tl-item"><div class="tl-dot"></div><h3 style="font-size:.9rem;">Compiler</h3><p>Compile ด้วย solc หรือ Remix IDE</p></div>
+        <div class="tl-item"><div class="tl-dot"></div><h3 style="font-size:.9rem;">EVM Bytecode + ABI</h3><p>Bytecode สำหรับ deploy + ABI สำหรับเรียกใช้</p></div>
+      </div>
+    </div>
+    <div class="card card-green">
+      <div class="card-icon">&#128222;</div>
+      <h3>Calling vs Sending Function</h3>
+      <div class="table-wrap" style="margin-top:.5rem;"><table>
+        <thead><tr><th>Calling</th><th>Sending</th></tr></thead>
+        <tbody>
+          <tr><td>ไม่บันทึกใน Blockchain</td><td>บันทึกใน Blockchain</td></tr>
+          <tr><td>Return ข้อมูลทันที</td><td>Return Transaction Hash</td></tr>
+          <tr><td>ทำงานทันที</td><td>ใช้เวลา (รอ confirm)</td></tr>
+          <tr><td><span class="badge badge-green">ฟรี</span></td><td><span class="badge badge-orange">เสีย Gas Fee</span></td></tr>
+        </tbody>
+      </table></div>
+      <div class="highlight" style="margin-top:.75rem;"><p><strong>Transaction fee = Gas used × Gas price</strong></p></div>
+    </div>
+  </div>
+
+  <h3 style="margin-bottom:.75rem;font-size:1.1rem;">&#128203; โครงสร้าง Smart Contract</h3>
+  <div class="code-block"><span class="cm">// ระบุ version ของ Solidity</span>
+<span class="kw">pragma</span> solidity ^<span class="nm">0.8.0</span>;
+
+<span class="kw">contract</span> <span class="ty">HelloWorld</span> {
+    <span class="cm">// State variables — เก็บข้อมูลถาวรใน Blockchain</span>
+    <span class="ty">uint</span> myUnsignedInteger = <span class="nm">100</span>;
+    <span class="ty">address</span> owner;
+    <span class="ty">mapping</span>(<span class="ty">address</span> =&gt; <span class="ty">uint256</span>) balances;
+
+    <span class="cm">// Constructor — ทำงานครั้งเดียวตอน Deploy</span>
+    <span class="kw">constructor</span>() {
+        owner = <span class="fn">msg.sender</span>;
+    }
+
+    <span class="cm">// Functions</span>
+    <span class="kw">function</span> <span class="fn">getBalance</span>() <span class="kw">public</span> <span class="kw">view</span> <span class="kw">returns</span> (<span class="ty">uint256</span>) {
+        <span class="kw">return</span> balances[<span class="fn">msg.sender</span>];
+    }
+}</div>
+
+  <h3 style="margin:1.75rem 0 .75rem;font-size:1.1rem;">&#128230; ประเภทตัวแปรใน Solidity</h3>
+  <div class="grid grid-3">
+    <div class="card card-blue"><div class="card-icon">&#128190;</div><h3>State Variables</h3><p>บันทึกถาวรใน Contract Storage บน Blockchain</p><div class="code-block" style="font-size:.8rem;"><span class="ty">uint</span> storedData; <span class="cm">// state var</span></div></div>
+    <div class="card card-green"><div class="card-icon">&#9889;</div><h3>Local Variables</h3><p>มีอยู่เฉพาะระหว่างฟังก์ชันทำงาน ไม่บันทึกใน Blockchain</p><div class="code-block" style="font-size:.8rem;"><span class="ty">uint</span> a = <span class="nm">1</span>; <span class="cm">// local var</span></div></div>
+    <div class="card card-purple"><div class="card-icon">&#127757;</div><h3>Global Variables</h3><p>ตัวแปรพิเศษที่ Solidity จัดให้ ให้ข้อมูลเกี่ยวกับ Blockchain</p><div class="code-block" style="font-size:.8rem;"><span class="fn">msg.sender</span>  <span class="cm">// ผู้เรียก</span>
+<span class="fn">msg.value</span>   <span class="cm">// ETH ที่ส่งมา</span>
+<span class="fn">block.number</span><span class="cm">// block ล่าสุด</span></div></div>
+  </div>
+
+  <h3 style="margin:1.75rem 0 .75rem;font-size:1.1rem;">&#128193; Data Types ที่ใช้บ่อย</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Type</th><th>ตัวอย่าง</th><th>คำอธิบาย</th></tr></thead>
+    <tbody>
+      <tr><td><code>bool</code></td><td><code>bool isDone;</code></td><td>true / false</td></tr>
+      <tr><td><code>uint / int</code></td><td><code>uint256 myNum;</code></td><td>จำนวนเต็มไม่มี/มีเครื่องหมาย</td></tr>
+      <tr><td><code>address</code></td><td><code>address owner;</code></td><td>ที่อยู่ Ethereum (20 bytes)</td></tr>
+      <tr><td><code>string</code></td><td><code>string name;</code></td><td>ข้อความ</td></tr>
+      <tr><td><code>struct</code></td><td><code>struct User { uint id; string name; }</code></td><td>โครงสร้างข้อมูลที่กำหนดเอง</td></tr>
+      <tr><td><code>mapping</code></td><td><code>mapping(address =&gt; uint) balances;</code></td><td>Key-Value store คล้าย dictionary</td></tr>
+      <tr><td><code>array</code></td><td><code>uint[] users;</code></td><td>อาร์เรย์ขนาดไม่คงที่</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 style="margin:1.75rem 0 .75rem;font-size:1.1rem;">&#129518; Math Operations</h3>
+  <div class="grid grid-4">
+    <div class="card"><h3>+ Addition</h3><p><code>x + y</code></p></div>
+    <div class="card"><h3>- Subtraction</h3><p><code>x - y</code></p></div>
+    <div class="card"><h3>* Multiplication</h3><p><code>x * y</code></p></div>
+    <div class="card"><h3>/ Division</h3><p><code>x / y</code></p></div>
+    <div class="card"><h3>% Modulus</h3><p><code>x % y</code> เช่น 21 % 4 = 1</p></div>
+    <div class="card"><h3>** Exponent</h3><p><code>x ** y</code> เช่น 3**2 = 9</p></div>
+  </div>
+
+  <h3 style="margin:1.75rem 0 .75rem;font-size:1.1rem;">&#128065; Function Visibility</h3>
+  <div class="grid grid-4">
+    <div class="card card-red"><h3><span class="badge badge-red">private</span></h3><p style="margin-top:.5rem;">ใช้ได้เฉพาะภายใน Contract เท่านั้น Derived Contract ก็เรียกไม่ได้</p></div>
+    <div class="card card-orange"><h3><span class="badge badge-orange">internal</span></h3><p style="margin-top:.5rem;">ใช้ได้ภายใน Contract และ Derived Contract แต่ไม่สามารถเรียกจากภายนอก</p></div>
+    <div class="card card-blue"><h3><span class="badge badge-blue">external</span></h3><p style="margin-top:.5rem;">เรียกจากภายนอกเท่านั้น ถ้าเรียกภายในต้องใช้ <code>this.function()</code></p></div>
+    <div class="card card-green"><h3><span class="badge badge-green">public</span></h3><p style="margin-top:.5rem;">เรียกได้ทั้งภายในและภายนอก Solidity auto-generate getter</p></div>
+  </div>
+
+  <h3 style="margin:1.75rem 0 .75rem;font-size:1.1rem;">&#11088; Special Modifiers</h3>
+  <div class="grid grid-3">
+    <div class="card card-blue"><h3><code>view</code></h3><p>อ่านข้อมูลเท่านั้น ไม่แก้ไข State Variable ไม่เสีย Gas</p></div>
+    <div class="card card-green"><h3><code>payable</code></h3><p>รับ Ether ได้ ใช้กับฟังก์ชัน deposit หรือฟังก์ชันรับเงิน</p></div>
+    <div class="card card-purple"><h3><code>modifier</code></h3><p>ใช้แก้ไขพฤติกรรมของฟังก์ชัน เช่น ตรวจสอบสิทธิ์ก่อนทำงาน</p></div>
+  </div>
+
+  <h3 style="margin:1.75rem 0 .75rem;font-size:1.1rem;">&#127757; Global Variables ที่สำคัญ</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Variable</th><th>ประเภท</th><th>คำอธิบาย</th></tr></thead>
+    <tbody>
+      <tr><td><code>msg.sender</code></td><td>address payable</td><td>ที่อยู่ของผู้เรียก Function ปัจจุบัน</td></tr>
+      <tr><td><code>msg.value</code></td><td>uint</td><td>จำนวน Wei ที่ส่งมาพร้อม Transaction</td></tr>
+      <tr><td><code>msg.data</code></td><td>bytes calldata</td><td>ข้อมูล calldata ทั้งหมด</td></tr>
+      <tr><td><code>block.number</code></td><td>uint</td><td>หมายเลข Block ปัจจุบัน</td></tr>
+      <tr><td><code>block.timestamp</code></td><td>uint</td><td>เวลา Block ปัจจุบัน (Unix epoch)</td></tr>
+      <tr><td><code>block.difficulty</code></td><td>uint</td><td>ความยากของ Block ปัจจุบัน</td></tr>
+      <tr><td><code>block.gaslimit</code></td><td>uint</td><td>Gas limit ของ Block ปัจจุบัน</td></tr>
+      <tr><td><code>gasleft()</code></td><td>uint256</td><td>Gas คงเหลือ</td></tr>
+      <tr><td><code>tx.gasprice</code></td><td>uint</td><td>ราคา Gas ของ Transaction</td></tr>
+      <tr><td><code>block.coinbase</code></td><td>address payable</td><td>ที่อยู่ Miner ของ Block ปัจจุบัน</td></tr>
+    </tbody>
+  </table></div>
+  <div class="highlight"><p>&#128161; <strong>address(this).balance</strong> — ใช้ดูยอดเงิน ETH คงเหลือในตัว Contract เอง</p></div>
+</section>
+
+<!-- ===== SECTION 7 ===== -->
+<section id="workshop">
+  <div class="section-header">
+    <div class="section-label">ส่วนที่ 7</div>
+    <h2>&#127970; Workshop: EasyBank Smart Contract</h2>
+    <p>ฝึกเขียน Smart Contract ธนาคารอย่างง่ายที่มีฟังก์ชัน 3 อย่าง</p>
+  </div>
+  <div class="grid grid-3" style="margin-bottom:1.5rem;">
+    <div class="card card-blue"><div class="card-icon">&#128176;</div><h3>getBalance()</h3><p>ดูยอดเงินคงเหลือของตัวเอง เป็น <code>public view</code> ไม่เสีย Gas</p></div>
+    <div class="card card-green"><div class="card-icon">&#128229;</div><h3>deposit()</h3><p>ฝากเงินเข้าบัญชี รับ ETH ได้ด้วย <code>payable</code> แล้วเพิ่มยอดใน mapping</p></div>
+    <div class="card card-orange"><div class="card-icon">&#128228;</div><h3>withdraw(uint256)</h3><p>ถอนเงิน ตรวจสอบว่ามีเงินพอ แล้วโอนกลับไปยังผู้ถอน</p></div>
+  </div>
+
+  <h3 style="margin-bottom:.75rem;font-size:1.05rem;">&#128221; โค้ด EasyBank.sol (ตัวอย่างสมบูรณ์)</h3>
+  <div class="code-block"><span class="cm">// SPDX-License-Identifier: MIT</span>
+<span class="kw">pragma</span> solidity ^<span class="nm">0.8.0</span>;
+
+<span class="kw">contract</span> <span class="ty">EasyBank</span> {
+    <span class="cm">// 1) ประกาศตัวแปร mapping address → ยอดเงิน</span>
+    <span class="ty">mapping</span>(<span class="ty">address</span> =&gt; <span class="ty">uint256</span>) balances;
+
+    <span class="cm">// 2) getBalance: ดูยอดเงินของตัวเอง (ไม่เปลี่ยน state)</span>
+    <span class="kw">function</span> <span class="fn">getBalance</span>() <span class="kw">public</span> <span class="kw">view</span> <span class="kw">returns</span> (<span class="ty">uint256</span>) {
+        <span class="kw">return</span> balances[<span class="fn">msg.sender</span>];
+    }
+
+    <span class="cm">// 3) deposit: ฝากเงิน (รับ ETH ได้ด้วย payable)</span>
+    <span class="kw">function</span> <span class="fn">deposit</span>() <span class="kw">public</span> <span class="kw">payable</span> {
+        balances[<span class="fn">msg.sender</span>] += <span class="fn">msg.value</span>;
+    }
+
+    <span class="cm">// 4) withdraw: ถอนเงิน</span>
+    <span class="kw">function</span> <span class="fn">withdraw</span>(<span class="ty">uint256</span> amount) <span class="kw">public</span> {
+        <span class="cm">// ตรวจสอบว่ามีเงินพอถอน</span>
+        <span class="fn">require</span>(balances[<span class="fn">msg.sender</span>] &gt;= amount, <span class="str">"Insufficient balance"</span>);
+
+        <span class="cm">// ลดยอดเงินก่อน (ป้องกัน reentrancy attack)</span>
+        balances[<span class="fn">msg.sender</span>] -= amount;
+
+        <span class="cm">// โอนเงินกลับไปที่ผู้ถอน</span>
+        (<span class="ty">bool</span> success, ) = <span class="fn">msg.sender</span>.call{value: amount}(<span class="str">""</span>);
+        <span class="fn">require</span>(success, <span class="str">"Withdraw failed!!"</span>);
+    }
+}</div>
+
+  <h3 style="margin:1.75rem 0 .75rem;font-size:1.05rem;">&#128640; ขั้นตอน Deploy บน Sepolia Testnet</h3>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-body"><h4>เตรียม Wallet</h4><p>เตรียม MetaMask 2 Wallet และ Connect กับ Sepolia Testnet</p></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-body"><h4>รับ SepoliaETH ฟรี</h4><p>ไปที่ Sepolia Faucet (Chainlink) เพื่อรับ Test ETH มาใช้จ่าย Gas</p></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-body"><h4>เปิด Remix IDE</h4><p>เขียน Smart Contract โดยใช้ OpenZeppelin เป็น Base (ถ้าจำเป็น) แล้ว Compile</p></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-body"><h4>Deploy Contract</h4><p>Deploy ไปยัง Sepolia Testnet ผ่าน MetaMask และยืนยัน Transaction</p></div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-body"><h4>ตรวจสอบบน Block Explorer</h4><p>ค้นหา Transaction Hash บน Sepolia Etherscan เพื่อยืนยันการ Deploy สำเร็จ</p></div></div>
+  </div>
+</section>
+
+<!-- ===== SECTION 8 ===== -->
+<section id="video">
+  <div class="section-header">
+    <div class="section-label">แหล่งอ้างอิงวิดีโอ</div>
+    <h2>&#9654; "How does a blockchain work" — Simply Explained</h2>
+    <p>วิดีโออธิบาย Blockchain อย่างง่ายที่ได้รับความนิยมมากที่สุด</p>
+  </div>
+  <div class="yt-wrap">
+    <iframe src="https://www.youtube.com/embed/SSo_EIwHSd4" title="How does a blockchain work" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+  <div class="grid grid-3" style="margin-top:1.5rem;">
+    <div class="card card-blue"><div class="card-icon">&#128214;</div><h3>Basic Definitions</h3><p>อธิบายว่า Blockchain คืออะไร และทำงานอย่างไร</p></div>
+    <div class="card card-green"><div class="card-icon">&#128161;</div><h3>Core Concepts</h3><p>Blockchain ไม่ได้ใช้เฉพาะ Cryptocurrency แต่มีประโยชน์หลากหลาย</p></div>
+    <div class="card card-purple"><div class="card-icon">&#127760;</div><h3>Real-world Applications</h3><p>Smart Contracts, Supply Chain, Healthcare และอื่นๆ</p></div>
+  </div>
+</section>
+
+<!-- ===== SECTION 9 ===== -->
+<section>
+  <div class="section-header">
+    <div class="section-label">Quick Reference</div>
+    <h2>&#128295; เครื่องมือที่ใช้ในคอร์สนี้</h2>
+  </div>
+  <div class="grid grid-4">
+    <a href="https://remix.ethereum.org" target="_blank" style="text-decoration:none;"><div class="card" style="text-align:center;cursor:pointer;"><div class="card-icon">&#128295;</div><h3>Remix IDE</h3><p>เขียนและทดสอบ Solidity ออนไลน์</p></div></a>
+    <a href="https://sepoliafaucet.com" target="_blank" style="text-decoration:none;"><div class="card" style="text-align:center;cursor:pointer;"><div class="card-icon">&#128694;</div><h3>Sepolia Faucet</h3><p>รับ Test ETH ฟรีสำหรับ Testnet</p></div></a>
+    <a href="https://openzeppelin.com/contracts/" target="_blank" style="text-decoration:none;"><div class="card" style="text-align:center;cursor:pointer;"><div class="card-icon">&#128737;</div><h3>OpenZeppelin</h3><p>Library สำหรับ Smart Contract ที่ปลอดภัย</p></div></a>
+    <a href="https://sepolia.etherscan.io" target="_blank" style="text-decoration:none;"><div class="card" style="text-align:center;cursor:pointer;"><div class="card-icon">&#128269;</div><h3>Sepolia Etherscan</h3><p>ตรวจสอบ Transaction บน Testnet</p></div></a>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  <p>สรุปเนื้อหาจาก <strong>[69] of BC-1.pdf</strong> &middot; <strong>Smart Contract (Cont.).pdf</strong> &middot; <a href="https://youtu.be/SSo_EIwHSd4" target="_blank">How does a blockchain work &mdash; Simply Explained</a></p>
+  <p style="margin-top:.4rem;font-size:.8rem;">Blockchain Technology Course &middot; Generated by Antigravity AI</p>
+</footer>
+
+</body>
+</html>
