@@ -1,884 +1,1639 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="th">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Blockchain Technology — สรุปเนื้อหา</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg: #0d1117; --surface: #161b22; --card: #1c2230; --border: #30363d;
-      --primary: #58a6ff; --primary-glow: rgba(88,166,255,0.15);
-      --accent: #f78166; --accent2: #3fb950; --accent3: #d2a8ff; --accent4: #ffa657;
-      --text: #e6edf3; --text-muted: #8b949e; --radius: 12px;
-    }
-    html { scroll-behavior: smooth; }
-    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI','Noto Sans Thai',system-ui,sans-serif; line-height: 1.7; font-size: 16px; }
-    ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: var(--bg); } ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-    nav { position: sticky; top: 0; z-index: 100; background: rgba(13,17,23,0.9); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0.75rem 2rem; display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
-    .nav-brand { font-weight: 700; font-size: 1.1rem; background: linear-gradient(90deg,var(--primary),var(--accent3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; }
-    .nav-links { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-left: auto; }
-    .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; padding: 0.3rem 0.7rem; border-radius: 20px; transition: all 0.2s; }
-    .nav-links a:hover { color: var(--primary); background: var(--primary-glow); }
-    .hero { text-align: center; padding: 5rem 2rem 3rem; background: radial-gradient(ellipse 80% 60% at 50% 0%,rgba(88,166,255,0.12) 0%,transparent 70%); }
-    .hero-badge { display: inline-block; background: var(--primary-glow); border: 1px solid var(--primary); color: var(--primary); border-radius: 20px; padding: 0.3rem 1rem; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1.5rem; }
-    .hero h1 { font-size: clamp(2rem,5vw,3.5rem); font-weight: 800; line-height: 1.2; background: linear-gradient(135deg,#fff 30%,var(--primary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
-    .hero p { color: var(--text-muted); font-size: 1.1rem; max-width: 620px; margin: 0 auto 2rem; }
-    .hero-sources { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
-    .source-chip { display: flex; align-items: center; gap: 0.5rem; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 1rem; font-size: 0.85rem; color: var(--text-muted); }
-    .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
-    section { padding: 3rem 0; }
-    section + section { border-top: 1px solid var(--border); }
-    .section-header { margin-bottom: 2rem; }
-    .section-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--primary); margin-bottom: 0.4rem; }
-    .section-header h2 { font-size: 1.8rem; font-weight: 700; }
-    .section-header p { color: var(--text-muted); margin-top: 0.5rem; }
-    .grid { display: grid; gap: 1.25rem; }
-    .grid-2 { grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); }
-    .grid-3 { grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); }
-    .grid-4 { grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); }
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; transition: border-color 0.2s, transform 0.2s; }
-    .card:hover { border-color: var(--primary); transform: translateY(-2px); }
-    .card-icon { font-size: 2rem; margin-bottom: 0.75rem; }
-    .card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .card p, .card li { color: var(--text-muted); font-size: 0.9rem; }
-    .card ul { padding-left: 1.2rem; } .card li { margin-bottom: 0.25rem; }
-    .card-blue  { border-left: 3px solid var(--primary); }
-    .card-red   { border-left: 3px solid var(--accent); }
-    .card-green { border-left: 3px solid var(--accent2); }
-    .card-purple{ border-left: 3px solid var(--accent3); }
-    .card-orange{ border-left: 3px solid var(--accent4); }
-    .timeline { position: relative; padding-left: 2rem; }
-    .timeline::before { content:''; position:absolute; left:0.45rem; top:0; bottom:0; width:2px; background:var(--border); }
-    .tl-item { position: relative; padding-bottom: 2rem; }
-    .tl-item:last-child { padding-bottom: 0; }
-    .tl-dot { position: absolute; left: -2rem; width: 14px; height: 14px; border-radius: 50%; background: var(--primary); border: 2px solid var(--bg); top: 0.35rem; }
-    .tl-item h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
-    .tl-item p { color: var(--text-muted); font-size: 0.9rem; }
-    .code-block { background: #010409; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; font-family: 'Fira Code','Cascadia Code',monospace; font-size: 0.85rem; overflow-x: auto; margin-top: 1rem; line-height: 1.6; white-space: pre; }
-    .kw{color:#ff7b72;} .ty{color:#79c0ff;} .fn{color:#d2a8ff;} .cm{color:#8b949e;font-style:italic;} .str{color:#a5d6ff;} .nm{color:#ffa657;}
-    .table-wrap { overflow-x: auto; margin-top: 1rem; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-    th { background: var(--card); color: var(--primary); font-weight: 700; text-align: left; padding: 0.7rem 1rem; border-bottom: 2px solid var(--border); }
-    td { padding: 0.65rem 1rem; border-bottom: 1px solid var(--border); color: var(--text-muted); vertical-align: top; }
-    tr:last-child td { border-bottom: none; }
-    tr:hover td { background: rgba(255,255,255,0.02); }
-    .badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
-    .badge-blue   { background: rgba(88,166,255,0.15); color: var(--primary); }
-    .badge-green  { background: rgba(63,185,80,0.15); color: var(--accent2); }
-    .badge-orange { background: rgba(255,166,87,0.15); color: var(--accent4); }
-    .badge-red    { background: rgba(247,129,102,0.15); color: var(--accent); }
-    .badge-purple { background: rgba(210,168,255,0.15); color: var(--accent3); }
-    .yt-wrap { position: relative; padding-bottom: 56.25%; height: 0; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
-    .yt-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-    .highlight { background: var(--primary-glow); border: 1px solid rgba(88,166,255,0.3); border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-top: 1rem; }
-    .highlight p { font-size: 0.95rem; }
-    .highlight strong { color: var(--primary); }
-    .steps { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem; }
-    .step { display: flex; gap: 1rem; align-items: flex-start; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; }
-    .step-num { min-width: 2rem; height: 2rem; background: var(--primary); color: #000; border-radius: 50%; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; }
-    .step-body h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.25rem; }
-    .step-body p { color: var(--text-muted); font-size: 0.88rem; }
-    footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; color: var(--text-muted); font-size: 0.85rem; }
-    footer a { color: var(--primary); text-decoration: none; }
-    code { background: rgba(88,166,255,0.1); color: var(--primary); padding: 0.1em 0.4em; border-radius: 4px; font-size: 0.88em; font-family: monospace; }
-    @keyframes fadeUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
-    .hero > * { animation: fadeUp 0.6s ease both; }
-    .hero > *:nth-child(1){animation-delay:.1s} .hero > *:nth-child(2){animation-delay:.2s} .hero > *:nth-child(3){animation-delay:.3s} .hero > *:nth-child(4){animation-delay:.4s}
-  </style>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Blockchain Technology — สรุปสอบปลายภาค เน้นอัตนัย</title>
+        <meta name="description" content="สรุปปลายภาค Blockchain ภาษาไทยแบบละเอียด เน้นอัตนัย Solidity, EasyBank, ComplicatedBank, modifier, enum และ array พร้อมแนวคำตอบ" />
+        <style>
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            :root {
+                --bg: #0d1117;
+                --surface: #161b22;
+                --card: #1c2230;
+                --border: #30363d;
+                --primary: #58a6ff;
+                --primary-glow: rgba(88, 166, 255, 0.15);
+                --accent: #f78166;
+                --accent2: #3fb950;
+                --accent3: #d2a8ff;
+                --accent4: #ffa657;
+                --text: #e6edf3;
+                --text-muted: #8b949e;
+                --radius: 12px;
+            }
+            html {
+                scroll-behavior: smooth;
+            }
+            body {
+                background: var(--bg);
+                color: var(--text);
+                font-family:
+                    "Segoe UI", "Noto Sans Thai", system-ui, sans-serif;
+                line-height: 1.7;
+                font-size: 16px;
+            }
+            ::-webkit-scrollbar {
+                width: 6px;
+            }
+            ::-webkit-scrollbar-track {
+                background: var(--bg);
+            }
+            ::-webkit-scrollbar-thumb {
+                background: var(--border);
+                border-radius: 3px;
+            }
+            nav {
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                background: rgba(13, 17, 23, 0.9);
+                backdrop-filter: blur(12px);
+                border-bottom: 1px solid var(--border);
+                padding: 0.75rem 2rem;
+                display: flex;
+                align-items: center;
+                gap: 1.5rem;
+                flex-wrap: wrap;
+            }
+            .nav-brand {
+                font-weight: 700;
+                font-size: 1.1rem;
+                background: linear-gradient(
+                    90deg,
+                    var(--primary),
+                    var(--accent3)
+                );
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                white-space: nowrap;
+            }
+            .nav-links {
+                display: flex;
+                gap: 0.5rem;
+                flex-wrap: wrap;
+                margin-left: auto;
+            }
+            .nav-links a {
+                color: var(--text-muted);
+                text-decoration: none;
+                font-size: 0.85rem;
+                padding: 0.3rem 0.7rem;
+                border-radius: 20px;
+                transition: all 0.2s;
+            }
+            .nav-links a:hover {
+                color: var(--primary);
+                background: var(--primary-glow);
+            }
+            .hero {
+                text-align: center;
+                padding: 5rem 2rem 3rem;
+                background: radial-gradient(
+                    ellipse 80% 60% at 50% 0%,
+                    rgba(88, 166, 255, 0.12) 0%,
+                    transparent 70%
+                );
+            }
+            .hero-badge {
+                display: inline-block;
+                background: var(--primary-glow);
+                border: 1px solid var(--primary);
+                color: var(--primary);
+                border-radius: 20px;
+                padding: 0.3rem 1rem;
+                font-size: 0.8rem;
+                font-weight: 600;
+                letter-spacing: 0.05em;
+                text-transform: uppercase;
+                margin-bottom: 1.5rem;
+            }
+            .hero h1 {
+                font-size: clamp(2rem, 5vw, 3.5rem);
+                font-weight: 800;
+                line-height: 1.2;
+                background: linear-gradient(
+                    135deg,
+                    #fff 30%,
+                    var(--primary) 100%
+                );
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                margin-bottom: 1rem;
+            }
+            .hero p {
+                color: var(--text-muted);
+                font-size: 1.1rem;
+                max-width: 620px;
+                margin: 0 auto 2rem;
+            }
+            .hero-sources {
+                display: flex;
+                justify-content: center;
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+            .source-chip {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                background: var(--card);
+                border: 1px solid var(--border);
+                border-radius: 8px;
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+                color: var(--text-muted);
+            }
+            .container {
+                max-width: 1100px;
+                margin: 0 auto;
+                padding: 0 1.5rem;
+            }
+            section {
+                padding: 3rem 0;
+            }
+            section + section {
+                border-top: 1px solid var(--border);
+            }
+            .section-header {
+                margin-bottom: 2rem;
+            }
+            .section-label {
+                font-size: 0.75rem;
+                font-weight: 700;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                color: var(--primary);
+                margin-bottom: 0.4rem;
+            }
+            .section-header h2 {
+                font-size: 1.8rem;
+                font-weight: 700;
+            }
+            .section-header p {
+                color: var(--text-muted);
+                margin-top: 0.5rem;
+            }
+            .grid {
+                display: grid;
+                gap: 1.25rem;
+            }
+            .grid-2 {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+            .grid-3 {
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            }
+            .grid-4 {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+            .card {
+                background: var(--card);
+                border: 1px solid var(--border);
+                border-radius: var(--radius);
+                padding: 1.5rem;
+                transition:
+                    border-color 0.2s,
+                    transform 0.2s;
+            }
+            .card:hover {
+                border-color: var(--primary);
+                transform: translateY(-2px);
+            }
+            .card-icon {
+                font-size: 2rem;
+                margin-bottom: 0.75rem;
+            }
+            .card h3 {
+                font-size: 1rem;
+                font-weight: 700;
+                margin-bottom: 0.5rem;
+            }
+            .card p,
+            .card li {
+                color: var(--text-muted);
+                font-size: 0.9rem;
+            }
+            .card ul {
+                padding-left: 1.2rem;
+            }
+            .card li {
+                margin-bottom: 0.25rem;
+            }
+            .card-blue {
+                border-left: 3px solid var(--primary);
+            }
+            .card-red {
+                border-left: 3px solid var(--accent);
+            }
+            .card-green {
+                border-left: 3px solid var(--accent2);
+            }
+            .card-purple {
+                border-left: 3px solid var(--accent3);
+            }
+            .card-orange {
+                border-left: 3px solid var(--accent4);
+            }
+            .timeline {
+                position: relative;
+                padding-left: 2rem;
+            }
+            .timeline::before {
+                content: "";
+                position: absolute;
+                left: 0.45rem;
+                top: 0;
+                bottom: 0;
+                width: 2px;
+                background: var(--border);
+            }
+            .tl-item {
+                position: relative;
+                padding-bottom: 2rem;
+            }
+            .tl-item:last-child {
+                padding-bottom: 0;
+            }
+            .tl-dot {
+                position: absolute;
+                left: -2rem;
+                width: 14px;
+                height: 14px;
+                border-radius: 50%;
+                background: var(--primary);
+                border: 2px solid var(--bg);
+                top: 0.35rem;
+            }
+            .tl-item h3 {
+                font-size: 1rem;
+                font-weight: 700;
+                margin-bottom: 0.35rem;
+            }
+            .tl-item p {
+                color: var(--text-muted);
+                font-size: 0.9rem;
+            }
+            .code-block {
+                background: #010409;
+                border: 1px solid var(--border);
+                border-radius: var(--radius);
+                padding: 1.25rem 1.5rem;
+                font-family: "Fira Code", "Cascadia Code", monospace;
+                font-size: 0.85rem;
+                overflow-x: auto;
+                margin-top: 1rem;
+                line-height: 1.6;
+                white-space: pre;
+            }
+            .kw {
+                color: #ff7b72;
+            }
+            .ty {
+                color: #79c0ff;
+            }
+            .fn {
+                color: #d2a8ff;
+            }
+            .cm {
+                color: #8b949e;
+                font-style: italic;
+            }
+            .str {
+                color: #a5d6ff;
+            }
+            .nm {
+                color: #ffa657;
+            }
+            .table-wrap {
+                overflow-x: auto;
+                margin-top: 1rem;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 0.88rem;
+            }
+            th {
+                background: var(--card);
+                color: var(--primary);
+                font-weight: 700;
+                text-align: left;
+                padding: 0.7rem 1rem;
+                border-bottom: 2px solid var(--border);
+            }
+            td {
+                padding: 0.65rem 1rem;
+                border-bottom: 1px solid var(--border);
+                color: var(--text-muted);
+                vertical-align: top;
+            }
+            tr:last-child td {
+                border-bottom: none;
+            }
+            tr:hover td {
+                background: rgba(255, 255, 255, 0.02);
+            }
+            .badge {
+                display: inline-block;
+                padding: 0.2rem 0.6rem;
+                border-radius: 20px;
+                font-size: 0.75rem;
+                font-weight: 600;
+            }
+            .badge-blue {
+                background: rgba(88, 166, 255, 0.15);
+                color: var(--primary);
+            }
+            .badge-green {
+                background: rgba(63, 185, 80, 0.15);
+                color: var(--accent2);
+            }
+            .badge-orange {
+                background: rgba(255, 166, 87, 0.15);
+                color: var(--accent4);
+            }
+            .badge-red {
+                background: rgba(247, 129, 102, 0.15);
+                color: var(--accent);
+            }
+            .badge-purple {
+                background: rgba(210, 168, 255, 0.15);
+                color: var(--accent3);
+            }
+            .yt-wrap {
+                position: relative;
+                padding-bottom: 56.25%;
+                height: 0;
+                border-radius: var(--radius);
+                overflow: hidden;
+                border: 1px solid var(--border);
+            }
+            .yt-wrap iframe {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+            .highlight {
+                background: var(--primary-glow);
+                border: 1px solid rgba(88, 166, 255, 0.3);
+                border-radius: var(--radius);
+                padding: 1.25rem 1.5rem;
+                margin-top: 1rem;
+            }
+            .highlight p {
+                font-size: 0.95rem;
+            }
+            .highlight strong {
+                color: var(--primary);
+            }
+            .steps {
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+                margin-top: 1rem;
+            }
+            .step {
+                display: flex;
+                gap: 1rem;
+                align-items: flex-start;
+                background: var(--card);
+                border: 1px solid var(--border);
+                border-radius: var(--radius);
+                padding: 1rem 1.25rem;
+            }
+            .step-num {
+                min-width: 2rem;
+                height: 2rem;
+                background: var(--primary);
+                color: #000;
+                border-radius: 50%;
+                font-weight: 800;
+                font-size: 0.85rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .step-body h4 {
+                font-size: 0.95rem;
+                font-weight: 700;
+                margin-bottom: 0.25rem;
+            }
+            .step-body p {
+                color: var(--text-muted);
+                font-size: 0.88rem;
+            }
+            footer {
+                border-top: 1px solid var(--border);
+                padding: 2rem;
+                text-align: center;
+                color: var(--text-muted);
+                font-size: 0.85rem;
+            }
+            footer a {
+                color: var(--primary);
+                text-decoration: none;
+            }
+            code {
+                background: rgba(88, 166, 255, 0.1);
+                color: var(--primary);
+                padding: 0.1em 0.4em;
+                border-radius: 4px;
+                font-size: 0.88em;
+                font-family: monospace;
+            }
+            @keyframes fadeUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            .hero > * {
+                animation: fadeUp 0.6s ease both;
+            }
+            .hero > *:nth-child(1) {
+                animation-delay: 0.1s;
+            }
+            .hero > *:nth-child(2) {
+                animation-delay: 0.2s;
+            }
+            .hero > *:nth-child(3) {
+                animation-delay: 0.3s;
+            }
+            .hero > *:nth-child(4) {
+                animation-delay: 0.4s;
+            }
+        </style>
+    <style>
+html{scroll-padding-top:115px} .hero{padding:3rem 1.5rem 2rem}.hero p{max-width:800px}.hero h1{font-size:clamp(2rem,5vw,3rem)}.exam-content{font-size:1rem;line-height:1.95}.exam-content p{margin:0 0 1.1rem}.exam-content h3{font-size:1.2rem;margin:1.8rem 0 .9rem;color:var(--primary)}.exam-content ul,.exam-content ol{padding-left:1.6rem;margin:1rem 0 1.3rem}.exam-content li{margin:.55rem 0}.exam-content strong{color:var(--text)}.exam-content code{overflow-wrap:anywhere}.exam-content pre{background:#010409;border:1px solid var(--border);border-radius:var(--radius);padding:1.3rem;overflow:auto;line-height:1.65;margin:1.2rem 0}.exam-content pre code{white-space:pre;overflow-wrap:normal;background:none;padding:0;color:#c6e7ff;font-size:.9rem}.exam-content table{font-size:.95rem;line-height:1.8}.exam-content td{color:#b7c4d3;min-width:130px}.table-wrap{margin:1.25rem 0}.reading-map{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}.reading-map a{color:var(--text);text-decoration:none}.reading-map .card h3{margin:0 0 .5rem;color:var(--primary)}.reading-map .card p{font-size:1rem;color:#b7c4d3}.scope-note{margin:1.5rem 0;line-height:1.9}.toc{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem 1.5rem}.toc a{color:var(--text-muted);text-decoration:none;font-size:1rem;line-height:1.8}.toc a:hover{color:var(--primary)}.toc span{color:var(--primary);margin-right:.5rem;font-family:monospace}.reference details{margin-top:1.5rem}.reference summary{cursor:pointer;font-size:1.1rem;color:var(--primary);padding:1rem;background:var(--card);border:1px solid var(--border);border-radius:var(--radius)}.reference section{padding:2rem 0}.reference .section-label{display:none}.reference .section-header p{font-size:1rem}.section-label{font-size:.875rem}.nav-links a{font-size:.9rem}a:focus-visible,summary:focus-visible{outline:3px solid var(--accent4);outline-offset:4px}.skip-link{position:fixed;left:10px;top:-100px;z-index:110;background:var(--card);color:var(--primary);padding:12px}.skip-link:focus{top:10px}@media(max-width:650px){nav{padding:.8rem 1rem;gap:.6rem}.nav-links{margin-left:0;gap:.2rem}.nav-links a{padding:.25rem .45rem}.container{padding:0 1.1rem}.toc{grid-template-columns:1fr}.exam-content pre{padding:1rem}.section-header h2{font-size:1.5rem}html{scroll-padding-top:155px}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hero>*{animation:none}}@media print{nav,.hero-sources,.reference{display:none}body{background:#fff;color:#111}.hero h1{-webkit-text-fill-color:#111}.hero p,.exam-content strong,.exam-content td,.toc a{color:#111}.exam-content pre{background:#eee}.exam-content pre code{color:#111;white-space:pre-wrap}.table-wrap{overflow:visible}section{break-inside:auto}.section-header{break-after:avoid}}
+</style>
 </head>
-<body>
+    <body><a class="skip-link" href="#contents">ข้ามไปสารบัญ</a><nav aria-label="เมนูหลัก"><span class="nav-brand">&#9939; Blockchain · ปลายภาค</span><div class="nav-links"><a href="#intro">เริ่มทวน</a><a href="#solidity">Solidity</a><a href="#modifier">Modifier</a><a href="#workshop">EasyBank</a><a href="#complicated-bank">ComplicatedBank</a><a href="#enum-array">Enum / Array</a><a href="#exam">แนวอัตนัย</a><a href="#blockchain">พื้นฐาน</a><a href="#contents">สารบัญ</a></div></nav><header class="hero" id="top"><div class="hero-badge">สรุปสอบปลายภาค · ภาษาไทย · เน้นอัตนัย</div><h1>Blockchain Technology<br>สรุปปลายภาคแบบละเอียด</h1><p>เข้าใจ Solidity และ Smart Contract ผ่านการฝากถอน การกำหนดสิทธิ และดอกเบี้ยรวม พร้อมอ่านโค้ดทีละส่วน ตัวอย่างคำนวณ และแนวคำตอบข้อเขียน</p><div class="hero-sources"><div class="source-chip">[69] BC-AfterGRAD.pdf</div><div class="source-chip">_[67-50] Smart Contract (Cont.).pdf</div><div class="source-chip">26 Aug 2026 [67] of BC-2.pdf</div><div class="source-chip">[69] of BC-1.pdf</div></div></header><main class="container"><section id="contents"><div class="section-header"><div class="section-label">อ่านเพื่อสอบอัตนัย</div><h2>เลือกบทที่ต้องการทบทวน</h2><p>เน้นเนื้อหาในเอกสารช่วงท้าย แล้วทบทวนพื้นฐานจากกลางภาคประกอบ</p></div><div class="reading-map"><a class="card card-blue" href="#workshop"><h3>1. ฝาก · อ่านยอด · ถอน</h3><p>อธิบาย mapping, msg.sender, msg.value และลำดับถอน</p></a><a class="card card-purple" href="#complicated-bank"><h3>2. สิทธิและดอกเบี้ยรวม</h3><p>Constructor, modifier, owner, array และ loop</p></a><a class="card card-green" href="#exam"><h3>3. ฝึกเขียนคำตอบ</h3><p>แนวตอบแบบยาว พร้อมคำสำคัญสำหรับตรวจคำตอบ</p></a></div><div class="highlight scope-note"><p><strong>ขอบเขตสรุป:</strong> เอกสารไม่มีประกาศขอบเขตปลายภาคหรือข้อสอบจริง คำถามในหน้านี้เป็นแบบฝึกจากบทเรียน โดยเน้น Solidity และ Workshop ช่วงท้าย ส่วน Voting.sol และ Lottery.sol มีเพียงชื่อกับลิงก์ในสไลด์ จึงไม่อ้างรายละเอียดโค้ดที่ไม่ได้ให้มา</p></div><div class="toc"><a href="#intro"><span>01</span>ลำดับอ่านเพื่อเตรียมตอบอัตนัย</a><a href="#solidity"><span>02</span>Smart Contract, Solidity, ABI และ EVM</a><a href="#calling"><span>03</span>Calling กับ Sending และ Gas</a><a href="#variables"><span>04</span>ชนิดข้อมูลและตัวแปร</a><a href="#visibility"><span>05</span>Visibility: private, internal, external, public</a><a href="#functions"><span>06</span>Constructor, view, payable และค่าพิเศษ</a><a href="#modifier"><span>07</span>Modifier และ require</a><a href="#workshop"><span>08</span>EasyBank: อธิบายฝาก อ่านยอด และถอน</a><a href="#complicated-bank"><span>09</span>ComplicatedBank และการคำนวณดอกเบี้ย</a><a href="#enum-array"><span>10</span>Enum และ Array</a><a href="#testing"><span>11</span>ขั้นตอนทดสอบและ Deploy</a><a href="#blockchain"><span>12</span>พื้นฐาน Blockchain สำหรับข้ออธิบาย</a><a href="#bitcoin"><span>13</span>Bitcoin, Halving และ Lightning Network</a><a href="#pitfalls"><span>14</span>จุดที่ควรแก้ความเข้าใจก่อนจำจากสไลด์</a><a href="#practice"><span>15</span>แบบฝึกอัตนัยก่อนสอบ</a><a href="#code-reading"><span>16</span>อ่านโค้ด Solidity ทีละส่วน: จากโครงสร้างถึงการทำงาน</a><a href="#complete-bank"><span>17</span>ตัวอย่างธนาคารครบชุดสำหรับใช้ฝึกอธิบาย</a><a href="#walkthrough"><span>18</span>จำลองการฝาก ถอน และดอกเบี้ย 5 บัญชี</a><a href="#debugging"><span>19</span>แบบฝึกหาข้อผิดพลาดในโค้ด</a><a href="#enum-example"><span>20</span>Enum: อ่านเงื่อนไขก่อนเปลี่ยนสถานะ</a><a href="#exam"><span>21</span>แนวตอบอัตนัยแบบยาวพร้อมโครงคะแนน</a><a href="#calculation"><span>22</span>แบบฝึกคำนวณพร้อมวิธีทำ</a><a href="#review"><span>23</span>แผนทบทวนก่อนสอบ</a></div></section><section id="intro"><div class="section-header"><div class="section-label">บทที่ 01 · สรุปปลายภาค</div><h2>ลำดับอ่านเพื่อเตรียมตอบอัตนัย</h2></div><div class="exam-content"><ol>
+<li>อธิบายการทำงานของ EasyBank: ฝาก อ่านยอด ถอน และตรวจสอบเงินให้พอ</li>
+<li>เปรียบเทียบตัวแปร State / Local / Global และ visibility ทั้ง 4 แบบ</li>
+<li>อธิบาย constructor, view, payable, modifier, require และ msg.sender / msg.value</li>
+<li>อธิบาย ComplicatedBank: owner, ดอกเบี้ยรายบัญชี และดอกเบี้ยรวมด้วย array กับ loop</li>
+<li>อธิบาย Calling / Sending, ABI / Bytecode / EVM และ Gas</li>
+<li>ทบทวน enum, array และการอ่านโค้ดเพื่อหาข้อผิดพลาด</li>
+<li>ทบทวน DLT, Hash, Blockchain, Bitcoin และ Lightning Network</li>
+</ol>
+<p><strong>โครงตอบที่ใช้ได้กับหลายข้อ:</strong> ให้นิยาม → อธิบายกลไกหรือขั้นตอน → ยกตัวอย่าง → ระบุเงื่อนไขหรือข้อจำกัดที่เกี่ยวข้อง</p></div></section><section id="solidity"><div class="section-header"><div class="section-label">บทที่ 02 · สรุปปลายภาค</div><h2>Smart Contract, Solidity, ABI และ EVM</h2></div><div class="exam-content"><span id="ethereum"></span><p><strong>คำถามฝึก: Smart Contract คืออะไร และนำไปใช้งานบน Ethereum อย่างไร?</strong></p>
+<p>แนวคำตอบ: Smart Contract คือโปรแกรมที่มีโค้ดและข้อมูลสถานะอยู่บน Blockchain โดยมี address ของตนเอง ผู้ใช้ส่งคำสั่งเพื่อให้โปรแกรมทำงานตามเงื่อนไขที่กำหนด เช่น รับฝากเงิน ตรวจสอบยอด และถอนเงิน ขั้นตอนเริ่มจากเขียน Solidity แล้ว compile เพื่อสร้าง bytecode และ ABI จากนั้นส่งธุรกรรม deploy เพื่อสร้างสัญญาบนเครือข่าย เมื่อใช้งาน แอปอาศัย ABI และ contract address เพื่อเรียกฟังก์ชัน ส่วน EVM ประมวลผล bytecode</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>คำศัพท์</th>
+<th>หน้าที่</th>
+<th>ตัวอย่างประโยคสำหรับตอบสอบ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Solidity</td>
+<td>ภาษาเขียน Smart Contract</td>
+<td>ใช้กำหนดตัวแปร ฟังก์ชัน และเงื่อนไขของสัญญา</td>
+</tr>
+<tr>
+<td>Compiler</td>
+<td>แปลงโค้ดต้นฉบับ</td>
+<td>สร้าง bytecode และ ABI จาก Solidity</td>
+</tr>
+<tr>
+<td>Bytecode</td>
+<td>คำสั่งสำหรับ EVM</td>
+<td>เป็นโค้ดที่เครื่องเสมือนนำไปประมวลผล</td>
+</tr>
+<tr>
+<td>ABI</td>
+<td>รูปแบบอธิบาย interface ของสัญญา</td>
+<td>ระบุชื่อฟังก์ชัน ชนิดพารามิเตอร์ และค่าที่คืน เพื่อให้แอปเข้ารหัสคำสั่งได้ถูกต้อง</td>
+</tr>
+<tr>
+<td>EVM</td>
+<td>เครื่องเสมือนประมวลผลสัญญา</td>
+<td>ดำเนินคำสั่งตาม bytecode และกฎของ Ethereum</td>
+</tr>
+<tr>
+<td>Contract address</td>
+<td>ที่อยู่ของสัญญาที่ deploy แล้ว</td>
+<td>ใช้ระบุว่าจะติดต่อสัญญาใดบนเครือข่ายใด</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>จำ:</strong> ABI ไม่ใช่โค้ดที่ EVM รัน และการ compile ยังไม่ใช่การ deploy</p>
+<p>อ้างอิงเอกสาร: AfterGRAD หน้า 2–6; Smart Contract (Cont.) หน้า 2–6</p></div></section><section id="calling"><div class="section-header"><div class="section-label">บทที่ 03 · สรุปปลายภาค</div><h2>Calling กับ Sending และ Gas</h2></div><div class="exam-content"><p><strong>คำถามฝึก: Calling function ต่างจาก Sending function อย่างไร?</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ประเด็น</th>
+<th>Calling ผ่านการอ่าน/จำลอง เช่น eth_call</th>
+<th>Sending transaction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ผลต่อข้อมูลบนเชน</td>
+<td>ไม่บันทึกการเปลี่ยนแปลงลงเชน</td>
+<td>สามารถบันทึกการเปลี่ยนแปลงเมื่อธุรกรรมสำเร็จ</td>
+</tr>
+<tr>
+<td>ผลที่ได้รับ</td>
+<td>ค่าที่ฟังก์ชันคืน</td>
+<td>โดยทั่วไปได้ transaction hash ก่อน แล้วตรวจ receipt</td>
+</tr>
+<tr>
+<td>เวลา</td>
+<td>ได้ผลจาก node โดยไม่รอเข้าบล็อก</td>
+<td>ต้องรอธุรกรรมได้รับการรวมในบล็อก</td>
+</tr>
+<tr>
+<td>ค่าธรรมเนียมบนเชน</td>
+<td>ไม่เสียค่าธรรมเนียมธุรกรรม</td>
+<td>ใช้ Gas และเสียค่าธรรมเนียม</td>
+</tr>
+<tr>
+<td>ตัวอย่าง</td>
+<td>อ่านยอดเงินด้วย getBalance</td>
+<td>ฝากเงินหรือถอนเงิน</td>
+</tr>
+</tbody>
+</table></div>
+<p>แนวคำตอบ: Calling เหมาะกับการอ่านหรือจำลองการทำงานโดยไม่บันทึกสถานะลง Blockchain จึงไม่ต้องจ่ายค่าธรรมเนียมธุรกรรม ส่วน Sending เป็นการส่งธุรกรรมไปยังเครือข่าย เช่น ฝากเงิน จึงต้องใช้ Gas และรอการยืนยัน โดย transaction hash ใช้ติดตามผลได้ แต่การได้ hash ยังไม่หมายความว่าธุรกรรมสำเร็จแล้ว</p>
+<p>สูตรตามสไลด์: <strong>ค่าธรรมเนียม = Gas used × Gas price</strong> โดยในการคำนวณจากธุรกรรมที่เกิดขึ้นจริงใช้ราคาต่อ Gas ที่ธุรกรรมนั้นจ่ายจริง</p>
+<p>ตัวอย่าง: ใช้ 50,000 Gas ราคาต่อ Gas 20 Gwei → 1,000,000 Gwei = <strong>0.001 ETH</strong></p>
+<ul>
+<li>1 ETH = 10¹⁸ Wei</li>
+<li>1 Gwei = 10⁹ Wei</li>
+<li>Gas used คือปริมาณที่ใช้จริง ส่วน Gas limit คือเพดานที่อนุญาตให้ใช้</li>
+<li><code>view</code> ไม่ได้แปลว่าฟรีในทุกบริบท: หากทำงานเป็นส่วนหนึ่งของธุรกรรม การประมวลผลนั้นยังใช้ Gas</li>
+</ul>
+<p>อ้างอิงเอกสาร: AfterGRAD หน้า 4 และ 20</p></div></section><section id="variables"><div class="section-header"><div class="section-label">บทที่ 04 · สรุปปลายภาค</div><h2>ชนิดข้อมูลและตัวแปร</h2></div><div class="exam-content"><p><strong>คำถามฝึก: State, Local และ Global variables ต่างกันอย่างไร?</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ประเภท</th>
+<th>ความหมาย</th>
+<th>ตัวอย่าง</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>State</td>
+<td>ข้อมูลที่เก็บใน storage ของสัญญาและคงอยู่ข้ามการเรียกฟังก์ชัน</td>
+<td>balances, owner, rate</td>
+</tr>
+<tr>
+<td>Local</td>
+<td>ตัวแปรภายในฟังก์ชัน ใช้งานระหว่างการเรียกนั้น</td>
+<td>i, total, amount ที่ประกาศภายใน</td>
+</tr>
+<tr>
+<td>Global</td>
+<td>ค่าพิเศษที่ให้ข้อมูลบริบทของธุรกรรมและ Blockchain</td>
+<td>msg.sender, msg.value, block.timestamp</td>
+</tr>
+</tbody>
+</table></div>
+<p>แนวคำตอบ: State variables ใช้รักษาสถานะของสัญญา เช่น ยอดเงินแต่ละบัญชี ส่วน Local variables ใช้คำนวณชั่วคราวในฟังก์ชัน เช่น ผลรวมดอกเบี้ย และ Global variables ให้ข้อมูลบริบท เช่น ผู้เรียกและจำนวน Ether ที่ส่งมา การแก้ไข State จึงมีผลต่อสถานะถาวรของสัญญาเมื่อธุรกรรมสำเร็จ</p>
+<p>ชนิดข้อมูลที่ควรจำ:</p>
+<ul>
+<li><code>uint</code> เท่ากับ <code>uint256</code> เป็นจำนวนเต็มไม่ติดลบ ส่วน <code>int</code> รองรับค่าติดลบ</li>
+<li><code>bool</code> มีค่า true / false; <code>address</code> เก็บที่อยู่บัญชีหรือสัญญา</li>
+<li><code>string</code> เก็บข้อความ; <code>bytes</code> เก็บข้อมูลไบต์ความยาวเปลี่ยนได้; <code>bytes32</code> มีขนาดคงที่ 32 ไบต์</li>
+<li><code>mapping(address =&gt; uint256)</code> เชื่อม address กับยอดเงิน คีย์ที่ยังไม่เคยกำหนดมีค่าเริ่มต้นเป็น 0</li>
+<li><code>address[]</code> เก็บรายการ address เป็นลำดับ ใช้วนลูปได้</li>
+<li><code>struct</code> รวมข้อมูลหลายช่อง เช่น userId และ userName</li>
+<li><code>enum</code> แทนชุดสถานะที่กำหนดไว้ เช่น Pending, Active, Completed, Canceled</li>
+</ul>
+<p><strong>ตัวดำเนินการ:</strong> <code>+ - * / %</code> และ <code>**</code> สำหรับยกกำลัง เช่น <code>21 % 4 = 1</code>, <code>3 ** 2 = 9</code> การหารจำนวนเต็มตัดเศษ เช่น <code>10 * 3 / 100 = 0</code> จึงต้องระวังหน่วยและการปัดเศษ</p>
+<p>อ้างอิงเอกสาร: AfterGRAD หน้า 7–14, 34–36</p></div></section><section id="visibility"><div class="section-header"><div class="section-label">บทที่ 05 · สรุปปลายภาค</div><h2>Visibility: private, internal, external, public</h2></div><div class="exam-content"><p><strong>คำถามฝึก: เปรียบเทียบ visibility ทั้ง 4 แบบ พร้อมยกตัวอย่างการเลือกใช้</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>แบบ</th>
+<th>เรียกภายในสัญญา</th>
+<th>ใช้โดยสัญญาที่สืบทอด</th>
+<th>เรียกจากภายนอก</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>private</td>
+<td>ได้</td>
+<td>ไม่ได้โดยตรง</td>
+<td>ไม่ได้</td>
+</tr>
+<tr>
+<td>internal</td>
+<td>ได้</td>
+<td>ได้</td>
+<td>ไม่ได้โดยตรง</td>
+</tr>
+<tr>
+<td>external</td>
+<td>ใช้ this.functionName() ซึ่งเป็นการเรียกภายนอก</td>
+<td>เรียกภายในโดยตรงไม่ได้</td>
+<td>ได้</td>
+</tr>
+<tr>
+<td>public</td>
+<td>ได้</td>
+<td>ได้</td>
+<td>ได้</td>
+</tr>
+</tbody>
+</table></div>
+<p>แนวคำตอบ: private จำกัดการใช้งานไว้ในสัญญาที่ประกาศ ส่วน internal เปิดให้สัญญาที่สืบทอดใช้งานด้วย external ใช้สำหรับการเรียกจากบัญชีหรือสัญญาภายนอก และ public รองรับทั้งภายในและภายนอก หาก state variable เป็น public compiler จะสร้าง getter ให้อัตโนมัติ แต่ไม่สร้าง setter ให้อัตโนมัติ</p>
+<p><strong>ข้อควรระวัง:</strong> <code>private</code> จำกัดการเข้าถึงผ่านภาษาและ interface ไม่ได้ทำให้ข้อมูลบนเชนเป็นความลับ และ <code>external</code> ใช้กับฟังก์ชัน ไม่ใช้กับ state variable รายละเอียด visibility ตรวจสอบกับ <a href="https://docs.solidity.org/en/latest/cheatsheet.html">Solidity Cheatsheet</a></p>
+<p>อ้างอิงเอกสาร: AfterGRAD หน้า 15–19 และ 22</p></div></section><section id="functions"><div class="section-header"><div class="section-label">บทที่ 06 · สรุปปลายภาค</div><h2>Constructor, view, payable และค่าพิเศษ</h2></div><div class="exam-content"><p><strong>Constructor:</strong> ทำงานครั้งเดียวเมื่อสร้างสัญญา ใช้กำหนดค่าเริ่มต้น เช่น <code>owner = msg.sender;</code> เพื่อบันทึกผู้ deploy</p>
+<p><strong>view:</strong> อ่าน state ได้แต่ห้ามแก้ไข state เช่น <code>return balances[msg.sender];</code> ส่วน <code>pure</code> ใช้กับการคำนวณที่ไม่อ่านหรือแก้ไข state ซึ่งเป็นความรู้เสริมเพื่อช่วยเปรียบเทียบ</p>
+<p><strong>payable:</strong> อนุญาตให้ฟังก์ชันรับ Ether มากับการเรียก เช่น <code>deposit()</code> แต่ไม่ได้เพิ่มยอดใน mapping ให้อัตโนมัติ ผู้เขียนต้องกำหนดคำสั่งเพิ่มยอดเอง</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>นิพจน์</th>
+<th>ความหมาย</th>
+<th>จุดที่มักสับสน</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>msg.sender</td>
+<td>ผู้เรียกปัจจุบัน</td>
+<td>อาจเป็นผู้ใช้หรือสัญญาอื่น</td>
+</tr>
+<tr>
+<td>msg.value</td>
+<td>จำนวน Wei ที่ส่งมากับการเรียก</td>
+<td>ไม่ใช่ยอดเงินทั้งหมดของผู้ใช้</td>
+</tr>
+<tr>
+<td>address(this)</td>
+<td>ที่อยู่ของสัญญาปัจจุบัน</td>
+<td>ต่างจาก address ของผู้เรียก</td>
+</tr>
+<tr>
+<td>address(this).balance</td>
+<td>Ether ทั้งหมดที่สัญญาถืออยู่ หน่วย Wei</td>
+<td>ต่างจากยอดของผู้ฝากแต่ละคนใน mapping</td>
+</tr>
+<tr>
+<td>block.timestamp</td>
+<td>เวลาของบล็อกเป็นวินาทีตั้งแต่ Unix epoch</td>
+<td>เป็นข้อมูลบริบทของบล็อก</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>คำถามฝึก: balances[msg.sender] กับ address(this).balance ต่างกันอย่างไร?</strong></p>
+<p>แนวคำตอบ: <code>balances[msg.sender]</code> เป็นยอดที่โปรแกรมบันทึกว่าผู้เรียกมีสิทธิถอนเท่าใด ส่วน <code>address(this).balance</code> เป็น Ether จริงทั้งหมดในสัญญา เช่น A ฝาก 2 ETH และ B ฝาก 3 ETH จะมียอด A เป็น 2 ETH ยอด B เป็น 3 ETH และยอดรวมของสัญญาเป็น 5 ETH ภายใต้ตัวอย่างที่ไม่มีเงินเข้าออกทางอื่น</p>
+<p>อ้างอิงเอกสาร: AfterGRAD หน้า 13, 21, 23–25</p></div></section><section id="modifier"><div class="section-header"><div class="section-label">บทที่ 07 · สรุปปลายภาค</div><h2>Modifier และ require</h2></div><div class="exam-content"><p><strong>คำถามฝึก: onlyOwner ทำงานอย่างไร และเครื่องหมาย _; หมายถึงอะไร?</strong></p>
+<pre><code class="language-solidity">address public owner;
 
-<nav>
-  <span class="nav-brand">&#9939; Blockchain Tech</span>
-  <div class="nav-links">
-    <a href="#intro">บทนำ</a><a href="#dlt">DLT</a><a href="#crypto">Cryptography</a>
-    <a href="#blockchain">Blockchain</a><a href="#bitcoin">Bitcoin</a>
-    <a href="#ethereum">Ethereum</a><a href="#wallet">Wallet</a>
-    <a href="#solidity">Solidity</a><a href="#workshop">Workshop</a>
-    <a href="#erc">ERC Standards</a><a href="#nft">NFT</a>
-    <a href="#exam">แนวข้อสอบ</a><a href="#video">วิดีโอ</a>
-  </div>
-</nav>
+constructor() {
+    owner = msg.sender;
+}
 
-<div class="hero">
-  <div class="hero-badge">&#128218; สรุปเนื้อหาครบจบในที่เดียว</div>
-  <h1>Blockchain Technology</h1>
-  <p>สรุปเนื้อหาครบถ้วน ครอบคลุมตั้งแต่ Blockchain, Bitcoin, Ethereum, Wallet, Smart Contract, ERC Token Standards ไปจนถึง NFT พร้อมแนวข้อเขียนสำหรับสอบกลางภาค</p>
-  <div class="hero-sources">
-    <div class="source-chip">&#128196; [69] of BC-1.pdf</div>
-    <div class="source-chip">&#128196; Smart Contract (Cont.).pdf</div>
-    <div class="source-chip">&#128196; สรุปสอบกลางภาค_Blockchain_SmartContract_Bitcoin.docx</div>
-    <div class="source-chip">&#9654; "How does a blockchain work" — Simply Explained</div>
-  </div>
-</div>
+modifier onlyOwner() {
+    require(msg.sender == owner, &quot;Not owner&quot;);
+    _;
+}
+</code></pre>
+<p>แนวคำตอบ: Modifier รวมเงื่อนไขที่ใช้ซ้ำกับหลายฟังก์ชัน ตัวอย่าง onlyOwner ตรวจว่า address ของผู้เรียกตรงกับ owner หรือไม่ ถ้าไม่ตรง <code>require</code> จะทำให้การเรียกล้มเหลวและย้อนการเปลี่ยนแปลง ส่วน <code>_;</code> คือตำแหน่งที่นำส่วนคำสั่งของฟังก์ชันมาทำงาน เมื่อเงื่อนไขผ่านจึงทำงานต่อ เช่น ใช้กับ turnOn, turnOff หรือฟังก์ชันของผู้จัดการธนาคาร</p>
+<p><strong>จำ:</strong> หากธุรกรรมถูกประมวลผลแล้วล้มเหลว การเปลี่ยน state ถูกย้อนกลับ แต่ Gas ที่ใช้ไปยังมีค่าใช้จ่าย</p>
+<p>การใช้ <code>onlyOwner</code> จำกัดการเรียกฟังก์ชัน ไม่ได้ทำให้ยอด Ether ของสัญญาเป็นความลับจากผู้ตรวจสอบ Blockchain</p>
+<p>อ้างอิงเอกสาร: AfterGRAD หน้า 26–28</p></div></section><section id="workshop"><div class="section-header"><div class="section-label">บทที่ 08 · สรุปปลายภาค</div><h2>EasyBank: อธิบายฝาก อ่านยอด และถอน</h2></div><div class="exam-content"><p>อ้างอิงเอกสาร: AfterGRAD หน้า 29–30; Smart Contract (Cont.) หน้า 27–29</p>
+<p><strong>คำถามฝึก: อธิบายการทำงานของ EasyBank พร้อมเหตุผลของแต่ละคำสั่ง</strong></p>
+<h3>การอ่านยอด</h3>
+<pre><code class="language-solidity">mapping(address =&gt; uint256) private balances;
 
-<div class="container">
+function getBalance() public view returns (uint256) {
+    return balances[msg.sender];
+}
+</code></pre>
+<p>ฟังก์ชันคืนยอดของผู้เรียก โดยใช้ address เป็นคีย์ค้นหาใน mapping และเป็น view เพราะไม่แก้ไข state</p>
+<h3>การฝาก</h3>
+<pre><code class="language-solidity">function deposit() public payable {
+    balances[msg.sender] += msg.value;
+}
+</code></pre>
+<p>ฟังก์ชันต้องเป็น payable เพื่อรับ Ether และบวกยอด Wei ที่ส่งเข้ามาให้บัญชีผู้เรียก ถ้า A ฝาก 1 ETH แล้วฝากอีก 0.5 ETH ยอดของ A จะเป็น 1.5 ETH การฝากของ B ใช้อีกคีย์หนึ่ง จึงไม่เปลี่ยนยอดของ A</p>
+<h3>การถอน</h3>
+<pre><code class="language-solidity">function withdraw(uint256 amount) public {
+    require(balances[msg.sender] &gt;= amount, &quot;Insufficient balance&quot;);
+    balances[msg.sender] -= amount;
+    (bool success, ) = payable(msg.sender).call{value: amount}(&quot;&quot;);
+    require(success, &quot;Withdraw failed&quot;);
+}
+</code></pre>
+<p>แนวคำตอบ: เริ่มตรวจว่ายอดของผู้เรียกเพียงพอกับจำนวนที่ขอถอน จากนั้นลด balance ก่อนโอน Ether ออกจากสัญญาไปยังผู้เรียก แล้วตรวจว่าการโอนสำเร็จ หากไม่สำเร็จให้ revert เพื่อย้อนการเปลี่ยนแปลงในครั้งนั้น ลำดับ <strong>ตรวจเงื่อนไข → แก้ไขยอด → โอนเงิน</strong> เป็น Checks–Effects–Interactions ช่วยลดความเสี่ยงจากการเรียกกลับเข้ามาระหว่างการโอน อ้างอิง <a href="https://docs.solidity.org/en/latest/security-considerations.html">Solidity Security Considerations</a></p>
+<p>ตัวอย่างนี้ใช้ประกอบการอธิบายบทเรียน ไม่ใช่ระบบธนาคารที่ผ่านการตรวจสอบเพื่อใช้งานจริง</p>
+<p><strong>คำถามฝึก: ถ้าโอนก่อนลด balance มีปัญหาอย่างไร?</strong></p>
+<p>แนวคำตอบ: ถ้าผู้รับเป็นสัญญา โค้ดของผู้รับอาจเรียก withdraw กลับเข้ามาขณะที่ยอดเดิมยังไม่ถูกลด ทำให้ตรวจยอดเดิมผ่านและถอนซ้ำได้ จึงควรปรับ state ให้ถูกต้องก่อนเรียกภายนอก</p>
+<p><strong>คำถามฝึก: withdraw จำเป็นต้องเป็น payable หรือไม่?</strong></p>
+<p>แนวคำตอบ: ไม่จำเป็นเพียงเพราะฟังก์ชันโอน Ether ออก <code>payable</code> ใช้เพื่อรับ Ether มากับการเรียก ส่วน withdraw ในตัวอย่างจ่ายจาก Ether ที่สัญญามีอยู่แล้ว</p></div></section><section id="complicated-bank"><div class="section-header"><div class="section-label">บทที่ 09 · สรุปปลายภาค</div><h2>ComplicatedBank และการคำนวณดอกเบี้ย</h2></div><div class="exam-content"><p>อ้างอิงเอกสาร: AfterGRAD หน้า 31–33</p>
+<p>ตัวแปรสำคัญ:</p>
+<ul>
+<li><code>balances</code>: เก็บยอดรายบัญชี</li>
+<li><code>accounts</code>: เก็บ address สำหรับวนลูป</li>
+<li><code>rate = 3</code>: อัตราดอกเบี้ยร้อยละ 3</li>
+<li><code>owner</code>: ผู้ deploy ซึ่งทำหน้าที่ผู้จัดการ</li>
+</ul>
+<p><strong>คำถามฝึก: getSystemBalance ควรออกแบบอย่างไร?</strong></p>
+<p>แนวคำตอบ: คืนค่า <code>address(this).balance</code> และใช้ <code>onlyOwner</code> ตรวจผู้เรียกตามข้อกำหนดแบบฝึกหัด ส่วน constructor บันทึก <code>msg.sender</code> เป็น owner ตั้งแต่สร้างสัญญา ฟังก์ชันเป็น view เพราะอ่านยอดโดยไม่แก้ไขข้อมูล</p>
+<p><strong>คำถามฝึก: calculateInterest คำนวณอย่างไร?</strong></p>
+<pre><code class="language-solidity">function calculateInterest(address account) public view returns (uint256) {
+    return balances[account] * rate / 100;
+}
+</code></pre>
+<p>แนวคำตอบ: ค้นหาเงินต้นจาก mapping แล้วคูณอัตราและหาร 100 เช่น ยอด 2 ETH อัตรา 3% ได้ดอกเบี้ย 0.06 ETH ผลคำนวณมีหน่วยเดียวกับเงินต้น คือ Wei และการคืนค่าดอกเบี้ยยังไม่ได้โอนเงินหรือเพิ่มยอดให้บัญชี</p>
+<p><strong>คำถามฝึก: ทำไมต้องมี accounts ทั้งที่มี mapping แล้ว?</strong></p>
+<p>แนวคำตอบ: mapping ใช้ค้นค่าจากคีย์ได้ แต่ไม่มีรายการคีย์ให้วนลูปโดยตรง จึงเก็บ address ใน array เพิ่มเพื่อให้คำนวณดอกเบี้ยทุกบัญชีได้ ต้องป้องกัน address ซ้ำ เช่น บันทึกด้วย <code>mapping(address =&gt; bool)</code> ว่าเพิ่มบัญชีแล้วหรือยัง มิฉะนั้นผู้ฝากซ้ำจะถูกนับดอกเบี้ยหลายครั้ง</p>
+<p><strong>คำถามฝึก: totalInterestPerYear ทำงานอย่างไร?</strong></p>
+<pre><code class="language-solidity">function totalInterestPerYear() public view returns (uint256) {
+    uint256 total = 0;
+    for (uint256 i = 0; i &lt; accounts.length; i++) {
+        address account = accounts[i];
+        total += calculateInterest(account);
+    }
+    return total;
+}
+</code></pre>
+<p>แนวคำตอบ: กำหนดผลรวมเริ่มต้นเป็นศูนย์ วนอ่าน accounts ตั้งแต่ index 0 จนถึงก่อน accounts.length เรียก calculateInterest ของแต่ละบัญชีแล้วสะสมลง total จากนั้นคืนผลรวม เช่น A มี 1 ETH และ B มี 2 ETH ที่อัตรา 3% ได้ดอกเบี้ยรวม 0.09 ETH</p>
+<p><strong>จุดวิเคราะห์:</strong> การวนลูปมีงานเพิ่มตามจำนวนบัญชี ถ้าประมวลผลในธุรกรรมที่มีบัญชีจำนวนมากอาจใช้ Gas เกิน limit และสูตรนี้คำนวณ 3% ของยอด ณ ตอนอ่าน ไม่มีการนับระยะเวลาฝากหรือทบต้นอัตโนมัติ</p></div></section><section id="enum-array"><div class="section-header"><div class="section-label">บทที่ 10 · สรุปปลายภาค</div><h2>Enum และ Array</h2></div><div class="exam-content"><p>อ้างอิงเอกสาร: AfterGRAD หน้า 34–36</p>
+<p><strong>คำถามฝึก: enum ช่วยจัดการสถานะอย่างไร?</strong></p>
+<p>แนวคำตอบ: enum กำหนดชุดค่าที่มีชื่อเพื่อให้โค้ดอ่านง่าย เช่น Pending, Active, Completed, Canceled ในตัวอย่าง ProcessManager constructor ตั้งสถานะ Pending ฟังก์ชัน activate ตรวจว่าปัจจุบันเป็น Pending ก่อนเปลี่ยนเป็น Active และ complete ตรวจว่าเป็น Active ก่อนเปลี่ยนเป็น Completed จึงช่วยควบคุมลำดับการเปลี่ยนสถานะ</p>
+<p><strong>ข้อควรจำ:</strong> enum ไม่ได้สร้างเงื่อนไขเปลี่ยนสถานะให้เอง ต้องใช้ require หรือโค้ดตรวจเงื่อนไข</p>
+<p><strong>คำถามฝึก: array.length และ push ใช้ทำอะไร?</strong></p>
+<p>แนวคำตอบ: <code>push</code> เพิ่มสมาชิกใน dynamic array ส่วน <code>length</code> คืนจำนวนสมาชิกเป็น uint256 เช่นเพิ่ม 10, 20, 30 จะได้ length เท่ากับ 3 และ index ที่ใช้ได้คือ 0, 1, 2 การวนลูปจึงใช้ <code>i &lt; array.length</code> เพื่อไม่อ่านเกินขอบเขต</p></div></section><section id="testing"><div class="section-header"><div class="section-label">บทที่ 11 · สรุปปลายภาค</div><h2>ขั้นตอนทดสอบและ Deploy</h2></div><div class="exam-content"><span id="wallet"></span><p><strong>คำถามฝึก: จะตรวจสอบว่าโปรแกรมธนาคารทำงานถูกต้องได้อย่างไร?</strong></p>
+<p>แนวคำตอบควรครอบคลุมทั้งกรณีสำเร็จและกรณีที่ต้องถูกปฏิเสธ:</p>
+<ol>
+<li>Compile ด้วย Solidity version ที่ตรง pragma และ deploy บนสภาพแวดล้อมทดสอบ</li>
+<li>ตรวจว่า owner ตรงกับบัญชีผู้ deploy และยอดเริ่มต้นของผู้ใช้เป็นศูนย์</li>
+<li>ใช้อย่างน้อย 5 accounts ตามแบบฝึกหัด ฝากจำนวนต่างกันและตรวจว่ายอดแยกจากกัน</li>
+<li>ฝากซ้ำจากบัญชีเดิม ตรวจว่ายอดเพิ่มถูกและ accounts ไม่เกิดรายการซ้ำ</li>
+<li>ถอนจำนวนที่ไม่เกินยอด ตรวจว่ายอดผู้ฝากและยอดสัญญาลดตามจำนวนถอน</li>
+<li>ทดลองถอนเกินยอด ควร revert และยอดไม่เปลี่ยน</li>
+<li>ให้ owner และบัญชีอื่นเรียกฟังก์ชันที่มี onlyOwner ตรวจว่าสิทธิถูกต้อง</li>
+<li>คำนวณดอกเบี้ยรายคนและยอดรวมด้วยมือ แล้วเทียบกับค่าจากโปรแกรม</li>
+<li>Deploy บน Sepolia ตามโจทย์ เก็บ contract address และตรวจ transaction receipt / block explorer</li>
+</ol>
+<p>บทบาทเครื่องมือ: Remix ใช้เขียน compile และ deploy; MetaMask ใช้จัดการบัญชีและลงนาม; Faucet แจกเหรียญทดสอบ; Block explorer ใช้ตรวจธุรกรรมและสัญญา; OpenZeppelin มีชุดสัญญาและส่วนประกอบมาตรฐานให้ศึกษาและนำมาใช้</p>
+<p>อ้างอิงเอกสาร: BC-2 หน้า 14–16; AfterGRAD หน้า 32</p></div></section><section id="blockchain"><div class="section-header"><div class="section-label">บทที่ 12 · สรุปปลายภาค</div><h2>พื้นฐาน Blockchain สำหรับข้ออธิบาย</h2></div><div class="exam-content"><h3 id="dlt">ระบบรวมศูนย์, P2P และ DLT</h3>
+<p><strong>คำถามฝึก: ระบบรวมศูนย์มีปัญหาอะไร และ Blockchain ใช้เทคโนโลยีใดช่วยจัดการ?</strong></p>
+<p>แนวคำตอบ: ระบบรวมศูนย์พึ่งพาผู้ควบคุมหรือเซิร์ฟเวอร์กลาง จึงเสี่ยงต่อ single point of failure และมีข้อกังวลเรื่องความปลอดภัย ความเป็นส่วนตัว และความโปร่งใส Blockchain ใช้ P2P ให้โหนดติดต่อกัน ใช้ DLT กระจายสำเนาบัญชีข้อมูล และใช้ Cryptography ช่วยตรวจสอบความถูกต้องและสิทธิในการทำธุรกรรม พร้อมกลไก consensus เพื่อให้โหนดตกลงสถานะร่วมกัน</p>
+<p><strong>คำถามฝึก: DLT ต่างจาก Blockchain อย่างไร?</strong></p>
+<p>แนวคำตอบ: DLT เป็นแนวคิดบัญชีข้อมูลที่จัดเก็บสำเนาในหลายจุด ส่วน Blockchain เป็นรูปแบบหนึ่งของ DLT ที่จัดข้อมูลเป็นบล็อกเชื่อมโยงกันด้วยค่า hash จึงกล่าวได้ว่า Blockchain เป็น DLT แต่ DLT ทุกแบบไม่จำเป็นต้องเป็น Blockchain</p>
+<p>Centralized เน้นอำนาจที่ศูนย์กลาง; Decentralized เน้นการกระจายอำนาจควบคุม; Distributed เน้นการกระจายข้อมูลหรือการประมวลผล ระบบที่มีหลายเครื่องจึงไม่ได้หมายความว่ากระจายอำนาจเสมอไป</p>
+<p>อ้างอิงเอกสาร: BC-1 และ BC-2 หน้า 2–6</p>
+<h3 id="crypto">Cryptography และ Hash</h3>
+<p><strong>คำถามฝึก: Hash ต่างจาก Encryption อย่างไร?</strong></p>
+<p>แนวคำตอบ: Encryption แปลงข้อมูลเพื่อให้ผู้ที่มีกุญแจถอดกลับได้ ส่วน Hash สร้างค่าผลลัพธ์ขนาดคงที่และออกแบบให้ย้อนหาข้อมูลต้นฉบับได้ยากมาก ใช้ตรวจสอบความครบถ้วนของข้อมูล เช่น เปลี่ยนข้อมูลในบล็อกแล้ว hash เปลี่ยน จึงตรวจพบการแก้ไขได้ Hash ไม่ใช่การเข้ารหัสที่มีไว้ถอดกลับ</p>
+<p>Symmetric encryption ใช้กุญแจลับร่วมกัน ส่วน Asymmetric ใช้คู่ public key และ private key ในธุรกรรม Blockchain ผู้ใช้ใช้ private key ลงลายมือชื่อ และผู้อื่นใช้ public key ตรวจลายมือชื่อ ลายมือชื่อช่วยยืนยันสิทธิและความถูกต้อง ไม่ได้ทำให้ข้อมูลธุรกรรมเป็นความลับโดยอัตโนมัติ</p>
+<p><strong>คำถามฝึก: ทำไม Blockchain จึงแก้ไขข้อมูลย้อนหลังได้ยาก?</strong></p>
+<p>แนวคำตอบ: บล็อกเชื่อมกันด้วย hash ของบล็อกก่อนหน้า ถ้าแก้ข้อมูลเก่า hash จะเปลี่ยนและความเชื่อมโยงของบล็อกถัดไปผิดไป ผู้แก้ไขจึงต้องทำให้ประวัติใหม่ผ่านกฎ consensus และได้รับการยอมรับจากเครือข่ายด้วย ความยากนี้มาจากทั้งการเชื่อมด้วย hash และกลไกของเครือข่าย ไม่ใช่ hash เพียงอย่างเดียว</p>
+<p>อ้างอิงเอกสาร: BC-1 / BC-2 หน้า 9–12; BC-2 หน้า 20</p>
+<h3>วิวัฒนาการ Blockchain ตามสไลด์</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>รุ่นตามการแบ่งในเอกสาร</th>
+<th>จุดเน้น</th>
+<th>ตัวอย่างคำตอบ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0</td>
+<td>Currency</td>
+<td>การโอนและบันทึกเงินดิจิทัล เช่น Bitcoin</td>
+</tr>
+<tr>
+<td>2.0</td>
+<td>Smart Contract</td>
+<td>เพิ่มการทำงานตามเงื่อนไขโปรแกรม เช่น Ethereum</td>
+</tr>
+<tr>
+<td>3.0</td>
+<td>DApps</td>
+<td>แอปที่ใช้สัญญาและเครือข่าย Blockchain เป็นส่วนหนึ่งของระบบ</td>
+</tr>
+<tr>
+<td>4.0</td>
+<td>Industry</td>
+<td>ประยุกต์ในงานธุรกิจและอุตสาหกรรม</td>
+</tr>
+</tbody>
+</table></div>
+<p>การแบ่งนี้เป็นกรอบอธิบายในสไลด์ ไม่ใช่เลขเวอร์ชันของ protocol</p>
+<p>อ้างอิงเอกสาร: BC-2 หน้า 21–22 และ 32–33</p></div></section><section id="bitcoin"><div class="section-header"><div class="section-label">บทที่ 13 · สรุปปลายภาค</div><h2>Bitcoin, Halving และ Lightning Network</h2></div><div class="exam-content"><p>เนื้อหาใน BC-2 ช่วงท้ายมีภาพ block explorer, กิจกรรม Lightning และภาพแนะนำวิดีโอ Halving โดยคำอธิบายต่อไปนี้ใช้ช่วยเชื่อมความหมายของหัวข้อในภาพ ไม่ใช่บทถอดเสียงวิดีโอ</p>
+<p><strong>คำถามฝึก: Block explorer ใช้ดูอะไรได้บ้าง?</strong></p>
+<p>แนวคำตอบ: ใช้ตรวจข้อมูลบล็อกและธุรกรรม เช่น block height, hash, เวลา, จำนวนธุรกรรม, ค่าธรรมเนียม และ confirmations ช่วยตรวจสอบว่าธุรกรรมอยู่ในบล็อกใด และมีบล็อกต่อท้ายแล้วกี่บล็อก การดู confirmations จึงเป็นการตรวจสถานะการยืนยัน ไม่ใช่ดูเพียงว่ามี transaction hash หรือไม่</p>
+<p><strong>คำถามฝึก: Bitcoin Halving คืออะไร?</strong></p>
+<p>แนวคำตอบ: Halving คือการลด block subsidy หรือ Bitcoin ใหม่ที่จ่ายให้ผู้ขุดต่อบล็อกลงครึ่งหนึ่งทุก 210,000 บล็อก โดยประมาณทุก 4 ปี ทำให้อัตราการสร้างเหรียญใหม่ลดลง ไม่ใช่การลดจำนวนเหรียญในกระเป๋าผู้ถือครึ่งหนึ่ง และไม่ได้รับประกันว่าราคาจะเพิ่มขึ้น ค่าธรรมเนียมธุรกรรมเป็นรายได้อีกส่วนของผู้ขุด</p>
+<p><strong>คำถามฝึก: Lightning Network ช่วยการชำระเงินอย่างไร?</strong></p>
+<p>แนวคำตอบ: Lightning เป็นเครือข่ายการชำระเงินบน Bitcoin ที่ใช้ payment channels ช่วยให้จ่ายเงินได้รวดเร็วและรองรับยอดเล็ก โดยไม่ต้องบันทึกการชำระแต่ละครั้งเป็นธุรกรรมบนเชนหลัก การชำระอาจส่งผ่านเส้นทางหลายช่องทาง สไลด์ให้ฝึกสร้าง invoice 100 sats เพื่อรับเงินผ่าน QR code</p>
+<p>1 BTC = 100,000,000 satoshi ดังนั้น <strong>100 sats = 0.000001 BTC</strong></p>
+<p>อ้างอิงเอกสาร: BC-2 หน้า 23–40 และตรวจสอบคำอธิบายเพิ่มเติมกับ <a href="https://developer.bitcoin.org/reference/block_chain.html">Bitcoin Developer Guide: Block Chain</a> และ <a href="https://lightning.network/lightning-network.pdf">Lightning Network: Payment Channels</a></p></div></section><section id="pitfalls"><div class="section-header"><div class="section-label">บทที่ 14 · สรุปปลายภาค</div><h2>จุดที่ควรแก้ความเข้าใจก่อนจำจากสไลด์</h2></div><div class="exam-content"><ol>
+<li><strong>view ที่แก้ยอดผิด:</strong> สไลด์ AfterGRAD หน้า 23 ใส่ <code>balances[msg.sender] += 1;</code> ในฟังก์ชัน view ซึ่งผิดข้อกำหนด ต้องลบคำสั่งแก้ state ออก รายละเอียดตรวจสอบกับ <a href="https://docs.soliditylang.org/en/v0.8.26/contracts.html">Solidity Contracts</a></li>
+<li><strong>ทิศทางถอนเงิน:</strong> ข้อความโจทย์บางหน้าระบุโอนกลับไป smart contract แต่การถอนในบริบทนี้ต้องโอนจากสัญญาไปบัญชีผู้ถอน ซึ่งสอดคล้องกับโค้ด call ใน Smart Contract (Cont.) หน้า 29</li>
+<li><strong>bytes มีขนาดเปลี่ยนได้:</strong> ตารางชนิดข้อมูลในสไลด์วาง bytes ไว้ทั้งสองกลุ่ม ให้แยก <code>bytes</code> จาก <code>bytes1</code> ถึง <code>bytes32</code></li>
+<li><strong>private ไม่เท่ากับความลับ:</strong> ข้อมูลบนเชนยังตรวจสอบได้แม้ไม่มี getter</li>
+<li><strong>public ไม่ได้ให้สิทธิแก้ตัวแปรโดยอัตโนมัติ:</strong> Getter ใช้อ่าน ต้องมีฟังก์ชันและเงื่อนไขสำหรับแก้ไข</li>
+<li><strong>payable ไม่เท่ากับเพิ่ม balance ใน mapping:</strong> รับ Ether ได้ แต่บัญชีภายในต้องอัปเดตด้วยโค้ด</li>
+<li><strong>การคำนวณดอกเบี้ยไม่เท่ากับจ่ายดอกเบี้ย:</strong> คืนค่าผลคำนวณไม่ได้สร้างเงินหรือโอนเงินให้ผู้ฝาก</li>
+<li><strong>ตัวอย่างบางส่วนใช้ syntax เก่า:</strong> เช่น <code>now</code> และการใส่ public ให้ constructor ควรอ่านตาม version ของ compiler แทนการคัดลอกทุกบรรทัด</li>
+<li><strong>ระบบโปร่งใสไม่ได้ทำให้ข้อมูลต้นทางถูกเสมอ:</strong> ถ้าป้อนข้อมูลผิด ระบบอาจเก็บข้อมูลผิดอย่างตรวจสอบย้อนหลังได้</li>
+</ol></div></section><section id="practice"><div class="section-header"><div class="section-label">บทที่ 15 · สรุปปลายภาค</div><h2>แบบฝึกอัตนัยก่อนสอบ</h2></div><div class="exam-content"><p>ลองตอบแต่ละข้อโดยไม่เปิดสรุป แล้วตรวจว่ามีคำสำคัญครบ:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>คำถาม</th>
+<th>คำสำคัญในคำตอบ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>อธิบายจาก Solidity ไปสู่การใช้งานสัญญา</td>
+<td>Compile, ABI, bytecode, deploy, address, EVM</td>
+</tr>
+<tr>
+<td>เปรียบเทียบ Calling กับ Sending</td>
+<td>อ่าน/จำลอง, เปลี่ยน state, transaction hash, confirmation, Gas</td>
+</tr>
+<tr>
+<td>เปรียบเทียบตัวแปร 3 ประเภท</td>
+<td>ถาวร, ชั่วคราว, บริบทธุรกรรม</td>
+</tr>
+<tr>
+<td>เปรียบเทียบ visibility</td>
+<td>ภายใน, สืบทอด, ภายนอก, getter</td>
+</tr>
+<tr>
+<td>อธิบายการฝากเงิน</td>
+<td>payable, msg.sender, msg.value, mapping</td>
+</tr>
+<tr>
+<td>อธิบายการถอนและลำดับคำสั่ง</td>
+<td>require, ลด balance, call, ตรวจ success, revert</td>
+</tr>
+<tr>
+<td>อธิบาย onlyOwner</td>
+<td>constructor, owner, msg.sender, require, _;</td>
+</tr>
+<tr>
+<td>อธิบายดอกเบี้ยรวม</td>
+<td>rate/100, accounts, ไม่ซ้ำ, loop, total, หน่วย Wei</td>
+</tr>
+<tr>
+<td>อธิบาย enum</td>
+<td>ชุดสถานะ, require, ลำดับการเปลี่ยนสถานะ</td>
+</tr>
+<tr>
+<td>อธิบายความแก้ไขย้อนหลังยากของ Blockchain</td>
+<td>hash เชื่อมบล็อก, สำเนาข้อมูล, consensus</td>
+</tr>
+<tr>
+<td>อธิบาย Hash กับลายมือชื่อดิจิทัล</td>
+<td>ความครบถ้วน, private key ลงชื่อ, public key ตรวจ</td>
+</tr>
+<tr>
+<td>อธิบาย Halving และ Lightning</td>
+<td>ลด subsidy, 210,000 บล็อก, payment channel, invoice</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>ทวนเร็ว:</strong> ผู้เรียก = msg.sender; เงินที่ส่งมา = msg.value; ยอดผู้ฝาก = balances[address]; ยอดสัญญา = address(this).balance; อ่านไม่แก้ = view; รับ Ether = payable; สิทธิผู้จัดการ = onlyOwner; ถอน = ตรวจ → ลด → โอน; ดอกเบี้ย = เงินต้น × rate ÷ 100; รวมทุกบัญชี = array + loop</p></div></section><section id="code-reading"><div class="section-header"><div class="section-label">บทที่ 16 · สรุปปลายภาค</div><h2>อ่านโค้ด Solidity ทีละส่วน: จากโครงสร้างถึงการทำงาน</h2></div><div class="exam-content"><h3>16.1 pragma และโครงสร้างสัญญา</h3>
+<pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
 
-<!-- ===== SECTION 1 ===== -->
-<section id="intro">
-  <div class="section-header">
-    <div class="section-label">ส่วนที่ 1</div>
-    <h2>ปัญหาของ Centralized Technology</h2>
-    <p>ระบบศูนย์กลางมีจุดอ่อน 4 ประการที่เป็นแรงผลักดันให้เกิด Blockchain</p>
-  </div>
-  <div class="grid grid-4">
-    <div class="card card-red"><div class="card-icon">&#128274;</div><h3>01 Security</h3><p>ข้อมูลทั้งหมดรวมอยู่ที่ศูนย์กลาง เสี่ยงต่อการถูกโจมตีหรือขโมย</p></div>
-    <div class="card card-orange"><div class="card-icon">&#10060;</div><h3>02 Single Point of Failure</h3><p>ถ้าเซิร์ฟเวอร์กลางล่ม ระบบทั้งหมดหยุดทำงานทันที</p></div>
-    <div class="card card-purple"><div class="card-icon">&#128373;</div><h3>03 Data Privacy</h3><p>ผู้ควบคุมศูนย์กลางสามารถเข้าถึงข้อมูลส่วนตัวของผู้ใช้ได้</p></div>
-    <div class="card card-blue"><div class="card-icon">&#128065;</div><h3>04 Transparency</h3><p>ผู้ใช้ทั่วไปไม่สามารถตรวจสอบหรือยืนยันข้อมูลได้โดยตรง</p></div>
-  </div>
-</section>
+contract Example {
+    uint256 public storedData;
 
-<!-- ===== SECTION 2 ===== -->
-<section>
-  <div class="section-header">
-    <div class="section-label">ส่วนที่ 2</div>
-    <h2>เทคโนโลยีที่อยู่เบื้องหลัง Blockchain</h2>
-    <p>Blockchain ประกอบด้วย 3 เทคโนโลยีหลัก</p>
-  </div>
-  <div class="grid grid-3">
-    <div class="card card-blue"><div class="card-icon">&#127760;</div><h3>01 Peer-to-Peer Network</h3><p>ทุก Node เชื่อมต่อกันโดยตรง ไม่มีเซิร์ฟเวอร์กลาง แต่ละ Peer รับ-ส่งข้อมูลได้เท่าเทียมกัน</p></div>
-    <div class="card card-green"><div class="card-icon">&#128220;</div><h3>02 Distributed Ledger Technology</h3><p>บันทึกธุรกรรมออนไลน์ที่จัดเก็บข้อมูลพร้อมกันในหลายที่ในเวลาเดียวกัน</p></div>
-    <div class="card card-purple"><div class="card-icon">&#128272;</div><h3>03 Cryptography</h3><p>เทคนิคการเข้ารหัสข้อมูลเพื่อปกป้องความเป็นส่วนตัวและความสมบูรณ์ของข้อมูล</p></div>
-  </div>
-  <div class="section-header" style="margin-top:2.5rem;"><h2>Centralized vs Decentralized vs Distributed</h2></div>
-  <div class="grid grid-3">
-    <div class="card"><div class="card-icon">&#127970;</div><h3>Centralized</h3><p>ควบคุมโดยจุดศูนย์กลางเดียว ถ้าล่มระบบทั้งหมดพัง</p></div>
-    <div class="card"><div class="card-icon">&#128376;</div><h3>Decentralized</h3><p>กระจายการควบคุมออกไปหลายจุด แต่ยังมีลำดับชั้นบ้าง</p></div>
-    <div class="card"><div class="card-icon">&#9889;</div><h3>Distributed</h3><p>กระจายทั้งข้อมูลและการประมวลผลทุก Node อย่างสมบูรณ์</p></div>
-  </div>
-</section>
-
-<!-- ===== SECTION 3 ===== -->
-<section id="dlt">
-  <div class="section-header">
-    <div class="section-label">ส่วนที่ 3</div>
-    <h2>Distributed Ledger Technology (DLT)</h2>
-    <p>DLT คือการบันทึกข้อมูลแบบออนไลน์ที่จัดเก็บไว้หลายที่พร้อมกัน</p>
-  </div>
-  <div class="grid grid-4">
-    <div class="card card-blue"><div class="card-icon">&#128256;</div><h3>Decentralization</h3><p>กระจายข้อมูลไปหลายโหนด ไม่มีจุดควบคุมกลาง</p></div>
-    <div class="card card-green"><div class="card-icon">&#129309;</div><h3>Consensus</h3><p>ทุก Node ต้องตกลงยืนยันธุรกรรมก่อนจึงจะบันทึกได้</p></div>
-    <div class="card card-orange"><div class="card-icon">&#128270;</div><h3>Transparency</h3><p>ทุกคนสามารถตรวจสอบธุรกรรมได้</p></div>
-    <div class="card card-red"><div class="card-icon">&#128737;</div><h3>Security</h3><p>ข้อมูลถูกป้องกันด้วยการเข้ารหัส</p></div>
-  </div>
-  <div class="highlight"><p><strong>Blockchain</strong> คือ ระบบการเก็บข้อมูลแบบกระจาย (แบบหนึ่งของ DLT) ที่มีความน่าเชื่อถือ โปร่งใส และ <strong>ไม่ต้องอาศัยคนกลาง</strong> — ข้อมูลที่บันทึกใน Blockchain ไม่สามารถเปลี่ยนแปลงหรือแก้ไขได้ <strong>(Immutability)</strong></p></div>
-</section>
-
-<!-- ===== SECTION 4 ===== -->
-<section id="crypto">
-  <div class="section-header">
-    <div class="section-label">ส่วนที่ 4</div>
-    <h2>Cryptography (การเข้ารหัส)</h2>
-    <p>เทคนิคการเข้ารหัสที่ใช้ใน Blockchain มี 2 ประเภทหลัก</p>
-  </div>
-  <div class="grid grid-2">
-    <div class="card card-blue">
-      <div class="card-icon">&#128505;</div>
-      <h3>1) Public-Key Cryptography (Asymmetric)</h3>
-      <p style="margin-bottom:.75rem;">ใช้กุญแจคู่:</p>
-      <ul>
-        <li><strong>Public Key</strong> — แจกได้ทั่วไป ใช้สำหรับเข้ารหัส</li>
-        <li><strong>Private Key</strong> — เก็บเป็นความลับ ใช้สำหรับถอดรหัส</li>
-      </ul>
-      <div style="margin-top:.75rem;padding:.5rem .75rem;background:rgba(88,166,255,.08);border-radius:8px;font-size:.85rem;color:var(--text-muted);">เปรียบได้กับกล่องล็อกที่ทุกคนหยอดจดหมายได้ (Public Key) แต่มีแค่เจ้าของที่เปิดได้ (Private Key)</div>
-    </div>
-    <div class="card card-purple">
-      <div class="card-icon">&#128279;</div>
-      <h3>2) Hash Function</h3>
-      <p style="margin-bottom:.75rem;">รับข้อมูลอะไรก็ได้และสร้าง output เป็นสตริงความยาวคงที่</p>
-      <ul>
-        <li>ไม่ว่า input จะมีขนาดเท่าไร output จะมีขนาดเท่ากันเสมอ</li>
-        <li><strong>One-way function</strong> — ไม่สามารถย้อนกลับข้อมูลเดิมได้</li>
-        <li>เปลี่ยน input แม้ 1 ตัว → hash เปลี่ยนหมด</li>
-      </ul>
-      <div style="margin-top:.75rem;font-size:.82rem;color:var(--text-muted);">ตัวอย่าง: SHA-256 (ใช้ใน Bitcoin)</div>
-    </div>
-  </div>
-  <div class="section-header" style="margin-top:2rem;"><h2>Symmetric vs Asymmetric Encryption</h2></div>
-  <div class="table-wrap"><table>
-    <thead><tr><th>คุณสมบัติ</th><th>Symmetric</th><th>Asymmetric</th></tr></thead>
-    <tbody>
-      <tr><td>จำนวนกุญแจ</td><td>1 กุญแจ (ใช้ร่วมกัน)</td><td>2 กุญแจ (Public + Private)</td></tr>
-      <tr><td>ความเร็ว</td><td><span class="badge badge-green">เร็ว</span></td><td><span class="badge badge-orange">ช้ากว่า</span></td></tr>
-      <tr><td>ความปลอดภัย</td><td>ต้องแชร์กุญแจ เสี่ยงถูกดักฟัง</td><td><span class="badge badge-green">ปลอดภัยกว่า</span></td></tr>
-      <tr><td>ตัวอย่าง</td><td>AES, DES</td><td>RSA, ECC (ใช้ใน Blockchain)</td></tr>
-    </tbody>
-  </table></div>
-</section>
-
-<!-- ===== SECTION 5 ===== -->
-<section id="blockchain">
-  <div class="section-header">
-    <div class="section-label">ส่วนที่ 5</div>
-    <h2>วิวัฒนาการของ Blockchain</h2>
-    <p>Blockchain พัฒนาผ่านหลาย Generation ตั้งแต่ cryptocurrency จนถึง Smart Contract</p>
-  </div>
-  <div class="timeline">
-    <div class="tl-item"><div class="tl-dot" style="background:var(--accent4);"></div><h3>Blockchain 1.0 — Cryptocurrency</h3><p>Bitcoin ถือกำเนิดในปี 2009 ใช้สำหรับโอนเงินแบบ Peer-to-Peer โดยไม่ต้องใช้ธนาคาร</p></div>
-    <div class="tl-item"><div class="tl-dot" style="background:var(--primary);"></div><h3>Blockchain 2.0 — Smart Contracts</h3><p>Ethereum นำ Smart Contract มาสู่ Blockchain โปรแกรมที่ทำงานอัตโนมัติตามเงื่อนไขที่กำหนด ไม่ต้องมีคนกลาง</p></div>
-    <div class="tl-item"><div class="tl-dot" style="background:var(--accent2);"></div><h3>Blockchain 3.0 — DApps &amp; Beyond</h3><p>การพัฒนา Decentralized Applications (DApps), DeFi, NFT และนวัตกรรมอื่นๆ</p></div>
-  </div>
-  <div class="section-header" style="margin-top:2.5rem;"><h2>คุณสมบัติหลักของ Blockchain</h2></div>
-  <div class="grid grid-3">
-    <div class="card card-green"><div class="card-icon">&#128274;</div><h3>Immutability</h3><p>ข้อมูลที่บันทึกแล้วไม่สามารถเปลี่ยนแปลงหรือลบได้ เพราะทุก Block เชื่อมกันด้วย Hash</p></div>
-    <div class="card card-blue"><div class="card-icon">&#128270;</div><h3>Transparency</h3><p>ทุกธุรกรรมตรวจสอบได้สาธารณะผ่าน Block Explorer</p></div>
-    <div class="card card-orange"><div class="card-icon">&#128225;</div><h3>Reliability</h3><p>น่าเชื่อถือสูง เพราะข้อมูลเดียวกันเก็บไว้ใน Node หลายพันแห่งทั่วโลก</p></div>
-  </div>
-</section>
-
-<!-- ===== SECTION 6 ===== -->
-<section id="solidity">
-  <div class="section-header">
-    <div class="section-label">ส่วนที่ 6</div>
-    <h2>Smart Contract &amp; Solidity</h2>
-    <p>ภาษาโปรแกรมหลักสำหรับเขียน Smart Contract บน Ethereum</p>
-  </div>
-
-  <div class="grid grid-2" style="margin-bottom:1.5rem;">
-    <div class="card card-blue">
-      <div class="card-icon">&#9881;</div>
-      <h3>Solidity → EVM Bytecode</h3>
-      <div class="timeline" style="margin-top:.75rem;">
-        <div class="tl-item"><div class="tl-dot"></div><h3 style="font-size:.9rem;">Solidity Source Code</h3><p>เขียนด้วยภาษา Solidity (.sol)</p></div>
-        <div class="tl-item"><div class="tl-dot"></div><h3 style="font-size:.9rem;">Compiler</h3><p>Compile ด้วย solc หรือ Remix IDE</p></div>
-        <div class="tl-item"><div class="tl-dot"></div><h3 style="font-size:.9rem;">EVM Bytecode + ABI</h3><p>Bytecode สำหรับ deploy + ABI สำหรับเรียกใช้</p></div>
-      </div>
-    </div>
-    <div class="card card-green">
-      <div class="card-icon">&#128222;</div>
-      <h3>Calling vs Sending Function</h3>
-      <div class="table-wrap" style="margin-top:.5rem;"><table>
-        <thead><tr><th>Calling</th><th>Sending</th></tr></thead>
-        <tbody>
-          <tr><td>ไม่บันทึกใน Blockchain</td><td>บันทึกใน Blockchain</td></tr>
-          <tr><td>Return ข้อมูลทันที</td><td>Return Transaction Hash</td></tr>
-          <tr><td>ทำงานทันที</td><td>ใช้เวลา (รอ confirm)</td></tr>
-          <tr><td><span class="badge badge-green">ฟรี</span></td><td><span class="badge badge-orange">เสีย Gas Fee</span></td></tr>
-        </tbody>
-      </table></div>
-      <div class="highlight" style="margin-top:.75rem;"><p><strong>Transaction fee = Gas used × Gas price</strong></p></div>
-    </div>
-  </div>
-
-  <h3 style="margin-bottom:.75rem;font-size:1.1rem;">&#128203; โครงสร้าง Smart Contract</h3>
-  <div class="code-block"><span class="cm">// ระบุ version ของ Solidity</span>
-<span class="kw">pragma</span> solidity ^<span class="nm">0.8.0</span>;
-
-<span class="kw">contract</span> <span class="ty">HelloWorld</span> {
-    <span class="cm">// State variables — เก็บข้อมูลถาวรใน Blockchain</span>
-    <span class="ty">uint</span> myUnsignedInteger = <span class="nm">100</span>;
-    <span class="ty">address</span> owner;
-    <span class="ty">mapping</span>(<span class="ty">address</span> =&gt; <span class="ty">uint256</span>) balances;
-
-    <span class="cm">// Constructor — ทำงานครั้งเดียวตอน Deploy</span>
-    <span class="kw">constructor</span>() {
-        owner = <span class="fn">msg.sender</span>;
+    constructor() {
+        storedData = 10;
     }
 
-    <span class="cm">// Functions</span>
-    <span class="kw">function</span> <span class="fn">getBalance</span>() <span class="kw">public</span> <span class="kw">view</span> <span class="kw">returns</span> (<span class="ty">uint256</span>) {
-        <span class="kw">return</span> balances[<span class="fn">msg.sender</span>];
-    }
-}</div>
-
-  <h3 style="margin:1.75rem 0 .75rem;font-size:1.1rem;">&#128230; ประเภทตัวแปรใน Solidity</h3>
-  <div class="grid grid-3">
-    <div class="card card-blue"><div class="card-icon">&#128190;</div><h3>State Variables</h3><p>บันทึกถาวรใน Contract Storage บน Blockchain</p><div class="code-block" style="font-size:.8rem;"><span class="ty">uint</span> storedData; <span class="cm">// state var</span></div></div>
-    <div class="card card-green"><div class="card-icon">&#9889;</div><h3>Local Variables</h3><p>มีอยู่เฉพาะระหว่างฟังก์ชันทำงาน ไม่บันทึกใน Blockchain</p><div class="code-block" style="font-size:.8rem;"><span class="ty">uint</span> a = <span class="nm">1</span>; <span class="cm">// local var</span></div></div>
-    <div class="card card-purple"><div class="card-icon">&#127757;</div><h3>Global Variables</h3><p>ตัวแปรพิเศษที่ Solidity จัดให้ ให้ข้อมูลเกี่ยวกับ Blockchain</p><div class="code-block" style="font-size:.8rem;"><span class="fn">msg.sender</span>  <span class="cm">// ผู้เรียก</span>
-<span class="fn">msg.value</span>   <span class="cm">// ETH ที่ส่งมา</span>
-<span class="fn">block.number</span><span class="cm">// block ล่าสุด</span></div></div>
-  </div>
-
-  <h3 style="margin:1.75rem 0 .75rem;font-size:1.1rem;">&#128193; Data Types ที่ใช้บ่อย</h3>
-  <div class="table-wrap"><table>
-    <thead><tr><th>Type</th><th>ตัวอย่าง</th><th>คำอธิบาย</th></tr></thead>
-    <tbody>
-      <tr><td><code>bool</code></td><td><code>bool isDone;</code></td><td>true / false</td></tr>
-      <tr><td><code>uint / int</code></td><td><code>uint256 myNum;</code></td><td>จำนวนเต็มไม่มี/มีเครื่องหมาย</td></tr>
-      <tr><td><code>address</code></td><td><code>address owner;</code></td><td>ที่อยู่ Ethereum (20 bytes)</td></tr>
-      <tr><td><code>string</code></td><td><code>string name;</code></td><td>ข้อความ</td></tr>
-      <tr><td><code>struct</code></td><td><code>struct User { uint id; string name; }</code></td><td>โครงสร้างข้อมูลที่กำหนดเอง</td></tr>
-      <tr><td><code>mapping</code></td><td><code>mapping(address =&gt; uint) balances;</code></td><td>Key-Value store คล้าย dictionary</td></tr>
-      <tr><td><code>array</code></td><td><code>uint[] users;</code></td><td>อาร์เรย์ขนาดไม่คงที่</td></tr>
-    </tbody>
-  </table></div>
-
-  <h3 style="margin:1.75rem 0 .75rem;font-size:1.1rem;">&#129518; Math Operations</h3>
-  <div class="grid grid-4">
-    <div class="card"><h3>+ Addition</h3><p><code>x + y</code></p></div>
-    <div class="card"><h3>- Subtraction</h3><p><code>x - y</code></p></div>
-    <div class="card"><h3>* Multiplication</h3><p><code>x * y</code></p></div>
-    <div class="card"><h3>/ Division</h3><p><code>x / y</code></p></div>
-    <div class="card"><h3>% Modulus</h3><p><code>x % y</code> เช่น 21 % 4 = 1</p></div>
-    <div class="card"><h3>** Exponent</h3><p><code>x ** y</code> เช่น 3**2 = 9</p></div>
-  </div>
-
-  <h3 style="margin:1.75rem 0 .75rem;font-size:1.1rem;">&#128065; Function Visibility</h3>
-  <div class="grid grid-4">
-    <div class="card card-red"><h3><span class="badge badge-red">private</span></h3><p style="margin-top:.5rem;">ใช้ได้เฉพาะภายใน Contract เท่านั้น Derived Contract ก็เรียกไม่ได้</p></div>
-    <div class="card card-orange"><h3><span class="badge badge-orange">internal</span></h3><p style="margin-top:.5rem;">ใช้ได้ภายใน Contract และ Derived Contract แต่ไม่สามารถเรียกจากภายนอก</p></div>
-    <div class="card card-blue"><h3><span class="badge badge-blue">external</span></h3><p style="margin-top:.5rem;">เรียกจากภายนอกเท่านั้น ถ้าเรียกภายในต้องใช้ <code>this.function()</code></p></div>
-    <div class="card card-green"><h3><span class="badge badge-green">public</span></h3><p style="margin-top:.5rem;">เรียกได้ทั้งภายในและภายนอก Solidity auto-generate getter</p></div>
-  </div>
-
-  <h3 style="margin:1.75rem 0 .75rem;font-size:1.1rem;">&#11088; Special Modifiers</h3>
-  <div class="grid grid-3">
-    <div class="card card-blue"><h3><code>view</code></h3><p>อ่านข้อมูลเท่านั้น ไม่แก้ไข State Variable ไม่เสีย Gas</p></div>
-    <div class="card card-green"><h3><code>payable</code></h3><p>รับ Ether ได้ ใช้กับฟังก์ชัน deposit หรือฟังก์ชันรับเงิน</p></div>
-    <div class="card card-purple"><h3><code>modifier</code></h3><p>ใช้แก้ไขพฤติกรรมของฟังก์ชัน เช่น ตรวจสอบสิทธิ์ก่อนทำงาน</p></div>
-  </div>
-
-  <h3 style="margin:1.75rem 0 .75rem;font-size:1.1rem;">&#127757; Global Variables ที่สำคัญ</h3>
-  <div class="table-wrap"><table>
-    <thead><tr><th>Variable</th><th>ประเภท</th><th>คำอธิบาย</th></tr></thead>
-    <tbody>
-      <tr><td><code>msg.sender</code></td><td>address payable</td><td>ที่อยู่ของผู้เรียก Function ปัจจุบัน</td></tr>
-      <tr><td><code>msg.value</code></td><td>uint</td><td>จำนวน Wei ที่ส่งมาพร้อม Transaction</td></tr>
-      <tr><td><code>msg.data</code></td><td>bytes calldata</td><td>ข้อมูล calldata ทั้งหมด</td></tr>
-      <tr><td><code>block.number</code></td><td>uint</td><td>หมายเลข Block ปัจจุบัน</td></tr>
-      <tr><td><code>block.timestamp</code></td><td>uint</td><td>เวลา Block ปัจจุบัน (Unix epoch)</td></tr>
-      <tr><td><code>block.difficulty</code></td><td>uint</td><td>ความยากของ Block ปัจจุบัน</td></tr>
-      <tr><td><code>block.gaslimit</code></td><td>uint</td><td>Gas limit ของ Block ปัจจุบัน</td></tr>
-      <tr><td><code>gasleft()</code></td><td>uint256</td><td>Gas คงเหลือ</td></tr>
-      <tr><td><code>tx.gasprice</code></td><td>uint</td><td>ราคา Gas ของ Transaction</td></tr>
-      <tr><td><code>block.coinbase</code></td><td>address payable</td><td>ที่อยู่ Miner ของ Block ปัจจุบัน</td></tr>
-    </tbody>
-  </table></div>
-  <div class="highlight"><p>&#128161; <strong>address(this).balance</strong> — ใช้ดูยอดเงิน ETH คงเหลือในตัว Contract เอง</p></div>
-</section>
-
-<!-- ===== SECTION 7 ===== -->
-<section id="workshop">
-  <div class="section-header">
-    <div class="section-label">ส่วนที่ 7</div>
-    <h2>&#127970; Workshop: EasyBank Smart Contract</h2>
-    <p>ฝึกเขียน Smart Contract ธนาคารอย่างง่ายที่มีฟังก์ชัน 3 อย่าง</p>
-  </div>
-  <div class="grid grid-3" style="margin-bottom:1.5rem;">
-    <div class="card card-blue"><div class="card-icon">&#128176;</div><h3>getBalance()</h3><p>ดูยอดเงินคงเหลือของตัวเอง เป็น <code>public view</code> ไม่เสีย Gas</p></div>
-    <div class="card card-green"><div class="card-icon">&#128229;</div><h3>deposit()</h3><p>ฝากเงินเข้าบัญชี รับ ETH ได้ด้วย <code>payable</code> แล้วเพิ่มยอดใน mapping</p></div>
-    <div class="card card-orange"><div class="card-icon">&#128228;</div><h3>withdraw(uint256)</h3><p>ถอนเงิน ตรวจสอบว่ามีเงินพอ แล้วโอนกลับไปยังผู้ถอน</p></div>
-  </div>
-
-  <h3 style="margin-bottom:.75rem;font-size:1.05rem;">&#128221; โค้ด EasyBank.sol (ตัวอย่างสมบูรณ์)</h3>
-  <div class="code-block"><span class="cm">// SPDX-License-Identifier: MIT</span>
-<span class="kw">pragma</span> solidity ^<span class="nm">0.8.0</span>;
-
-<span class="kw">contract</span> <span class="ty">EasyBank</span> {
-    <span class="cm">// 1) ประกาศตัวแปร mapping address → ยอดเงิน</span>
-    <span class="ty">mapping</span>(<span class="ty">address</span> =&gt; <span class="ty">uint256</span>) balances;
-
-    <span class="cm">// 2) getBalance: ดูยอดเงินของตัวเอง (ไม่เปลี่ยน state)</span>
-    <span class="kw">function</span> <span class="fn">getBalance</span>() <span class="kw">public</span> <span class="kw">view</span> <span class="kw">returns</span> (<span class="ty">uint256</span>) {
-        <span class="kw">return</span> balances[<span class="fn">msg.sender</span>];
+    function setData(uint256 newValue) public {
+        storedData = newValue;
     }
 
-    <span class="cm">// 3) deposit: ฝากเงิน (รับ ETH ได้ด้วย payable)</span>
-    <span class="kw">function</span> <span class="fn">deposit</span>() <span class="kw">public</span> <span class="kw">payable</span> {
-        balances[<span class="fn">msg.sender</span>] += <span class="fn">msg.value</span>;
+    function getData() public view returns (uint256) {
+        return storedData;
+    }
+}
+</code></pre>
+<p><code>SPDX-License-Identifier</code> ระบุใบอนุญาตของ source code ส่วน <code>pragma</code> กำหนดช่วง compiler ที่ยอมรับได้ <code>^0.8.20</code> หมายถึงตั้งแต่ 0.8.20 และต่ำกว่า 0.9.0 ไม่ได้หมายความว่าเลือก compiler ให้อัตโนมัติ ชื่อ <code>Example</code> คือชื่อสัญญา และ <code>{ ... }</code> ครอบสมาชิกของสัญญา อ้างอิง <a href="https://docs.soliditylang.org/en/latest/layout-of-source-files.html">Solidity: Source File Layout</a></p>
+<p><code>storedData</code> ประกาศนอกฟังก์ชัน จึงเป็น state variable <code>public</code> ทำให้มี getter สำหรับอ่านค่า ส่วน constructor ตั้งค่าเริ่มต้นเป็น 10 เมื่อ deploy การเรียก setData เปลี่ยนค่าใน storage จึงต้องส่งธุรกรรมหากต้องการบันทึกผลบนเชน ขณะที่ getData อ่านข้อมูลและคืนค่าโดยไม่แก้ไข</p>
+<p><strong>แนวตอบเมื่อให้อธิบายโค้ด:</strong> “สัญญานี้เก็บจำนวนเต็มไม่ติดลบหนึ่งค่า เริ่มที่ 10 ผู้ใช้เรียก setData เพื่อเปลี่ยนค่าได้ และอ่านผ่าน getData หรือ getter ของ storedData ได้ โดย setData ไม่มีการจำกัด owner จึงเปิดให้ผู้เรียกภายนอกแก้ค่าตามกฎของฟังก์ชัน”</p>
+<h3>16.2 พารามิเตอร์กับค่าที่คืน</h3>
+<p>ใน <code>function withdraw(uint256 amount)</code> ค่า amount เป็นข้อมูลที่ส่งเข้าฟังก์ชัน ส่วน <code>returns (uint256)</code> ประกาศชนิดผลลัพธ์ที่ส่งกลับ และ <code>return</code> เป็นคำสั่งคืนค่าจริง ต้องแยกให้ออกระหว่างข้อมูลเข้า ข้อมูลออก และ state ที่ฟังก์ชันอ่านหรือแก้ไข</p>
+<p>ตัวอย่าง <code>calculateInterest(address account)</code> รับ address เพื่อเลือกบัญชี อ่าน balances ของบัญชีนั้น คำนวณ และคืนจำนวน Wei โดยไม่จำเป็นต้องเป็นบัญชีเดียวกับ msg.sender เพราะใช้พารามิเตอร์ account เป็นคีย์</p>
+<h3>16.3 State variables ไม่เหมือน storage / memory / calldata</h3>
+<p>State / Local / Global เป็นการแบ่งบทบาทของตัวแปร ส่วน storage / memory / calldata บอกตำแหน่งข้อมูลสำหรับชนิดอ้างอิง จึงไม่ควรใช้แทนกัน เช่น local variable สามารถเป็นตัวอ้างอิงไปยัง storage ได้ ไม่ใช่ว่า local ทุกตัวต้องอยู่ใน memory เสมอ</p>
+<ul>
+<li><code>storage</code>: ข้อมูลที่เก็บถาวรของสัญญา การแก้ผ่านตัวอ้างอิงไปยัง state ทำให้ state เปลี่ยน</li>
+<li><code>memory</code>: พื้นที่ข้อมูลชั่วคราวระหว่างการเรียก ใช้กับสำเนาและผลคำนวณ</li>
+<li><code>calldata</code>: พื้นที่ข้อมูลเข้าที่อ่านอย่างเดียว ใช้กับพารามิเตอร์ที่เหมาะสมเพื่อลดการคัดลอก</li>
+</ul>
+<p>ส่วนนี้เป็นความรู้เสริมเพื่ออ่านโค้ด ไม่ใช่หัวข้อที่มีคำอธิบายครบในสไลด์ ตัวอย่าง <code>string memory</code> ใช้เมื่อฟังก์ชันคืนข้อความ ส่วน <code>uint256 amount</code> เป็น value type จึงไม่เขียน memory ต่อท้าย</p>
+<h3>16.4 ตารางวิเคราะห์ฟังก์ชันก่อนลงมือเขียนคำตอบ</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ฟังก์ชัน</th>
+<th>รับข้อมูลอะไร</th>
+<th>อ่านอะไร</th>
+<th>เปลี่ยนอะไร</th>
+<th>เงินเข้า/ออก</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>getBalance</td>
+<td>ไม่มี</td>
+<td>balances[msg.sender]</td>
+<td>ไม่เปลี่ยน</td>
+<td>ไม่มี</td>
+</tr>
+<tr>
+<td>deposit</td>
+<td>msg.value จากการเรียก</td>
+<td>ยอดเดิมของผู้เรียก</td>
+<td>ยอดผู้ฝาก</td>
+<td>เข้า</td>
+</tr>
+<tr>
+<td>withdraw</td>
+<td>amount</td>
+<td>ยอดผู้เรียก</td>
+<td>ลด balances</td>
+<td>ออก</td>
+</tr>
+<tr>
+<td>getSystemBalance</td>
+<td>ไม่มี</td>
+<td>ยอด Ether ของสัญญาและ owner</td>
+<td>ไม่เปลี่ยน</td>
+<td>ไม่มี</td>
+</tr>
+<tr>
+<td>calculateInterest</td>
+<td>account</td>
+<td>balances[account], rate</td>
+<td>ไม่เปลี่ยน</td>
+<td>ไม่มี</td>
+</tr>
+<tr>
+<td>totalInterestPerYear</td>
+<td>ไม่มี</td>
+<td>accounts และยอดทุกบัญชี</td>
+<td>ไม่เปลี่ยน</td>
+<td>ไม่มี</td>
+</tr>
+</tbody>
+</table></div></div></section><section id="complete-bank"><div class="section-header"><div class="section-label">บทที่ 17 · สรุปปลายภาค</div><h2>ตัวอย่างธนาคารครบชุดสำหรับใช้ฝึกอธิบาย</h2></div><div class="exam-content"><p>โค้ดต่อไปนี้เรียบเรียงขึ้นเพื่อรวมข้อกำหนด EasyBank และ ComplicatedBank ในสไลด์ ไม่ใช่โค้ดต้นฉบับที่ดาวน์โหลดจากผู้สอน เพิ่มการป้องกันบัญชีซ้ำและตรวจจำนวนฝาก/ถอนมากกว่าศูนย์เพื่อให้ติดตามการทำงานได้ชัดเจน</p>
+<pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract StudyBank {
+    mapping(address =&gt; uint256) private balances;
+    mapping(address =&gt; bool) private registered;
+    address[] public accounts;
+    uint256 public rate = 3;
+    address public owner;
+
+    constructor() {
+        owner = msg.sender;
     }
 
-    <span class="cm">// 4) withdraw: ถอนเงิน</span>
-    <span class="kw">function</span> <span class="fn">withdraw</span>(<span class="ty">uint256</span> amount) <span class="kw">public</span> {
-        <span class="cm">// ตรวจสอบว่ามีเงินพอถอน</span>
-        <span class="fn">require</span>(balances[<span class="fn">msg.sender</span>] &gt;= amount, <span class="str">"Insufficient balance"</span>);
-
-        <span class="cm">// ลดยอดเงินก่อน (ป้องกัน reentrancy attack)</span>
-        balances[<span class="fn">msg.sender</span>] -= amount;
-
-        <span class="cm">// โอนเงินกลับไปที่ผู้ถอน</span>
-        (<span class="ty">bool</span> success, ) = <span class="fn">msg.sender</span>.call{value: amount}(<span class="str">""</span>);
-        <span class="fn">require</span>(success, <span class="str">"Withdraw failed!!"</span>);
+    modifier onlyOwner() {
+        require(msg.sender == owner, &quot;Not owner&quot;);
+        _;
     }
-}</div>
 
-  <h3 style="margin:1.75rem 0 .75rem;font-size:1.05rem;">&#128640; ขั้นตอน Deploy บน Sepolia Testnet</h3>
-  <div class="steps">
-    <div class="step"><div class="step-num">1</div><div class="step-body"><h4>เตรียม Wallet</h4><p>เตรียม MetaMask 2 Wallet และ Connect กับ Sepolia Testnet</p></div></div>
-    <div class="step"><div class="step-num">2</div><div class="step-body"><h4>รับ SepoliaETH ฟรี</h4><p>ไปที่ Sepolia Faucet (Chainlink) เพื่อรับ Test ETH มาใช้จ่าย Gas</p></div></div>
-    <div class="step"><div class="step-num">3</div><div class="step-body"><h4>เปิด Remix IDE</h4><p>เขียน Smart Contract โดยใช้ OpenZeppelin เป็น Base (ถ้าจำเป็น) แล้ว Compile</p></div></div>
-    <div class="step"><div class="step-num">4</div><div class="step-body"><h4>Deploy Contract</h4><p>Deploy ไปยัง Sepolia Testnet ผ่าน MetaMask และยืนยัน Transaction</p></div></div>
-    <div class="step"><div class="step-num">5</div><div class="step-body"><h4>ตรวจสอบบน Block Explorer</h4><p>ค้นหา Transaction Hash บน Sepolia Etherscan เพื่อยืนยันการ Deploy สำเร็จ</p></div></div>
-  </div>
-</section>
+    function getBalance() public view returns (uint256) {
+        return balances[msg.sender];
+    }
 
+    function deposit() public payable {
+        require(msg.value &gt; 0, &quot;Zero deposit&quot;);
+        if (!registered[msg.sender]) {
+            registered[msg.sender] = true;
+            accounts.push(msg.sender);
+        }
+        balances[msg.sender] += msg.value;
+    }
 
-<!-- ===== SECTION 8 — BITCOIN ===== -->
-<section id="bitcoin">
-  <div class="section-header">
-    <div class="section-label">ส่วนที่ 8</div>
-    <h2>&#8383; Bitcoin และ Blockchain 1.0</h2>
-    <p>Bitcoin คือระบบเงินดิจิทัลแบบ Peer-to-Peer ที่เปิดตัวปี 2009 บน Blockchain — ไม่ต้องมีธนาคารกลาง</p>
-  </div>
+    function withdraw(uint256 amount) public {
+        require(amount &gt; 0, &quot;Zero withdrawal&quot;);
+        require(balances[msg.sender] &gt;= amount, &quot;Insufficient balance&quot;);
+        balances[msg.sender] -= amount;
+        (bool success, ) = payable(msg.sender).call{value: amount}(&quot;&quot;);
+        require(success, &quot;Withdraw failed&quot;);
+    }
 
-  <div class="grid grid-2" style="margin-bottom:1.5rem;">
-    <div class="card card-orange">
-      <div class="card-icon">&#128200;</div>
-      <h3>UTXO Model</h3>
-      <p style="margin-bottom:.75rem;">Bitcoin ใช้ <strong>Unspent Transaction Output (UTXO)</strong> แทนยอดคงเหลือแบบบัญชี</p>
-      <ul>
-        <li>เปรียบเหมือนการหยิบธนบัตรมาจ่ายแล้วรับเงินทอน</li>
-        <li>Input = UTXO ที่เป็นของผู้ส่ง</li>
-        <li>Output = UTXO ใหม่ให้ผู้รับ + เงินทอนกลับผู้ส่ง</li>
-      </ul>
-      <div style="margin-top:.75rem;font-size:.82rem;color:var(--text-muted);">ต่างจาก Ethereum ที่ใช้ Account-based Model (ยอดเงินในบัญชี)</div>
-    </div>
-    <div class="card card-red">
-      <div class="card-icon">&#128296;</div>
-      <h3>Proof of Work & Mining</h3>
-      <p style="margin-bottom:.75rem;"><strong>Proof of Work (PoW)</strong> ให้ Miner แข่งกันค้นหาค่า nonce ที่ทำให้ hash ผ่าน difficulty</p>
-      <ul>
-        <li>ผู้สำเร็จเสนอ Block ใหม่และรับ Block Reward</li>
-        <li>ทำให้การแก้ประวัติย้อนหลังต้องใช้พลังประมวลผลสูงมาก</li>
-        <li>Bitcoin ใช้ SHA-256 ในกระบวนการ Mining</li>
-      </ul>
-    </div>
-  </div>
+    function getSystemBalance() public view onlyOwner returns (uint256) {
+        return address(this).balance;
+    }
 
-  <h3 style="margin-bottom:.75rem;font-size:1.1rem;">&#128337; Bitcoin Halving</h3>
-  <div class="highlight" style="margin-bottom:1.5rem;">
-    <p>Block Reward ลดลงครึ่งหนึ่งทุก <strong>210,000 blocks (~4 ปี)</strong> เพื่อควบคุมอุปทาน BTC สูงสุดที่ <strong>21 ล้าน BTC</strong></p>
-  </div>
-  <div class="grid grid-4" style="margin-bottom:1.5rem;">
-    <div class="card"><h3>2009</h3><p style="font-size:1.2rem;font-weight:700;color:var(--accent4);">50 BTC</p><p>Block Reward เริ่มต้น</p></div>
-    <div class="card"><h3>2012</h3><p style="font-size:1.2rem;font-weight:700;color:var(--accent4);">25 BTC</p><p>Halving ครั้งที่ 1</p></div>
-    <div class="card"><h3>2016</h3><p style="font-size:1.2rem;font-weight:700;color:var(--accent4);">12.5 BTC</p><p>Halving ครั้งที่ 2</p></div>
-    <div class="card"><h3>2020</h3><p style="font-size:1.2rem;font-weight:700;color:var(--accent4);">6.25 BTC</p><p>Halving ครั้งที่ 3</p></div>
-  </div>
-  <div class="card card-orange" style="margin-bottom:1.5rem;"><h3>2024: 3.125 BTC — Halving ครั้งที่ 4</h3></div>
+    function calculateInterest(address account) public view returns (uint256) {
+        return balances[account] * rate / 100;
+    }
 
-  <h3 style="margin:1.5rem 0 .75rem;font-size:1.1rem;">&#128202; Bitcoin vs Ethereum</h3>
-  <div class="table-wrap"><table>
-    <thead><tr><th>หัวข้อ</th><th>Bitcoin</th><th>Ethereum</th></tr></thead>
-    <tbody>
-      <tr><td>เป้าหมายเด่น</td><td>เงินดิจิทัล/การโอนมูลค่า</td><td>แพลตฟอร์ม Smart Contract & dApp</td></tr>
-      <tr><td>หน่วยหลัก</td><td>BTC</td><td>ETH</td></tr>
-      <tr><td>แบบบัญชี</td><td>UTXO</td><td>Account-based</td></tr>
-      <tr><td>Consensus</td><td>Proof of Work</td><td>Proof of Stake</td></tr>
-      <tr><td>โปรแกรมบนเชน</td><td>Script แบบจำกัด</td><td>EVM + Smart Contract</td></tr>
-      <tr><td>Token Standards</td><td>ไม่ใช่มาตรฐาน ERC</td><td>ERC-20, ERC-721, ERC-1155</td></tr>
-    </tbody>
-  </table></div>
-</section>
+    function totalInterestPerYear() public view returns (uint256) {
+        uint256 total;
+        for (uint256 i = 0; i &lt; accounts.length; i++) {
+            total += calculateInterest(accounts[i]);
+        }
+        return total;
+    }
 
-<!-- ===== SECTION 9 — ETHEREUM ===== -->
-<section id="ethereum">
-  <div class="section-header">
-    <div class="section-label">ส่วนที่ 9</div>
-    <h2>&#9830; Ethereum, EVM, ABI & Gas</h2>
-    <p>Ethereum คือ Blockchain ที่ออกแบบให้รัน Smart Contract และ dApp ได้อย่างสมบูรณ์</p>
-  </div>
+    function getAccountCount() public view returns (uint256) {
+        return accounts.length;
+    }
+}
+</code></pre>
+<h3>17.1 เหตุผลของตัวแปรแต่ละตัว</h3>
+<p><code>balances</code> เป็นบัญชีภายในว่าผู้ฝากแต่ละคนมีสิทธิถอนเท่าใด <code>registered</code> บันทึกว่าเคยเพิ่ม address ลง accounts แล้วหรือยัง และ <code>accounts</code> เป็นรายการสำหรับวนลูป หากไม่ใช้ registered ทุกการฝากอาจ push address ซ้ำจนดอกเบี้ยของคนเดิมถูกนับหลายรอบ</p>
+<p><code>rate</code> ตั้งต้นเป็น 3 ตามโจทย์ ส่วน owner บันทึกผู้ deploy การประกาศ public เปิดให้อ่านผ่าน getter แต่ในโค้ดนี้ไม่มี setter จึงไม่มีฟังก์ชันให้เปลี่ยน rate หรือ owner ภายหลัง</p>
+<h3>17.2 ทำไม accounts ยังมีคนที่ถอนหมดแล้ว?</h3>
+<p>โค้ดนี้เก็บประวัติผู้ที่เคยฝาก เมื่อถอนหมด ยอดเป็นศูนย์และดอกเบี้ยที่คำนวณได้เป็นศูนย์ ไม่จำเป็นต้องลบ address เพื่อให้ผลรวมถูก แต่ถ้ามีบัญชีจำนวนมาก การวนลูปก็ยังต้องผ่านรายการเหล่านั้น นี่เป็นข้อจำกัดของการออกแบบสำหรับบทเรียน</p>
+<h3>17.3 ทำไม getBalance ไม่รับ address?</h3>
+<p>ตาม EasyBank ต้องคืนยอดของผู้เรียก จึงใช้ msg.sender โดยตรง ส่วน calculateInterest รับ address เพื่อให้เลือกบัญชีที่ต้องการคำนวณได้ หากโจทย์ต้องการจำกัดการอ่านดอกเบี้ยให้เฉพาะเจ้าของบัญชีหรือ owner ต้องเพิ่มเงื่อนไขตามโจทย์ ไม่ควรสมมติว่า public มีการจำกัดสิทธิอยู่แล้ว</p>
+<h3>17.4 ขอบเขตของโปรแกรมตัวอย่าง</h3>
+<p>โปรแกรมนี้คำนวณดอกเบี้ยจากยอดปัจจุบัน ไม่มีการจ่ายดอกเบี้ยจริง ไม่มีการนับวันฝาก ไม่มีระบบกู้ยืม และไม่ได้สร้าง Ether เพิ่ม การใช้ onlyOwner กับ getSystemBalance เป็นการฝึกสิทธิเรียกฟังก์ชัน ข้อมูลยอดของ address บนเชนยังตรวจสอบได้จากภายนอก</p>
+<p>อธิบายเพิ่มเติมเกี่ยวกับชนิดข้อมูลและตำแหน่งข้อมูลได้จาก <a href="https://docs.soliditylang.org/en/latest/types.html">Solidity Types</a> และกฎฟังก์ชันจาก <a href="https://docs.soliditylang.org/en/v0.8.26/contracts.html">Solidity Contracts</a></p></div></section><section id="walkthrough"><div class="section-header"><div class="section-label">บทที่ 18 · สรุปปลายภาค</div><h2>จำลองการฝาก ถอน และดอกเบี้ย 5 บัญชี</h2></div><div class="exam-content"><p>สมมติอัตรา 3% ทุกบัญชีเริ่มจากศูนย์ ไม่มีเงินเข้าออกช่องทางอื่น และแสดงหน่วย ETH เพื่ออ่านง่าย โปรแกรมจริงเก็บหน่วย Wei</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>บัญชี</th>
+<th>ฝากเริ่มต้น</th>
+<th>ดอกเบี้ย 3%</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>1 ETH</td>
+<td>0.03 ETH</td>
+</tr>
+<tr>
+<td>B</td>
+<td>2 ETH</td>
+<td>0.06 ETH</td>
+</tr>
+<tr>
+<td>C</td>
+<td>3 ETH</td>
+<td>0.09 ETH</td>
+</tr>
+<tr>
+<td>D</td>
+<td>4 ETH</td>
+<td>0.12 ETH</td>
+</tr>
+<tr>
+<td>E</td>
+<td>5 ETH</td>
+<td>0.15 ETH</td>
+</tr>
+<tr>
+<td>รวม</td>
+<td>15 ETH</td>
+<td>0.45 ETH</td>
+</tr>
+</tbody>
+</table></div>
+<h3>กรณีที่ 1: A ฝากเพิ่ม 0.5 ETH</h3>
+<p>ยอด A เปลี่ยนจาก 1 เป็น 1.5 ETH ยอดสัญญาเป็น 15.5 ETH ดอกเบี้ย A เป็น 0.045 ETH และดอกเบี้ยรวมเป็น 0.465 ETH จำนวน accounts ยังเป็น 5 เพราะ registered ของ A เป็น true แล้ว</p>
+<h3>กรณีที่ 2: B ถอน 0.4 ETH</h3>
+<p>ยอด B ลดจาก 2 เป็น 1.6 ETH ยอดสัญญาลดเหลือ 15.1 ETH ดอกเบี้ย B เป็น 0.048 ETH และดอกเบี้ยรวมเป็น 0.453 ETH กระเป๋า B ได้รับ 0.4 ETH แต่การเปลี่ยนแปลงสุทธิของยอดในกระเป๋าผู้ส่งธุรกรรมต้องคิดค่าธรรมเนียมด้วย</p>
+<h3>กรณีที่ 3: C ขอถอน 4 ETH ทั้งที่มี 3 ETH</h3>
+<p>require ไม่ผ่าน การถอนจึงล้มเหลว ยอด C ยังเป็น 3 ETH และยอดสัญญายังเป็น 15.1 ETH หากธุรกรรมล้มเหลวบนเชนจริง ผู้ส่งยังเสียค่าธรรมเนียมสำหรับงานที่ประมวลผลไป</p>
+<h3>กรณีที่ 4: E ถอนหมด 5 ETH</h3>
+<p>ยอด E เป็นศูนย์ ยอดสัญญาเหลือ 10.1 ETH ดอกเบี้ยรวมเป็น 0.303 ETH และ accounts ยังมี 5 รายการ E จึงยังอยู่ในรายการแต่มีส่วนร่วมในผลรวมเป็นศูนย์</p>
+<h3>กรณีที่ 5: ผู้ที่ไม่ใช่ owner เรียก getSystemBalance</h3>
+<p>onlyOwner ตรวจ msg.sender ไม่ตรง owner จึงปฏิเสธการเรียก การอ่านถูกจำกัดผ่านฟังก์ชันนี้ แต่ไม่เปลี่ยนความโปร่งใสของข้อมูลยอดเงินบน Blockchain</p>
+<p><strong>คำตอบเชิงวิเคราะห์ที่ควรเขียนได้:</strong> “การฝากเปลี่ยนทั้ง Ether จริงในสัญญาและยอดบัญชีภายใน การถอนที่สำเร็จลดทั้งสองอย่าง ส่วนการคำนวณดอกเบี้ยเพียงอ่านยอด ไม่เปลี่ยน Ether และไม่เพิ่มสิทธิถอน”</p></div></section><section id="debugging"><div class="section-header"><div class="section-label">บทที่ 19 · สรุปปลายภาค</div><h2>แบบฝึกหาข้อผิดพลาดในโค้ด</h2></div><div class="exam-content"><h3>ข้อ 1: view แต่มีการเพิ่มยอด</h3>
+<pre><code class="language-solidity">function getBalance() public view returns (uint256) {
+    balances[msg.sender] += 1;
+    return balances[msg.sender];
+}
+</code></pre>
+<p><strong>แนวตอบ:</strong> การเพิ่มยอดเป็นการแก้ state จึงขัดกับ view และ compile ไม่ผ่านในบริบทนี้ ถ้าต้องการอ่านยอดตามชื่อฟังก์ชันให้ลบคำสั่ง <code>+= 1</code> หากโจทย์ต้องการเพิ่มยอดจริงต้องเปลี่ยนการออกแบบและส่งธุรกรรม พร้อมตรวจสิทธิ ไม่ใช่เปลี่ยน keyword แล้วจบโดยไม่วิเคราะห์เจตนา</p>
+<h3>ข้อ 2: เพิ่มทุก address ทุกครั้งที่ฝาก</h3>
+<pre><code class="language-solidity">function deposit() public payable {
+    accounts.push(msg.sender);
+    balances[msg.sender] += msg.value;
+}
+</code></pre>
+<p><strong>แนวตอบ:</strong> ยอดเงินรายบัญชีเพิ่มถูก แต่รายการ accounts มี address ซ้ำ ผู้ฝากสองครั้งอาจถูกนับดอกเบี้ยสองรอบเมื่อวนลูป แก้โดยตรวจการลงทะเบียนก่อน push ใช้ mapping ของ bool หรือวิธีตรวจสมาชิกที่เหมาะสม</p>
+<h3>ข้อ 3: ขอบเขต loop เกินสมาชิก</h3>
+<pre><code class="language-solidity">for (uint256 i = 0; i &lt;= accounts.length; i++) {
+    total += calculateInterest(accounts[i]);
+}
+</code></pre>
+<p><strong>แนวตอบ:</strong> เมื่อ i เท่ากับ length จะอ่าน index ที่ไม่มีอยู่ เพราะสมาชิกสุดท้ายมี index length − 1 ต้องเปลี่ยนเป็น <code>&lt;</code> และ array ว่างต้องไม่วนลูปเลย</p>
+<h3>ข้อ 4: โอนเงินให้ owner แทนผู้ถอน</h3>
+<pre><code class="language-solidity">balances[msg.sender] -= amount;
+(bool success, ) = payable(owner).call{value: amount}(&quot;&quot;);
+require(success, &quot;Failed&quot;);
+</code></pre>
+<p><strong>แนวตอบ:</strong> ลดสิทธิถอนของผู้เรียก แต่ส่งเงินให้ owner จึงผิดเจตนาของการถอนรายบัญชี ต้องเลือกผู้รับเป็น msg.sender และต้องมี require ตรวจยอดก่อนลดด้วย</p>
+<h3>ข้อ 5: คิดดอกเบี้ยกลับลำดับ</h3>
+<pre><code class="language-solidity">return balances[account] / 100 * rate;
+</code></pre>
+<p><strong>แนวตอบ:</strong> การหารจำนวนเต็มก่อนคูณอาจตัดเศษเร็ว ทำให้ผลคลาดเคลื่อนเพิ่ม ควรคูณ rate ก่อนหาร 100 ภายใต้ช่วงค่าที่ไม่ overflow เช่นเงินต้น 199 Wei อัตรา 3% สูตรคูณก่อนให้ 5 Wei ขณะที่หารก่อนให้ 3 Wei</p>
+<h3>ข้อ 6: ทึกทักว่ามี getter แล้วมี setter</h3>
+<pre><code class="language-solidity">uint256 public rate = 3;
+</code></pre>
+<p><strong>แนวตอบ:</strong> public ทำให้เกิด getter สำหรับอ่าน rate ไม่ใช่ setter ถ้าต้องการเปลี่ยนอัตราต้องเขียนฟังก์ชันเพิ่มและกำหนดผู้ที่เปลี่ยนได้ เช่น onlyOwner</p></div></section><section id="enum-example"><div class="section-header"><div class="section-label">บทที่ 20 · สรุปปลายภาค</div><h2>Enum: อ่านเงื่อนไขก่อนเปลี่ยนสถานะ</h2></div><div class="exam-content"><pre><code class="language-solidity">enum Status { Pending, Active, Completed, Canceled }
+Status public currentStatus;
 
-  <div class="grid grid-3" style="margin-bottom:1.5rem;">
-    <div class="card card-blue">
-      <div class="card-icon">&#128176;</div>
-      <h3>ETH, Wei & Gwei</h3>
-      <div class="table-wrap" style="margin-top:.5rem;"><table>
-        <thead><tr><th>หน่วย</th><th>ค่า</th><th>ใช้กับ</th></tr></thead>
-        <tbody>
-          <tr><td><code>Wei</code></td><td>1 ETH = 10<sup>18</sup> Wei</td><td>หน่วยเล็กสุด</td></tr>
-          <tr><td><code>Gwei</code></td><td>1 Gwei = 10<sup>9</sup> Wei</td><td>แสดง Gas Price</td></tr>
-          <tr><td><code>ETH</code></td><td>หน่วยหลัก</td><td>ยอดเงิน/โอนมูลค่า</td></tr>
-        </tbody>
-      </table></div>
-    </div>
-    <div class="card card-purple">
-      <div class="card-icon">&#9881;</div>
-      <h3>EVM (Ethereum Virtual Machine)</h3>
-      <p>สภาพแวดล้อมเสมือนที่โหนด Ethereum ใช้ประมวลผล Smart Contract ให้ได้ผลลัพธ์ตามกฎเดียวกัน</p>
-      <ul style="margin-top:.75rem;">
-        <li>รัน EVM Bytecode ไม่ใช่ Solidity source code โดยตรง</li>
-        <li>ทุกโหนดรันโค้ดเดียวกันและได้ผลเหมือนกัน</li>
-      </ul>
-    </div>
-    <div class="card card-green">
-      <div class="card-icon">&#128220;</div>
-      <h3>ABI (Application Binary Interface)</h3>
-      <p>คำอธิบาย interface ของ contract เช่น function, parameter, return type, event เพื่อให้โปรแกรมภายนอกสื่อสารกับ contract ได้</p>
-      <ul style="margin-top:.75rem;">
-        <li>Remix, Web3.js, ethers.js ต้องใช้ ABI</li>
-        <li>สร้างอัตโนมัติตอน compile Solidity</li>
-      </ul>
-    </div>
-  </div>
+function activate() public {
+    require(currentStatus == Status.Pending, &quot;Invalid state&quot;);
+    currentStatus = Status.Active;
+}
 
-  <h3 style="margin-bottom:.75rem;font-size:1.1rem;">&#128260; Solidity → EVM Bytecode Flow</h3>
-  <div class="steps" style="margin-bottom:1.5rem;">
-    <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Solidity Source Code (.sol)</h4><p>เขียนด้วยภาษา Solidity ที่มนุษย์อ่านได้</p></div></div>
-    <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Solidity Compiler (solc / Remix)</h4><p>แปลง source code เป็น EVM Bytecode + ABI</p></div></div>
-    <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Deploy Bytecode → Contract Address</h4><p>Bytecode ถูก deploy สร้าง Contract Address บนเครือข่าย</p></div></div>
-    <div class="step"><div class="step-num">4</div><div class="step-body"><h4>Web/Remix/dApp ใช้ ABI เรียก Function</h4><p>ผู้ใช้ interact ผ่าน ABI โดยไม่ต้องรู้ Bytecode</p></div></div>
-  </div>
+function complete() public {
+    require(currentStatus == Status.Active, &quot;Invalid state&quot;);
+    currentStatus = Status.Completed;
+}
+</code></pre>
+<p>เริ่มต้น enum มีค่าแรกคือ Pending หากยังไม่ได้กำหนดค่าอื่น การเรียก complete ตั้งแต่ Pending จะถูกปฏิเสธ ต้อง activate ให้เป็น Active ก่อน จากนั้นจึง complete ได้ ถ้าเรียก activate หลัง Completed จะไม่ผ่านเงื่อนไข</p>
+<p>การมีชื่อ Canceled ใน enum ไม่ได้ทำให้เกิดฟังก์ชันยกเลิกอัตโนมัติ และในตัวอย่างนี้ไม่ได้จำกัด owner ดังนั้นใครที่เข้าถึง public function ก็อาจเปลี่ยนสถานะได้เมื่อเงื่อนไขผ่าน หากโจทย์ต้องการให้เฉพาะผู้จัดการเปลี่ยนสถานะ ต้องเพิ่มการตรวจสิทธิด้วย</p>
+<p><strong>แนวตอบอัตนัย:</strong> “enum ทำให้ชุดสถานะมีชื่อและจำกัดชนิดค่าที่เลือกได้ แต่กฎการเปลี่ยนสถานะและผู้มีสิทธิเปลี่ยนเป็นอีกส่วนหนึ่ง ต้องเขียนเงื่อนไขตรวจอย่างชัดเจน”</p></div></section><section id="exam"><div class="section-header"><div class="section-label">บทที่ 21 · สรุปปลายภาค</div><h2>แนวตอบอัตนัยแบบยาวพร้อมโครงคะแนน</h2></div><div class="exam-content"><p>เกณฑ์ด้านล่างเป็นรายการตรวจคำตอบสำหรับฝึกเอง ไม่ใช่เกณฑ์ให้คะแนนจริงของผู้สอน</p>
+<h3>ข้อ A: อธิบายระบบฝากถอนโดยใช้ mapping และความสัมพันธ์กับ Ether จริง</h3>
+<p><strong>ตัวอย่างคำตอบ:</strong> สัญญาใช้ mapping เชื่อม address ของผู้ฝากกับยอดเงินในหน่วย Wei ฟังก์ชัน deposit เป็น payable เพื่อรับ Ether ที่ส่งมา แล้วใช้ msg.sender ระบุเจ้าของยอดและ msg.value เพิ่ม balance ของผู้เรียก ฟังก์ชัน getBalance อ่านค่าของผู้เรียกและเป็น view ส่วน withdraw รับ amount ตรวจว่ายอดพอ ลด balance ก่อนส่ง Ether กลับ และตรวจความสำเร็จของการโอน ถ้าโอนไม่สำเร็จให้ revert ยอดใน mapping คือบัญชีสิทธิถอน ขณะที่ address(this).balance คือ Ether จริงทั้งหมดในสัญญา เช่น A ฝาก 1 ETH และ B ฝาก 2 ETH จะมียอดรายคน 1 และ 2 ETH และยอดรวม 3 ETH ก่อนมีรายการอื่น</p>
+<p><strong>ตรวจให้ครบ:</strong> mapping, หน่วย Wei, payable, msg.sender, msg.value, require, ลำดับถอน, ความต่างของยอดสองชนิด</p>
+<h3>ข้อ B: อธิบายการคำนวณดอกเบี้ยรวมและปัญหาบัญชีซ้ำ</h3>
+<p><strong>ตัวอย่างคำตอบ:</strong> คำนวณดอกเบี้ยรายบัญชีด้วยเงินต้นคูณ rate แล้วหาร 100 โดยอ่านเงินต้นจาก balances[account] จากนั้นเก็บรายการผู้ฝากใน accounts เพราะ mapping ไม่ให้รายการคีย์สำหรับวนลูปโดยตรง ฟังก์ชันรวมดอกเบี้ยสร้าง local variable total แล้ววนตั้งแต่ index 0 จนก่อน length เรียก calculateInterest ของแต่ละบัญชีและสะสมผล ต้องป้องกันการเพิ่ม address ซ้ำมิฉะนั้นคนที่ฝากหลายครั้งถูกนับซ้ำ เช่น A มี 1 ETH และ B มี 2 ETH ที่ 3% ให้ผลรวม 0.09 ETH การคืนผลรวมนี้ไม่ใช่การจ่ายดอกเบี้ยและยังไม่ได้คิดระยะเวลาฝากจริง</p>
+<p><strong>ตรวจให้ครบ:</strong> สูตร, array, mapping วนคีย์ไม่ได้โดยตรง, loop, total, บัญชีซ้ำ, ตัวอย่าง, คำนวณไม่เท่ากับจ่าย</p>
+<h3>ข้อ C: อธิบายการควบคุมสิทธิด้วย constructor และ modifier</h3>
+<p><strong>ตัวอย่างคำตอบ:</strong> constructor ทำงานครั้งเดียวตอนสร้างสัญญาและเก็บ msg.sender เป็น owner เพื่อระบุผู้จัดการ modifier onlyOwner ใช้ require เปรียบเทียบผู้เรียกกับ owner ถ้าไม่ตรงจะ revert ส่วน _; เป็นตำแหน่งดำเนินคำสั่งของฟังก์ชันหลังตรวจเงื่อนไขในตัวอย่างนี้ การนำ modifier ไปใช้กับหลายฟังก์ชันช่วยให้เงื่อนไขเหมือนกันและลดการเขียนซ้ำ อย่างไรก็ตามการจำกัดฟังก์ชันอ่านยอดไม่ได้ซ่อนข้อมูลจากผู้ตรวจสอบเชน และ private ไม่ใช่กลไกเข้ารหัสข้อมูล</p>
+<p><strong>ตรวจให้ครบ:</strong> ทำงานครั้งเดียว, ผู้ deploy, require, revert, _;, ใช้ซ้ำ, visibility ต่างจากความลับ</p>
+<h3>ข้อ D: อธิบายความน่าเชื่อถือของ Blockchain และข้อจำกัด</h3>
+<p><strong>ตัวอย่างคำตอบ:</strong> Blockchain จัดข้อมูลเป็นบล็อกที่เชื่อมกันด้วย hash และกระจายสำเนาให้หลายโหนด การแก้ข้อมูลเก่าทำให้ hash เปลี่ยนและกระทบความเชื่อมโยงของบล็อกถัดไป อีกทั้งเครือข่ายใช้ consensus ตัดสินประวัติที่ยอมรับร่วมกันจึงทำให้การแก้ย้อนหลังทำได้ยาก ลายมือชื่อดิจิทัลช่วยตรวจสิทธิของผู้ส่งและความครบถ้วนของธุรกรรม แต่ระบบไม่ได้รับรองว่าข้อมูลภายนอกที่ป้อนเข้าเป็นจริงเสมอ เช่นบันทึกสถานะสินค้าผิดก็ยังเป็นข้อมูลผิดที่ตรวจสอบย้อนหลังได้ ความโปร่งใสและการกระจายสำเนาจึงต้องใช้ร่วมกับการออกแบบแหล่งข้อมูลและสิทธิที่เหมาะสม</p>
+<p><strong>ตรวจให้ครบ:</strong> บล็อก, hash, สำเนา, consensus, ลายมือชื่อ, ข้อมูลต้นทาง, ข้อจำกัด</p></div></section><section id="calculation"><div class="section-header"><div class="section-label">บทที่ 22 · สรุปปลายภาค</div><h2>แบบฝึกคำนวณพร้อมวิธีทำ</h2></div><div class="exam-content"><h3>โจทย์ 1: ค่าธรรมเนียมธุรกรรม</h3>
+<p>ธุรกรรมใช้ 80,000 Gas ราคาจ่ายจริง 15 Gwei ต่อ Gas ค่าธรรมเนียม = 80,000 × 15 = 1,200,000 Gwei = <strong>0.0012 ETH</strong> ต้องแสดงการแปลงหน่วยและอย่าสับสน Gwei กับ Wei</p>
+<h3>โจทย์ 2: เงินต้นกับดอกเบี้ย</h3>
+<p>ยอดบัญชี 4 ETH อัตรา 3% → 4 × 3 / 100 = <strong>0.12 ETH</strong> ถ้าใช้หน่วย Wei เงินต้นคือ 4 × 10¹⁸ Wei ผลคือ 1.2 × 10¹⁷ Wei ไม่จำเป็นต้องแปลงเป็น ETH ในสัญญา</p>
+<h3>โจทย์ 3: ฝากแล้วถอน</h3>
+<p>A ฝาก 0.8 ETH อีกครั้ง 0.7 ETH แล้วถอน 0.4 ETH ยอดใน mapping เหลือ <strong>1.1 ETH</strong> ดอกเบี้ยตาม rate 3% เท่ากับ <strong>0.033 ETH</strong> ค่าธรรมเนียมกระทบกระเป๋าที่ส่งธุรกรรม ไม่ได้ถูกลบจาก balances โดยโค้ดตัวอย่างเอง</p>
+<h3>โจทย์ 4: หาเหตุผลของผลต่างจากการปัดเศษ</h3>
+<p>สองบัญชีมีเงินต้นบัญชีละ 34 Wei อัตรา 3% แต่ละบัญชีได้ 1 Wei ผลรวมดอกเบี้ยรายบัญชีเป็น 2 Wei หากรวมเงินต้นก่อนเป็น 68 Wei แล้วคิด 3% ก็เป็น 2 Wei เช่นกันในตัวอย่างนี้ แต่สองบัญชีละ 20 Wei จะได้รายคน 0 Wei รวมเป็น 0 Wei ขณะที่รวมเงินต้นก่อน 40 Wei แล้วคิด 3% ได้ 1 Wei จึงไม่ควรสรุปว่าสองวิธีเท่ากันเสมอ เพราะมีการตัดเศษจำนวนเต็ม</p>
+<h3>โจทย์ 5: หน่วย Bitcoin</h3>
+<p>250 sats = 250 / 100,000,000 BTC = <strong>0.0000025 BTC</strong> หน่วย satoshi เป็นของ Bitcoin ส่วน Wei และ Gwei เป็นหน่วย Ether อย่าสลับระบบหน่วย</p></div></section><section id="review"><div class="section-header"><div class="section-label">บทที่ 23 · สรุปปลายภาค</div><h2>แผนทบทวนก่อนสอบ</h2></div><div class="exam-content"><div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ช่วงอ่าน</th>
+<th>สิ่งที่ต้องทำได้เมื่ออ่านจบ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>รอบที่ 1: ภาพรวม</td>
+<td>อธิบาย Blockchain, DLT, Hash และขั้นตอน deploy ด้วยคำของตนเอง</td>
+</tr>
+<tr>
+<td>รอบที่ 2: ภาษา</td>
+<td>เทียบตัวแปร visibility, view, payable, constructor และ modifier</td>
+</tr>
+<tr>
+<td>รอบที่ 3: ธนาคาร</td>
+<td>อธิบายโค้ดทีละบรรทัดและตามยอดฝากถอน 5 บัญชีได้</td>
+</tr>
+<tr>
+<td>รอบที่ 4: วิเคราะห์</td>
+<td>พบปัญหา address ซ้ำ loop เกินขอบเขต view แก้ state และโอนผิดคน</td>
+</tr>
+<tr>
+<td>รอบที่ 5: เขียนจริง</td>
+<td>ตอบข้อ A–D โดยไม่เปิดเอกสาร แล้วตรวจคำสำคัญ</td>
+</tr>
+</tbody>
+</table></div>
+<p>ถ้าเวลาน้อย ให้เริ่มที่การฝากถอน modifier และดอกเบี้ยรวม เพราะเป็นแบบฝึกหัดที่มีข้อกำหนดชัดในเอกสารช่วงท้าย แล้วทบทวน Calling/Sending และตารางตัวแปร การให้น้ำหนักนี้อิงเนื้อหาที่มี ไม่ใช่การคาดการณ์ข้อสอบจากผู้สอน</p>
+<h3>เช็กลิสต์ก่อนส่งคำตอบอัตนัย</h3>
+<ul>
+<li>ตอบตรงคำถามว่าให้นิยาม เปรียบเทียบ อธิบายโค้ด หรือวิเคราะห์ข้อผิดพลาด</li>
+<li>ระบุว่าฟังก์ชันอ่านหรือแก้ state และมี Ether เข้าออกหรือไม่</li>
+<li>ใช้ msg.sender และ msg.value ถูกความหมาย</li>
+<li>ใส่หน่วยของเงินและตัวเลขที่คำนวณได้</li>
+<li>แยกสิทธิเรียกฟังก์ชันออกจากความเป็นส่วนตัวของข้อมูล</li>
+<li>ไม่อ้างว่าดอกเบี้ยคำนวณแล้วจ่ายอัตโนมัติ หรือ transaction hash ยืนยันความสำเร็จ</li>
+<li>ยกตัวอย่างสั้นที่พิสูจน์คำอธิบาย ไม่เพิ่มข้อสมมติที่ขัดกับโจทย์</li>
+</ul></div></section><section class="reference" id="midterm-reference"><div class="section-header"><div class="section-label">เนื้อหาทบทวนเดิม</div><h2>เนื้อหาเสริมจากหน้าเว็บกลางภาค</h2><p>เก็บหัวข้อ ERC, NFT และวิดีโอเดิมไว้ให้ทบทวนเพิ่มเติม เอกสารปลายภาคที่มีไม่ได้ระบุหัวข้อเหล่านี้เป็นขอบเขตสอบ</p></div><details><summary>เปิดเนื้อหา ERC, NFT และวิดีโอเดิม</summary><section id="erc">
+                <div class="section-header">
+                    <div class="section-label">ส่วนที่ 11</div>
+                    <h2>
+                        &#128176; ERC Token Standards: ERC-20 / ERC-721 /
+                        ERC-1155
+                    </h2>
+                    <p>
+                        ERC (Ethereum Request for Comments) คือมาตรฐาน interface
+                        ของ Smart Contract บน Ethereum สำหรับ Token
+                    </p>
+                </div>
 
-  <div class="grid grid-2">
-    <div class="card card-blue">
-      <div class="card-icon">&#128137;</div>
-      <h3>Gas คืออะไร?</h3>
-      <p style="margin-bottom:.75rem;">Gas คือหน่วยวัดปริมาณงานคำนวณที่ EVM ต้องทำ</p>
-      <div class="highlight"><p><strong>Transaction Fee = Gas Used × Gas Price</strong></p></div>
-      <ul style="margin-top:.75rem;">
-        <li>เขียนข้อมูลลง Blockchain ใช้ Gas มากกว่าการอ่าน</li>
-        <li>Code ที่ซับซ้อนหรือเขียน Storage มากใช้ Gas มากขึ้น</li>
-        <li>ผู้ส่ง Transaction จ่าย Gas เป็น ETH</li>
-      </ul>
-    </div>
-    <div class="card card-orange">
-      <div class="card-icon">&#128203;</div>
-      <h3>คำศัพท์สำคัญ</h3>
-      <div class="table-wrap" style="margin-top:.5rem;"><table>
-        <thead><tr><th>คำ</th><th>ความหมาย</th></tr></thead>
-        <tbody>
-          <tr><td><code>Bytecode</code></td><td>รหัสระดับต่ำที่ EVM รัน</td></tr>
-          <tr><td><code>ABI</code></td><td>Interface ของ Contract สำหรับโปรแกรมภายนอก</td></tr>
-          <tr><td><code>Contract Address</code></td><td>Address ของ Smart Contract หลัง Deploy</td></tr>
-          <tr><td><code>Transaction Hash</code></td><td>รหัสอ้างอิงธุรกรรม ตรวจสอบบน Block Explorer</td></tr>
-        </tbody>
-      </table></div>
-    </div>
-  </div>
-</section>
+                <div class="grid grid-3" style="margin-bottom: 1.5rem">
+                    <div class="card card-blue">
+                        <div class="card-icon">&#128176;</div>
+                        <h3>ERC-20 — Fungible Token</h3>
+                        <p style="margin-bottom: 0.75rem">
+                            Token แต่ละหน่วย <strong>ทดแทนกันได้</strong> เช่น 1
+                            Token A = 1 Token A
+                        </p>
+                        <p
+                            style="
+                                margin-bottom: 0.5rem;
+                                font-size: 0.85rem;
+                                color: var(--primary);
+                            "
+                        >
+                            Functions หลัก:
+                        </p>
+                        <ul>
+                            <li>
+                                <code>totalSupply()</code> — จำนวน Token ทั้งหมด
+                            </li>
+                            <li>
+                                <code>balanceOf(address)</code> — ยอด Token ของ
+                                address
+                            </li>
+                            <li>
+                                <code>transfer(to, amount)</code> — โอน Token
+                            </li>
+                            <li>
+                                <code>approve(spender, amount)</code> — อนุญาต
+                                spender
+                            </li>
+                            <li>
+                                <code>transferFrom(from, to, amount)</code> —
+                                โอนตาม allowance
+                            </li>
+                        </ul>
+                        <div
+                            style="
+                                margin-top: 0.75rem;
+                                font-size: 0.82rem;
+                                color: var(--accent4);
+                            "
+                        >
+                            &#9758; เหรียญ, utility token, governance token,
+                            คะแนน
+                        </div>
+                    </div>
+                    <div class="card card-purple">
+                        <div class="card-icon">&#127912;</div>
+                        <h3>ERC-721 — Non-Fungible Token</h3>
+                        <p style="margin-bottom: 0.75rem">
+                            แต่ละ Token มี
+                            <strong>tokenId เฉพาะ</strong> และมีเจ้าของชัดเจน —
+                            ทดแทนกันไม่ได้
+                        </p>
+                        <p
+                            style="
+                                margin-bottom: 0.5rem;
+                                font-size: 0.85rem;
+                                color: var(--primary);
+                            "
+                        >
+                            Functions หลัก:
+                        </p>
+                        <ul>
+                            <li>
+                                <code>ownerOf(tokenId)</code> — เจ้าของ Token ID
+                                นั้น
+                            </li>
+                            <li>
+                                <code>balanceOf(owner)</code> — นับ NFT ที่
+                                owner ถือ
+                            </li>
+                            <li>
+                                <code>safeTransferFrom(...)</code> — โอน NFT
+                                อย่างปลอดภัย
+                            </li>
+                            <li>
+                                <code>tokenURI(tokenId)</code> — ชี้ไปยัง
+                                Metadata
+                            </li>
+                        </ul>
+                        <div
+                            style="
+                                margin-top: 0.75rem;
+                                font-size: 0.82rem;
+                                color: var(--accent3);
+                            "
+                        >
+                            &#9758; งานศิลป์, ของสะสม, ใบรับรอง
+                        </div>
+                    </div>
+                    <div class="card card-green">
+                        <div class="card-icon">&#127918;</div>
+                        <h3>ERC-1155 — Multi Token Standard</h3>
+                        <p style="margin-bottom: 0.75rem">
+                            Contract เดียวรองรับ Token
+                            <strong>หลายชนิด</strong> แต่ละ tokenId
+                            มีจำนวนมากกว่า 1 ได้
+                        </p>
+                        <ul>
+                            <li>
+                                Fungible, Non-Fungible, Semi-Fungible ในที่เดียว
+                            </li>
+                            <li>
+                                รองรับ
+                                <strong>Batch Transfer</strong> ช่วยลดจำนวน
+                                Transaction
+                            </li>
+                            <li>
+                                ตัวอย่าง:
+                                <code>_mint(msg.sender, 1, 10, "")</code> = mint
+                                tokenId=1 จำนวน 10 หน่วย
+                            </li>
+                        </ul>
+                        <div
+                            style="
+                                margin-top: 0.75rem;
+                                font-size: 0.82rem;
+                                color: var(--accent2);
+                            "
+                        >
+                            &#9758; เกม, ไอเทมหลายชนิด, Gold Coin, Sword, Ticket
+                            ใน contract เดียว
+                        </div>
+                    </div>
+                </div>
 
-<!-- ===== SECTION 10 — WALLET ===== -->
-<section id="wallet">
-  <div class="section-header">
-    <div class="section-label">ส่วนที่ 10</div>
-    <h2>&#128273; Digital Wallet, MetaMask & SepoliaETH</h2>
-    <p>Wallet ไม่ได้เก็บเหรียญโดยตรง — แต่เก็บ "กุญแจ" ที่ใช้เข้าถึงสิทธิ์ในการสั่งธุรกรรม</p>
-  </div>
+                <h3 style="margin-bottom: 0.75rem; font-size: 1.1rem">
+                    &#128202; ตารางเปรียบเทียบ ERC
+                </h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>หัวข้อ</th>
+                                <th>ERC-20</th>
+                                <th>ERC-721</th>
+                                <th>ERC-1155</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ประเภท</td>
+                                <td>
+                                    <span class="badge badge-blue"
+                                        >Fungible</span
+                                    >
+                                </td>
+                                <td>
+                                    <span class="badge badge-purple"
+                                        >Non-Fungible</span
+                                    >
+                                </td>
+                                <td>
+                                    <span class="badge badge-green"
+                                        >Multi-token</span
+                                    >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>แต่ละหน่วยเหมือนกัน?</td>
+                                <td>&#9989; ใช่</td>
+                                <td>&#10060; ไม่ใช่</td>
+                                <td>ขึ้นกับ tokenId</td>
+                            </tr>
+                            <tr>
+                                <td>Token ID</td>
+                                <td>ไม่เน้น tokenId รายชิ้น</td>
+                                <td>ทุก NFT มี tokenId</td>
+                                <td>ทุกชนิดใช้ tokenId</td>
+                            </tr>
+                            <tr>
+                                <td>จำนวนต่อ ID</td>
+                                <td>ยอดรวมทั้งหมด</td>
+                                <td>ปกติ 1 เจ้าของต่อ tokenId</td>
+                                <td>1 หรือหลายหน่วยต่อ tokenId</td>
+                            </tr>
+                            <tr>
+                                <td>Batch Transfer</td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>
+                                    <span class="badge badge-green"
+                                        >&#9989; รองรับ</span
+                                    >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>เหมาะกับ</td>
+                                <td>เหรียญ/คะแนน</td>
+                                <td>งานศิลป์/ของสะสม</td>
+                                <td>เกม/ไอเทมจำนวนมาก</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-  <div class="highlight" style="margin-bottom:1.5rem;">
-    <p>&#128161; <strong>เหรียญ/Token อยู่บน Blockchain</strong> ส่วน Wallet ทำหน้าที่เก็บและจัดการ "กุญแจ" เพื่อสร้าง address, แสดงยอดจาก Blockchain และลงนามธุรกรรม</p>
-  </div>
+                <div class="highlight" style="margin-top: 1rem">
+                    <p>
+                        &#128161; <strong>Mnemonic จำง่าย:</strong>
+                        <strong>20</strong> = Money (เหรียญเหมือนกัน)
+                        &nbsp;|&nbsp; <strong>721</strong> = One-by-one NFT
+                        (แต่ละ tokenId เฉพาะ) &nbsp;|&nbsp;
+                        <strong>1155</strong> = Many-in-one (หลายชนิดใน contract
+                        เดียว)
+                    </p>
+                </div>
+            </section><section id="nft">
+                <div class="section-header">
+                    <div class="section-label">ส่วนที่ 12</div>
+                    <h2>&#127912; NFT และ Metadata</h2>
+                    <p>
+                        NFT (Non-Fungible Token) คือ Token
+                        ที่ใช้แทนสิทธิ์หรือรายการดิจิทัลที่มีเอกลักษณ์เฉพาะ
+                    </p>
+                </div>
 
-  <h3 style="margin-bottom:.75rem;font-size:1.1rem;">&#128220; สิ่งสำคัญใน Wallet</h3>
-  <div class="table-wrap" style="margin-bottom:1.5rem;"><table>
-    <thead><tr><th>สิ่งที่พบ</th><th>คืออะไร</th><th>ถ้ารั่วเกิดอะไร</th></tr></thead>
-    <tbody>
-      <tr><td><code>Wallet Address</code></td><td>ที่อยู่สาธารณะสำหรับรับเหรียญ/Token</td><td><span class="badge badge-green">ปลอดภัย</span> คนอื่นเห็นได้</td></tr>
-      <tr><td><code>Public Key</code></td><td>กุญแจสาธารณะสำหรับตรวจสอบทาง Cryptography</td><td><span class="badge badge-green">เปิดเผยได้</span></td></tr>
-      <tr><td><code>Private Key</code></td><td>กุญแจลับที่ใช้เซ็นธุรกรรมของ account</td><td><span class="badge badge-red">อันตราย!</span> ผู้ที่ได้ไปควบคุม account ได้</td></tr>
-      <tr><td><code>Secret Recovery Phrase</code></td><td>12 คำ ใช้กู้/สร้าง HD Wallet</td><td><span class="badge badge-red">อันตรายสูงสุด!</span> กู้หลาย account ได้</td></tr>
-      <tr><td><code>MetaMask Password</code></td><td>รหัสปลดล็อกข้อมูล wallet บนอุปกรณ์นั้น</td><td>ไม่ใช่ตัวแทนของ SRP</td></tr>
-    </tbody>
-  </table></div>
+                <div class="highlight" style="margin-bottom: 1.5rem">
+                    <p>
+                        &#128683; <strong>จุดที่มักเข้าใจผิด:</strong> NFT
+                        ไม่จำเป็นต้องเป็น "รูปภาพที่เก็บอยู่บน Blockchain" — ตัว
+                        Token บนเชนมักเก็บเพียง tokenId, owner และ URI ส่วนรูป,
+                        ชื่อ, description มักอยู่ใน
+                        <strong>metadata ภายนอก</strong> เช่น IPFS หรือ Web
+                        Server
+                    </p>
+                </div>
 
-  <div class="grid grid-3" style="margin-bottom:1.5rem;">
-    <div class="card card-red">
-      <div class="card-icon">&#128274;</div>
-      <h3>Password</h3>
-      <p>ปกป้องไฟล์/ข้อมูล wallet ในอุปกรณ์หนึ่งเครื่อง เปลี่ยนได้ ไม่ใช่กุญแจบน Blockchain</p>
-    </div>
-    <div class="card card-orange">
-      <div class="card-icon">&#128272;</div>
-      <h3>Private Key</h3>
-      <p>ควบคุม account หนึ่งบัญชี ใช้ลงนามธุรกรรม — ห้ามเปิดเผย!</p>
-    </div>
-    <div class="card card-purple">
-      <div class="card-icon">&#128220;</div>
-      <h3>Secret Recovery Phrase (12 คำ)</h3>
-      <p>รากของ HD Wallet ใช้ derive Private Keys หลาย account ได้ — อันตรายสูงสุดถ้ารั่ว!</p>
-    </div>
-  </div>
+                <div class="grid grid-2" style="margin-bottom: 1.5rem">
+                    <div class="card card-purple">
+                        <div class="card-icon">&#128196;</div>
+                        <h3>Metadata JSON</h3>
+                        <p style="margin-bottom: 0.75rem">
+                            Metadata อยู่ในรูป JSON ที่ Smart Contract ใช้ URI
+                            ชี้ไป
+                        </p>
+                        <div class="code-block" style="font-size: 0.82rem">
+                            { <span class="str">"name"</span>:
+                            <span class="str">"MaiyNFT"</span>,
+                            <span class="str">"description"</span>:
+                            <span class="str">"My first NFT"</span>,
+                            <span class="str">"image"</span>:
+                            <span class="str">"https://.../image.png"</span> }
+                        </div>
+                    </div>
+                    <div class="card card-blue">
+                        <div class="card-icon">&#128247;</div>
+                        <h3>On-chain vs Off-chain Metadata</h3>
+                        <div class="table-wrap" style="margin-top: 0.5rem">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>แบบ</th>
+                                        <th>ข้อดี</th>
+                                        <th>ข้อควรระวัง</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>On-chain</td>
+                                        <td>คงอยู่ตาม Blockchain</td>
+                                        <td>ใช้ Gas/Storage สูง</td>
+                                    </tr>
+                                    <tr>
+                                        <td>IPFS</td>
+                                        <td>ลดค่าใช้จ่าย เก็บไฟล์ใหญ่ได้</td>
+                                        <td>ต้องดูแล URI และ pin ข้อมูล</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Web/GitHub</td>
+                                        <td>ทำง่าย เหมาะทดลอง</td>
+                                        <td>เจ้าของอาจแก้/ลบไฟล์ได้</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
 
-  <div class="highlight" style="margin-bottom:1.5rem;">
-    <p>&#128683; <strong>ข้อผิดพลาดที่ชอบออกสอบ:</strong> MetaMask Secret Recovery Phrase คือ <strong>"12 คำ"</strong> ไม่ใช่รหัสผ่าน 12 ตัวอักษร และ <strong>ไม่เหมือน MetaMask Password</strong> — Password ปลดล็อกแอปบนเครื่อง แต่ SRP ใช้กู้ wallet ได้ทุกเครื่อง</p>
-  </div>
-
-  <h3 style="margin-bottom:.75rem;font-size:1.1rem;">&#127981; MetaMask & Sepolia Workflow</h3>
-  <div class="steps">
-    <div class="step"><div class="step-num">1</div><div class="step-body"><h4>เพิ่ม Sepolia Network ใน MetaMask</h4><p>สลับ network เป็น Sepolia Testnet</p></div></div>
-    <div class="step"><div class="step-num">2</div><div class="step-body"><h4>รับ SepoliaETH จาก Faucet</h4><p>SepoliaETH = Test ETH สำหรับ Gas ไม่มีมูลค่าจริง รับจาก Chainlink Faucet ฟรี</p></div></div>
-    <div class="step"><div class="step-num">3</div><div class="step-body"><h4>เชื่อม MetaMask กับ Remix / dApp</h4><p>อนุมัติการ deploy และ transaction ผ่าน MetaMask</p></div></div>
-    <div class="step"><div class="step-num">4</div><div class="step-body"><h4>ตรวจสอบบน Sepolia Etherscan</h4><p>Block Explorer ใช้ค้นหา TX Hash, Contract Address, Gas, From/To</p></div></div>
-  </div>
-</section>
-
-<!-- ===== SECTION 11 — ERC STANDARDS ===== -->
-<section id="erc">
-  <div class="section-header">
-    <div class="section-label">ส่วนที่ 11</div>
-    <h2>&#128176; ERC Token Standards: ERC-20 / ERC-721 / ERC-1155</h2>
-    <p>ERC (Ethereum Request for Comments) คือมาตรฐาน interface ของ Smart Contract บน Ethereum สำหรับ Token</p>
-  </div>
-
-  <div class="grid grid-3" style="margin-bottom:1.5rem;">
-    <div class="card card-blue">
-      <div class="card-icon">&#128176;</div>
-      <h3>ERC-20 — Fungible Token</h3>
-      <p style="margin-bottom:.75rem;">Token แต่ละหน่วย <strong>ทดแทนกันได้</strong> เช่น 1 Token A = 1 Token A</p>
-      <p style="margin-bottom:.5rem;font-size:.85rem;color:var(--primary);">Functions หลัก:</p>
-      <ul>
-        <li><code>totalSupply()</code> — จำนวน Token ทั้งหมด</li>
-        <li><code>balanceOf(address)</code> — ยอด Token ของ address</li>
-        <li><code>transfer(to, amount)</code> — โอน Token</li>
-        <li><code>approve(spender, amount)</code> — อนุญาต spender</li>
-        <li><code>transferFrom(from, to, amount)</code> — โอนตาม allowance</li>
-      </ul>
-      <div style="margin-top:.75rem;font-size:.82rem;color:var(--accent4);">&#9758; เหรียญ, utility token, governance token, คะแนน</div>
-    </div>
-    <div class="card card-purple">
-      <div class="card-icon">&#127912;</div>
-      <h3>ERC-721 — Non-Fungible Token</h3>
-      <p style="margin-bottom:.75rem;">แต่ละ Token มี <strong>tokenId เฉพาะ</strong> และมีเจ้าของชัดเจน — ทดแทนกันไม่ได้</p>
-      <p style="margin-bottom:.5rem;font-size:.85rem;color:var(--primary);">Functions หลัก:</p>
-      <ul>
-        <li><code>ownerOf(tokenId)</code> — เจ้าของ Token ID นั้น</li>
-        <li><code>balanceOf(owner)</code> — นับ NFT ที่ owner ถือ</li>
-        <li><code>safeTransferFrom(...)</code> — โอน NFT อย่างปลอดภัย</li>
-        <li><code>tokenURI(tokenId)</code> — ชี้ไปยัง Metadata</li>
-      </ul>
-      <div style="margin-top:.75rem;font-size:.82rem;color:var(--accent3);">&#9758; งานศิลป์, ของสะสม, ใบรับรอง</div>
-    </div>
-    <div class="card card-green">
-      <div class="card-icon">&#127918;</div>
-      <h3>ERC-1155 — Multi Token Standard</h3>
-      <p style="margin-bottom:.75rem;">Contract เดียวรองรับ Token <strong>หลายชนิด</strong> แต่ละ tokenId มีจำนวนมากกว่า 1 ได้</p>
-      <ul>
-        <li>Fungible, Non-Fungible, Semi-Fungible ในที่เดียว</li>
-        <li>รองรับ <strong>Batch Transfer</strong> ช่วยลดจำนวน Transaction</li>
-        <li>ตัวอย่าง: <code>_mint(msg.sender, 1, 10, "")</code> = mint tokenId=1 จำนวน 10 หน่วย</li>
-      </ul>
-      <div style="margin-top:.75rem;font-size:.82rem;color:var(--accent2);">&#9758; เกม, ไอเทมหลายชนิด, Gold Coin, Sword, Ticket ใน contract เดียว</div>
-    </div>
-  </div>
-
-  <h3 style="margin-bottom:.75rem;font-size:1.1rem;">&#128202; ตารางเปรียบเทียบ ERC</h3>
-  <div class="table-wrap"><table>
-    <thead><tr><th>หัวข้อ</th><th>ERC-20</th><th>ERC-721</th><th>ERC-1155</th></tr></thead>
-    <tbody>
-      <tr><td>ประเภท</td><td><span class="badge badge-blue">Fungible</span></td><td><span class="badge badge-purple">Non-Fungible</span></td><td><span class="badge badge-green">Multi-token</span></td></tr>
-      <tr><td>แต่ละหน่วยเหมือนกัน?</td><td>&#9989; ใช่</td><td>&#10060; ไม่ใช่</td><td>ขึ้นกับ tokenId</td></tr>
-      <tr><td>Token ID</td><td>ไม่เน้น tokenId รายชิ้น</td><td>ทุก NFT มี tokenId</td><td>ทุกชนิดใช้ tokenId</td></tr>
-      <tr><td>จำนวนต่อ ID</td><td>ยอดรวมทั้งหมด</td><td>ปกติ 1 เจ้าของต่อ tokenId</td><td>1 หรือหลายหน่วยต่อ tokenId</td></tr>
-      <tr><td>Batch Transfer</td><td>—</td><td>—</td><td><span class="badge badge-green">&#9989; รองรับ</span></td></tr>
-      <tr><td>เหมาะกับ</td><td>เหรียญ/คะแนน</td><td>งานศิลป์/ของสะสม</td><td>เกม/ไอเทมจำนวนมาก</td></tr>
-    </tbody>
-  </table></div>
-
-  <div class="highlight" style="margin-top:1rem;">
-    <p>&#128161; <strong>Mnemonic จำง่าย:</strong> <strong>20</strong> = Money (เหรียญเหมือนกัน) &nbsp;|&nbsp; <strong>721</strong> = One-by-one NFT (แต่ละ tokenId เฉพาะ) &nbsp;|&nbsp; <strong>1155</strong> = Many-in-one (หลายชนิดใน contract เดียว)</p>
-  </div>
-</section>
-
-<!-- ===== SECTION 12 — NFT ===== -->
-<section id="nft">
-  <div class="section-header">
-    <div class="section-label">ส่วนที่ 12</div>
-    <h2>&#127912; NFT และ Metadata</h2>
-    <p>NFT (Non-Fungible Token) คือ Token ที่ใช้แทนสิทธิ์หรือรายการดิจิทัลที่มีเอกลักษณ์เฉพาะ</p>
-  </div>
-
-  <div class="highlight" style="margin-bottom:1.5rem;">
-    <p>&#128683; <strong>จุดที่มักเข้าใจผิด:</strong> NFT ไม่จำเป็นต้องเป็น "รูปภาพที่เก็บอยู่บน Blockchain" — ตัว Token บนเชนมักเก็บเพียง tokenId, owner และ URI ส่วนรูป, ชื่อ, description มักอยู่ใน <strong>metadata ภายนอก</strong> เช่น IPFS หรือ Web Server</p>
-  </div>
-
-  <div class="grid grid-2" style="margin-bottom:1.5rem;">
-    <div class="card card-purple">
-      <div class="card-icon">&#128196;</div>
-      <h3>Metadata JSON</h3>
-      <p style="margin-bottom:.75rem;">Metadata อยู่ในรูป JSON ที่ Smart Contract ใช้ URI ชี้ไป</p>
-      <div class="code-block" style="font-size:.82rem;">{
-  <span class="str">"name"</span>: <span class="str">"MaiyNFT"</span>,
-  <span class="str">"description"</span>: <span class="str">"My first NFT"</span>,
-  <span class="str">"image"</span>: <span class="str">"https://.../image.png"</span>
-}</div>
-    </div>
-    <div class="card card-blue">
-      <div class="card-icon">&#128247;</div>
-      <h3>On-chain vs Off-chain Metadata</h3>
-      <div class="table-wrap" style="margin-top:.5rem;"><table>
-        <thead><tr><th>แบบ</th><th>ข้อดี</th><th>ข้อควรระวัง</th></tr></thead>
-        <tbody>
-          <tr><td>On-chain</td><td>คงอยู่ตาม Blockchain</td><td>ใช้ Gas/Storage สูง</td></tr>
-          <tr><td>IPFS</td><td>ลดค่าใช้จ่าย เก็บไฟล์ใหญ่ได้</td><td>ต้องดูแล URI และ pin ข้อมูล</td></tr>
-          <tr><td>Web/GitHub</td><td>ทำง่าย เหมาะทดลอง</td><td>เจ้าของอาจแก้/ลบไฟล์ได้</td></tr>
-        </tbody>
-      </table></div>
-    </div>
-  </div>
-
-  <h3 style="margin-bottom:.75rem;font-size:1.1rem;">&#128640; Workflow สร้าง NFT (ERC-1155) จากใบงาน</h3>
-  <div class="steps" style="margin-bottom:1.5rem;">
-    <div class="step"><div class="step-num">1</div><div class="step-body"><h4>สร้าง ERC-1155 Contract ใน Remix / OpenZeppelin</h4><p>ใช้ OpenZeppelin เป็น Base เพื่อความปลอดภัย</p></div></div>
-    <div class="step"><div class="step-num">2</div><div class="step-body"><h4>เตรียมรูป NFT และ Metadata JSON ใน GitHub</h4><p>ใช้ Raw URL ของรูปใน JSON และ Raw URL ของ JSON เป็น URI</p></div></div>
-    <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Mint Token</h4><p><code>_mint(msg.sender, 1, 10, "")</code> = mint tokenId=1 จำนวน 10 หน่วย</p></div></div>
-    <div class="step"><div class="step-num">4</div><div class="step-body"><h4>Compile & Deploy บน Sepolia ผ่าน MetaMask</h4><p>ยืนยัน Transaction จ่าย Gas ด้วย SepoliaETH</p></div></div>
-    <div class="step"><div class="step-num">5</div><div class="step-body"><h4>Verify Source Code บน Sepolia Etherscan</h4><p>ช่วยให้ผู้ใช้ตรวจสอบว่า source code ตรงกับ bytecode ที่ deploy ไว้</p></div></div>
-    <div class="step"><div class="step-num">6</div><div class="step-body"><h4>Import NFT & ทดสอบส่งไปยัง Wallet อื่น</h4><p>ตรวจสอบผ่าน MetaMask และ Sepolia Etherscan</p></div></div>
-  </div>
-</section>
-
-<!-- ===== SECTION 13 — EXAM Q&A ===== -->
-<section id="exam">
-  <div class="section-header">
-    <div class="section-label">ส่วนที่ 13</div>
-    <h2>&#128221; แนวข้อเขียนสำหรับสอบกลางภาค</h2>
-    <p>16 ข้อที่ควรตอบได้ — พร้อมแนวคำตอบสำหรับใช้ตอบในห้องสอบ</p>
-  </div>
-
-  <div class="grid grid-2" style="margin-bottom:1.5rem;">
-    <div class="card card-blue">
-      <h3>&#10067; ข้อ 1: Blockchain คืออะไร และหลักการทำงานเป็นอย่างไร?</h3>
-      <p style="margin-top:.5rem;">Blockchain คือระบบบันทึกข้อมูลแบบกระจาย (DLT) โดยข้อมูลธุรกรรมถูกกระจายไปยังหลายโหนดในเครือข่าย P2P ใช้ cryptography ยืนยันตัวตนและตรวจสอบข้อมูล จากนั้นใช้ consensus ให้โหนดเห็นพ้องกัน ธุรกรรมที่ยืนยันแล้วถูกบันทึกเป็น block เชื่อมกับ block ก่อนหน้าด้วย hash ทำให้การแก้ข้อมูลย้อนหลังทำได้ยากมาก</p>
-    </div>
-    <div class="card card-green">
-      <h3>&#10067; ข้อ 2: DLT กับ Blockchain ต่างกันอย่างไร?</h3>
-      <p style="margin-top:.5rem;">DLT เป็นแนวคิดกว้างของสมุดบัญชีแบบกระจายที่มีข้อมูลสำเนาหลายจุดและอัปเดตร่วมกัน ส่วน Blockchain เป็น DLT ชนิดหนึ่งที่จัดข้อมูลเป็นบล็อกและเชื่อมบล็อกต่อกันเป็นลำดับ ดังนั้น <strong>Blockchain ทุกระบบเป็น DLT แต่ DLT บางระบบอาจไม่ได้จัดข้อมูลเป็น chain of blocks</strong></p>
-    </div>
-    <div class="card card-purple">
-      <h3>&#10067; ข้อ 3: Cryptography และ Hash มีบทบาทต่อ Blockchain อย่างไร?</h3>
-      <p style="margin-top:.5rem;">Public-key cryptography ให้ผู้ใช้ใช้ private key ลงนามธุรกรรมพิสูจน์สิทธิ์ ส่วน hash function รับข้อมูลแล้วสร้างค่าความยาวคงที่แบบ one-way ใช้ตรวจ integrity และเชื่อม block หากข้อมูลเดิมถูกแก้ hash จะเปลี่ยน ทำให้เครือข่ายตรวจพบความผิดปกติได้</p>
-    </div>
-    <div class="card card-orange">
-      <h3>&#10067; ข้อ 4: Bitcoin คืออะไร และทำงานอย่างไร?</h3>
-      <p style="margin-top:.5rem;">Bitcoin คือระบบเงินดิจิทัล P2P ที่ใช้ Blockchain บันทึกการโอน BTC ผู้ส่งใช้ private key ลงนาม broadcast ไปยังเครือข่าย โหนดตรวจสอบกฎ จากนั้น miner ใช้ Proof of Work สร้าง block ใหม่ Bitcoin ใช้โมเดล UTXO และมี block reward ที่ลดลงตาม halving</p>
-    </div>
-    <div class="card card-red">
-      <h3>&#10067; ข้อ 5: Bitcoin Halving คืออะไร และมีเหตุผลอะไร?</h3>
-      <p style="margin-top:.5rem;">Bitcoin Halving คือการลด block reward ลงครึ่งหนึ่งทุก 210,000 blocks (~4 ปี) มีวัตถุประสงค์เพื่อควบคุมอัตราการออก BTC ใหม่ ทำให้อุปทานเพิ่มช้าลง และรักษาข้อจำกัดอุปทานสูงสุดประมาณ 21 ล้าน BTC</p>
-    </div>
-    <div class="card card-blue">
-      <h3>&#10067; ข้อ 6: Wallet คืออะไร? Password, Private Key และ SRP ต่างกันอย่างไร?</h3>
-      <p style="margin-top:.5rem;"><strong>Password</strong> ปลดล็อกข้อมูล wallet ในอุปกรณ์ &nbsp;|&nbsp; <strong>Private Key</strong> ควบคุมและเซ็นธุรกรรมของ account หนึ่ง &nbsp;|&nbsp; <strong>Secret Recovery Phrase (12 คำ)</strong> เป็นข้อมูลรากที่ใช้กู้ wallet และ derive private keys หลายบัญชี — SRP และ private key ต้องเก็บเป็นความลับสูงสุด</p>
-    </div>
-    <div class="card card-green">
-      <h3>&#10067; ข้อ 7: MetaMask, Sepolia และ SepoliaETH คืออะไร?</h3>
-      <p style="margin-top:.5rem;">MetaMask คือ self-custody wallet ที่ผู้ใช้ถือกุญแจเอง เชื่อม Ethereum/EVM รวมถึง Remix/dApp &nbsp;|&nbsp; Sepolia คือ Ethereum Testnet ทดลองก่อนขึ้น Mainnet &nbsp;|&nbsp; SepoliaETH คือ ETH ทดสอบสำหรับจ่าย Gas บน Sepolia ไม่มีมูลค่าจริง รับได้จาก faucet</p>
-    </div>
-    <div class="card card-purple">
-      <h3>&#10067; ข้อ 8: Smart Contract คืออะไร? ขั้นตอนตั้งแต่เขียนจนใช้งาน?</h3>
-      <p style="margin-top:.5rem;">Smart Contract คือโปรแกรมที่ deploy บน Blockchain ทำงานตาม logic อัตโนมัติ ขั้นตอน: เขียน Solidity → compile ได้ Bytecode + ABI → deploy สร้าง Contract Address → Call เพื่ออ่าน (ฟรี) หรือ Send Transaction เพื่อแก้ state (เสีย Gas)</p>
-    </div>
-    <div class="card card-orange">
-      <h3>&#10067; ข้อ 9: EVM, Bytecode และ ABI คืออะไร?</h3>
-      <p style="margin-top:.5rem;"><strong>EVM</strong> คือสภาพแวดล้อมเสมือนที่โหนด Ethereum ใช้รัน Smart Contract ให้ได้ผลเหมือนกัน &nbsp;|&nbsp; <strong>Bytecode</strong> คือรหัสที่ compiler สร้างจาก Solidity ให้ EVM รัน &nbsp;|&nbsp; <strong>ABI</strong> คือคำอธิบาย interface ของ contract เพื่อให้ Remix, Web3.js, dApp เรียกใช้ได้</p>
-    </div>
-    <div class="card card-red">
-      <h3>&#10067; ข้อ 10: Call Function กับ Transaction Function ต่างกันอย่างไร?</h3>
-      <div class="table-wrap" style="margin-top:.5rem;"><table>
-        <thead><tr><th>Call</th><th>Transaction (Send)</th></tr></thead>
-        <tbody>
-          <tr><td>ไม่เปลี่ยน state บน Blockchain</td><td>มีการเปลี่ยน state</td></tr>
-          <tr><td>คืนผลได้เร็ว</td><td>คืน TX Hash รอยืนยัน</td></tr>
-          <tr><td><span class="badge badge-green">ฟรี</span></td><td><span class="badge badge-orange">เสีย Gas</span></td></tr>
-          <tr><td>view / pure function</td><td>transfer, mint, deploy</td></tr>
-        </tbody>
-      </table></div>
-    </div>
-    <div class="card card-blue">
-      <h3>&#10067; ข้อ 11: อธิบาย msg.sender, msg.value, view, payable และ modifier</h3>
-      <p style="margin-top:.5rem;"><code>msg.sender</code> = address ผู้เรียก function &nbsp;|&nbsp; <code>msg.value</code> = Wei ที่ส่งมากับ transaction &nbsp;|&nbsp; <code>view</code> = อ่าน state ได้แต่ห้ามแก้ &nbsp;|&nbsp; <code>payable</code> = รับ ETH ได้ &nbsp;|&nbsp; <code>modifier</code> = กำหนดเงื่อนไข/พฤติกรรมของ function เช่น onlyOwner</p>
-    </div>
-    <div class="card card-green">
-      <h3>&#10067; ข้อ 12: ERC-20 คืออะไร?</h3>
-      <p style="margin-top:.5rem;">ERC-20 เป็นมาตรฐาน Fungible Token บน Ethereum — Token แต่ละหน่วยทดแทนกันได้ มาตรฐานกำหนด interface สำคัญ: <code>totalSupply</code>, <code>balanceOf</code>, <code>transfer</code>, <code>approve</code>, <code>allowance</code>, <code>transferFrom</code> ทำให้ wallet, exchange และ dApp รองรับ Token ต่าง ๆ ด้วยวิธีเดียวกัน</p>
-    </div>
-    <div class="card card-purple">
-      <h3>&#10067; ข้อ 13: ERC-721 กับ ERC-1155 ต่างกันอย่างไร?</h3>
-      <p style="margin-top:.5rem;">ERC-721 เน้น NFT ที่แต่ละ tokenId เป็นรายการเฉพาะมีเจ้าของหนึ่งชุด เหมาะของสะสม/งานศิลป์ &nbsp;|&nbsp; ERC-1155 เป็น multi-token standard ที่ contract เดียวมี tokenId หลายชนิด แต่ละ ID มีจำนวนหลายหน่วยได้ รองรับ batch transfer เหมาะกับเกม</p>
-    </div>
-    <div class="card card-orange">
-      <h3>&#10067; ข้อ 14: NFT คืออะไร และรูปภาพอยู่บน Blockchain หรือไม่?</h3>
-      <p style="margin-top:.5rem;">NFT คือ Non-Fungible Token ที่ใช้แทนสิทธิ์หรือรายการที่มีเอกลักษณ์ ตัว Token บน Blockchain มักเก็บ tokenId, owner และ URI ส่วนรูปภาพและรายละเอียดมักเก็บใน metadata ภายนอก เช่น IPFS หรือ Web URL — <strong>NFT ≠ รูปภาพเก็บ on-chain เสมอไป</strong></p>
-    </div>
-    <div class="card card-red">
-      <h3>&#10067; ข้อ 15: ขั้นตอนสร้าง NFT แบบ ERC-1155</h3>
-      <p style="margin-top:.5rem;">สร้าง ERC-1155 contract ใน Remix/OpenZeppelin → เตรียมรูปและ metadata JSON → ใช้ URL ของ metadata เป็น URI → mint: <code>_mint(msg.sender, 1, 10, "")</code> → compile + เชื่อม MetaMask → deploy บน Sepolia จ่าย Gas ด้วย SepoliaETH → verify source code บน Sepolia Etherscan → import NFT เข้า wallet</p>
-    </div>
-    <div class="card card-blue">
-      <h3>&#10067; ข้อ 16: Gas คืออะไร และเกี่ยวข้องกับ Smart Contract อย่างไร?</h3>
-      <p style="margin-top:.5rem;">Gas คือหน่วยวัดงานคำนวณที่ EVM ต้องทำ การ deploy contract, แก้ state, mint หรือ transfer ต้องใช้ Gas ผู้ส่ง transaction จ่ายเป็น ETH &nbsp;|&nbsp; <strong>Transaction Fee = Gas Used × Gas Price</strong> &nbsp;|&nbsp; code ที่ซับซ้อนหรือเขียน storage มากใช้ Gas มากขึ้น</p>
-    </div>
-  </div>
-
-  <h3 style="margin-bottom:.75rem;font-size:1.1rem;">&#128308; ข้อผิดพลาดที่ไม่ควรเขียนในข้อสอบ</h3>
-  <div class="grid grid-2">
-    <div class="card card-red">
-      <ul>
-        <li>Blockchain = Bitcoin ❌ (Bitcoin เป็นแค่หนึ่งระบบที่ใช้ Blockchain)</li>
-        <li>Wallet เก็บเหรียญไว้ในเครื่อง ❌ (Wallet เก็บกุญแจ ยอดอยู่บน Blockchain)</li>
-        <li>12-word SRP คือ Password ของ MetaMask ❌</li>
-        <li>SepoliaETH มีมูลค่าเท่ากับ ETH Mainnet ❌</li>
-      </ul>
-    </div>
-    <div class="card card-red">
-      <ul>
-        <li>NFT คือไฟล์รูปโดยตรง ❌ (Token กับ metadata/image เป็นคนละส่วน)</li>
-        <li>ERC-20 เป็น NFT ❌ (ERC-20 เป็น Fungible Token)</li>
-        <li>view function แก้ state ได้ ❌</li>
-        <li>Call function เสีย Gas ❌ (เฉพาะ Transaction เท่านั้นที่เสีย Gas)</li>
-      </ul>
-    </div>
-  </div>
-
-  <h3 style="margin:1.75rem 0 .75rem;font-size:1.1rem;">&#9889; สรุปจำก่อนเข้าห้องสอบ (1 บรรทัดต่อหัวข้อ)</h3>
-  <div class="grid grid-2" style="margin-bottom:1.5rem;">
-    <div class="card card-blue"><h3>Blockchain</h3><p>Distributed ledger + P2P + Cryptography + Consensus → โปร่งใส ตรวจสอบได้ แก้ย้อนหลังยาก</p></div>
-    <div class="card card-orange"><h3>Bitcoin</h3><p>เงินดิจิทัล P2P ใช้ UTXO + Proof of Work + Mining; มี Halving ลด Block Reward ครึ่งหนึ่งทุก ~4 ปี</p></div>
-    <div class="card card-purple"><h3>Ethereum</h3><p>Blockchain รัน Smart Contract ผ่าน EVM; Solidity compile เป็น Bytecode + ABI; Transaction ที่แก้ state เสีย Gas</p></div>
-    <div class="card card-green"><h3>Wallet</h3><p>Wallet จัดการ Keys ไม่ได้เก็บเหรียญ; Private Key คุม account, SRP 12 คำกู้ wallet, Password แค่ปลดล็อก MetaMask ในเครื่อง</p></div>
-    <div class="card card-blue"><h3>Token Standards</h3><p>ERC-20 = fungible, ERC-721 = NFT เฉพาะ tokenId, ERC-1155 = multi-token + batch + หลายหน่วยต่อ ID</p></div>
-    <div class="card card-purple"><h3>NFT</h3><p>NFT คือ Token/สิทธิ์ที่มีเอกลักษณ์; รูปและรายละเอียดมักอยู่ใน Metadata URI ไม่ได้อยู่บนเชนทั้งหมด</p></div>
-  </div>
-
-  <h3 style="margin-bottom:.75rem;font-size:1.1rem;">&#9889; 10 คำที่เห็นแล้วต้องตอบได้ทันที</h3>
-  <div class="table-wrap"><table>
-    <thead><tr><th>คำ</th><th>คีย์เวิร์ดตอบ</th></tr></thead>
-    <tbody>
-      <tr><td><strong>Hash</strong></td><td>fixed-size, one-way, integrity</td></tr>
-      <tr><td><strong>Consensus</strong></td><td>กลไกให้โหนดเห็นพ้องสถานะ</td></tr>
-      <tr><td><strong>Private Key</strong></td><td>ลับ, เซ็นธุรกรรม, คุม account</td></tr>
-      <tr><td><strong>SRP 12 words</strong></td><td>กู้ wallet / derive keys, ห้ามแชร์</td></tr>
-      <tr><td><strong>Sepolia</strong></td><td>Ethereum Testnet</td></tr>
-      <tr><td><strong>SepoliaETH</strong></td><td>Test ETH สำหรับ Gas</td></tr>
-      <tr><td><strong>EVM</strong></td><td>รัน Smart Contract</td></tr>
-      <tr><td><strong>ABI</strong></td><td>Interface contract</td></tr>
-      <tr><td><strong>Gas</strong></td><td>ค่าทรัพยากรคำนวณ</td></tr>
-      <tr><td><strong>Mint</strong></td><td>สร้าง Token ใหม่</td></tr>
-    </tbody>
-  </table></div>
-</section>
-
-<!-- ===== SECTION 14 — VIDEO ===== -->
-<section id="video">
-  <div class="section-header">
-    <div class="section-label">แหล่งอ้างอิงวิดีโอ</div>
-    <h2>&#9654; "How does a blockchain work" — Simply Explained</h2>
-    <p>วิดีโออธิบาย Blockchain อย่างง่ายที่ได้รับความนิยมมากที่สุด</p>
-  </div>
-  <div class="yt-wrap">
-    <iframe src="https://www.youtube.com/embed/SSo_EIwHSd4" title="How does a blockchain work" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-  </div>
-  <div class="grid grid-3" style="margin-top:1.5rem;">
-    <div class="card card-blue"><div class="card-icon">&#128214;</div><h3>Basic Definitions</h3><p>อธิบายว่า Blockchain คืออะไร และทำงานอย่างไร</p></div>
-    <div class="card card-green"><div class="card-icon">&#128161;</div><h3>Core Concepts</h3><p>Blockchain ไม่ได้ใช้เฉพาะ Cryptocurrency แต่มีประโยชน์หลากหลาย</p></div>
-    <div class="card card-purple"><div class="card-icon">&#127760;</div><h3>Real-world Applications</h3><p>Smart Contracts, Supply Chain, Healthcare และอื่นๆ</p></div>
-  </div>
-</section>
-
-<!-- ===== SECTION 9 ===== -->
-<section>
-  <div class="section-header">
-    <div class="section-label">Quick Reference</div>
-    <h2>&#128295; เครื่องมือที่ใช้ในคอร์สนี้</h2>
-  </div>
-  <div class="grid grid-4">
-    <a href="https://remix.ethereum.org" target="_blank" style="text-decoration:none;"><div class="card" style="text-align:center;cursor:pointer;"><div class="card-icon">&#128295;</div><h3>Remix IDE</h3><p>เขียนและทดสอบ Solidity ออนไลน์</p></div></a>
-    <a href="https://sepoliafaucet.com" target="_blank" style="text-decoration:none;"><div class="card" style="text-align:center;cursor:pointer;"><div class="card-icon">&#128694;</div><h3>Sepolia Faucet</h3><p>รับ Test ETH ฟรีสำหรับ Testnet</p></div></a>
-    <a href="https://openzeppelin.com/contracts/" target="_blank" style="text-decoration:none;"><div class="card" style="text-align:center;cursor:pointer;"><div class="card-icon">&#128737;</div><h3>OpenZeppelin</h3><p>Library สำหรับ Smart Contract ที่ปลอดภัย</p></div></a>
-    <a href="https://sepolia.etherscan.io" target="_blank" style="text-decoration:none;"><div class="card" style="text-align:center;cursor:pointer;"><div class="card-icon">&#128269;</div><h3>Sepolia Etherscan</h3><p>ตรวจสอบ Transaction บน Testnet</p></div></a>
-  </div>
-</section>
-
-</div>
-
-<footer>
-  <p>สรุปเนื้อหาจาก <strong>[69] of BC-1.pdf</strong> &middot; <strong>Smart Contract (Cont.).pdf</strong> &middot; <strong>สรุปสอบกลางภาค_Blockchain_SmartContract_Bitcoin.docx</strong> &middot; <a href="https://youtu.be/SSo_EIwHSd4" target="_blank">How does a blockchain work &mdash; Simply Explained</a></p>
-  <p style="margin-top:.4rem;font-size:.8rem;">Blockchain Technology Course &middot; Generated by Antigravity AI</p>
-</footer>
-
-</body>
-</html>
+                <h3 style="margin-bottom: 0.75rem; font-size: 1.1rem">
+                    &#128640; Workflow สร้าง NFT (ERC-1155) จากใบงาน
+                </h3>
+                <div class="steps" style="margin-bottom: 1.5rem">
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <div class="step-body">
+                            <h4>
+                                สร้าง ERC-1155 Contract ใน Remix / OpenZeppelin
+                            </h4>
+                            <p>ใช้ OpenZeppelin เป็น Base เพื่อความปลอดภัย</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <div class="step-body">
+                            <h4>เตรียมรูป NFT และ Metadata JSON ใน GitHub</h4>
+                            <p>
+                                ใช้ Raw URL ของรูปใน JSON และ Raw URL ของ JSON
+                                เป็น URI
+                            </p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <div class="step-body">
+                            <h4>Mint Token</h4>
+                            <p>
+                                <code>_mint(msg.sender, 1, 10, "")</code> = mint
+                                tokenId=1 จำนวน 10 หน่วย
+                            </p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">4</div>
+                        <div class="step-body">
+                            <h4>Compile & Deploy บน Sepolia ผ่าน MetaMask</h4>
+                            <p>ยืนยัน Transaction จ่าย Gas ด้วย SepoliaETH</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">5</div>
+                        <div class="step-body">
+                            <h4>Verify Source Code บน Sepolia Etherscan</h4>
+                            <p>
+                                ช่วยให้ผู้ใช้ตรวจสอบว่า source code ตรงกับ
+                                bytecode ที่ deploy ไว้
+                            </p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">6</div>
+                        <div class="step-body">
+                            <h4>Import NFT & ทดสอบส่งไปยัง Wallet อื่น</h4>
+                            <p>ตรวจสอบผ่าน MetaMask และ Sepolia Etherscan</p>
+                        </div>
+                    </div>
+                </div>
+            </section><section id="video">
+                <div class="section-header">
+                    <div class="section-label">แหล่งอ้างอิงวิดีโอ</div>
+                    <h2>
+                        &#9654; "How does a blockchain work" — Simply Explained
+                    </h2>
+                    <p>
+                        วิดีโออธิบาย Blockchain
+                        อย่างง่ายที่ได้รับความนิยมมากที่สุด
+                    </p>
+                </div>
+                <div class="yt-wrap">
+                    <iframe
+                        src="https://www.youtube.com/embed/SSo_EIwHSd4"
+                        title="How does a blockchain work"
+                        frameborder="0"
+                        allow="
+                            accelerometer;
+                            autoplay;
+                            clipboard-write;
+                            encrypted-media;
+                            gyroscope;
+                            picture-in-picture;
+                        "
+                        allowfullscreen
+                    ></iframe>
+                </div>
+                <div class="grid grid-3" style="margin-top: 1.5rem">
+                    <div class="card card-blue">
+                        <div class="card-icon">&#128214;</div>
+                        <h3>Basic Definitions</h3>
+                        <p>อธิบายว่า Blockchain คืออะไร และทำงานอย่างไร</p>
+                    </div>
+                    <div class="card card-green">
+                        <div class="card-icon">&#128161;</div>
+                        <h3>Core Concepts</h3>
+                        <p>
+                            Blockchain ไม่ได้ใช้เฉพาะ Cryptocurrency
+                            แต่มีประโยชน์หลากหลาย
+                        </p>
+                    </div>
+                    <div class="card card-purple">
+                        <div class="card-icon">&#127760;</div>
+                        <h3>Real-world Applications</h3>
+                        <p>
+                            Smart Contracts, Supply Chain, Healthcare และอื่นๆ
+                        </p>
+                    </div>
+                </div>
+            </section></details></section></main><footer><p>สรุปสอบปลายภาค Blockchain · จากเอกสารประกอบการเรียน 4 ไฟล์</p><p style="margin-top:.5rem">แนวคำตอบจัดเพื่อฝึกอัตนัย ไม่ใช่ข้อสอบจริง · ตัวอย่างโค้ดเพิ่มเติมระบุไว้ในแต่ละบท</p><p style="margin-top:.7rem"><a href="#top">กลับไปต้นหน้า</a></p></footer></body></html>
