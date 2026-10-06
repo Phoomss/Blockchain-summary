@@ -1,0 +1,884 @@
+<!doctype html>
+<html lang="th">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Blockchain Technology — สรุปสอบปลายภาค เน้นอัตนัย</title>
+        <meta name="description" content="สรุปปลายภาค Blockchain ภาษาไทยแบบละเอียด เน้นอัตนัย Solidity, EasyBank, ComplicatedBank, modifier, enum และ array พร้อมแนวคำตอบ" />
+        <style>
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            :root {
+                --bg: #0d1117;
+                --surface: #161b22;
+                --card: #1c2230;
+                --border: #30363d;
+                --primary: #58a6ff;
+                --primary-glow: rgba(88, 166, 255, 0.15);
+                --accent: #f78166;
+                --accent2: #3fb950;
+                --accent3: #d2a8ff;
+                --accent4: #ffa657;
+                --text: #e6edf3;
+                --text-muted: #8b949e;
+                --radius: 12px;
+            }
+            html {
+                scroll-behavior: smooth;
+            }
+            body {
+                background: var(--bg);
+                color: var(--text);
+                font-family:
+                    "Segoe UI", "Noto Sans Thai", system-ui, sans-serif;
+                line-height: 1.7;
+                font-size: 16px;
+            }
+            ::-webkit-scrollbar {
+                width: 6px;
+            }
+            ::-webkit-scrollbar-track {
+                background: var(--bg);
+            }
+            ::-webkit-scrollbar-thumb {
+                background: var(--border);
+                border-radius: 3px;
+            }
+            nav {
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                background: rgba(13, 17, 23, 0.9);
+                backdrop-filter: blur(12px);
+                border-bottom: 1px solid var(--border);
+                padding: 0.75rem 2rem;
+                display: flex;
+                align-items: center;
+                gap: 1.5rem;
+                flex-wrap: wrap;
+            }
+            .nav-brand {
+                font-weight: 700;
+                font-size: 1.1rem;
+                background: linear-gradient(
+                    90deg,
+                    var(--primary),
+                    var(--accent3)
+                );
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                white-space: nowrap;
+            }
+            .nav-links {
+                display: flex;
+                gap: 0.5rem;
+                flex-wrap: wrap;
+                margin-left: auto;
+            }
+            .nav-links a {
+                color: var(--text-muted);
+                text-decoration: none;
+                font-size: 0.85rem;
+                padding: 0.3rem 0.7rem;
+                border-radius: 20px;
+                transition: all 0.2s;
+            }
+            .nav-links a:hover {
+                color: var(--primary);
+                background: var(--primary-glow);
+            }
+            .hero {
+                text-align: center;
+                padding: 5rem 2rem 3rem;
+                background: radial-gradient(
+                    ellipse 80% 60% at 50% 0%,
+                    rgba(88, 166, 255, 0.12) 0%,
+                    transparent 70%
+                );
+            }
+            .hero-badge {
+                display: inline-block;
+                background: var(--primary-glow);
+                border: 1px solid var(--primary);
+                color: var(--primary);
+                border-radius: 20px;
+                padding: 0.3rem 1rem;
+                font-size: 0.8rem;
+                font-weight: 600;
+                letter-spacing: 0.05em;
+                text-transform: uppercase;
+                margin-bottom: 1.5rem;
+            }
+            .hero h1 {
+                font-size: clamp(2rem, 5vw, 3.5rem);
+                font-weight: 800;
+                line-height: 1.2;
+                background: linear-gradient(
+                    135deg,
+                    #fff 30%,
+                    var(--primary) 100%
+                );
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                margin-bottom: 1rem;
+            }
+            .hero p {
+                color: var(--text-muted);
+                font-size: 1.1rem;
+                max-width: 620px;
+                margin: 0 auto 2rem;
+            }
+            .hero-sources {
+                display: flex;
+                justify-content: center;
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+            .source-chip {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                background: var(--card);
+                border: 1px solid var(--border);
+                border-radius: 8px;
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+                color: var(--text-muted);
+            }
+            .container {
+                max-width: 1100px;
+                margin: 0 auto;
+                padding: 0 1.5rem;
+            }
+            section {
+                padding: 3rem 0;
+            }
+            section + section {
+                border-top: 1px solid var(--border);
+            }
+            .section-header {
+                margin-bottom: 2rem;
+            }
+            .section-label {
+                font-size: 0.75rem;
+                font-weight: 700;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                color: var(--primary);
+                margin-bottom: 0.4rem;
+            }
+            .section-header h2 {
+                font-size: 1.8rem;
+                font-weight: 700;
+            }
+            .section-header p {
+                color: var(--text-muted);
+                margin-top: 0.5rem;
+            }
+            .grid {
+                display: grid;
+                gap: 1.25rem;
+            }
+            .grid-2 {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+            .grid-3 {
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            }
+            .grid-4 {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+            .card {
+                background: var(--card);
+                border: 1px solid var(--border);
+                border-radius: var(--radius);
+                padding: 1.5rem;
+                transition:
+                    border-color 0.2s,
+                    transform 0.2s;
+            }
+            .card:hover {
+                border-color: var(--primary);
+                transform: translateY(-2px);
+            }
+            .card-icon {
+                font-size: 2rem;
+                margin-bottom: 0.75rem;
+            }
+            .card h3 {
+                font-size: 1rem;
+                font-weight: 700;
+                margin-bottom: 0.5rem;
+            }
+            .card p,
+            .card li {
+                color: var(--text-muted);
+                font-size: 0.9rem;
+            }
+            .card ul {
+                padding-left: 1.2rem;
+            }
+            .card li {
+                margin-bottom: 0.25rem;
+            }
+            .card-blue {
+                border-left: 3px solid var(--primary);
+            }
+            .card-red {
+                border-left: 3px solid var(--accent);
+            }
+            .card-green {
+                border-left: 3px solid var(--accent2);
+            }
+            .card-purple {
+                border-left: 3px solid var(--accent3);
+            }
+            .card-orange {
+                border-left: 3px solid var(--accent4);
+            }
+            .timeline {
+                position: relative;
+                padding-left: 2rem;
+            }
+            .timeline::before {
+                content: "";
+                position: absolute;
+                left: 0.45rem;
+                top: 0;
+                bottom: 0;
+                width: 2px;
+                background: var(--border);
+            }
+            .tl-item {
+                position: relative;
+                padding-bottom: 2rem;
+            }
+            .tl-item:last-child {
+                padding-bottom: 0;
+            }
+            .tl-dot {
+                position: absolute;
+                left: -2rem;
+                width: 14px;
+                height: 14px;
+                border-radius: 50%;
+                background: var(--primary);
+                border: 2px solid var(--bg);
+                top: 0.35rem;
+            }
+            .tl-item h3 {
+                font-size: 1rem;
+                font-weight: 700;
+                margin-bottom: 0.35rem;
+            }
+            .tl-item p {
+                color: var(--text-muted);
+                font-size: 0.9rem;
+            }
+            .code-block {
+                background: #010409;
+                border: 1px solid var(--border);
+                border-radius: var(--radius);
+                padding: 1.25rem 1.5rem;
+                font-family: "Fira Code", "Cascadia Code", monospace;
+                font-size: 0.85rem;
+                overflow-x: auto;
+                margin-top: 1rem;
+                line-height: 1.6;
+                white-space: pre;
+            }
+            .kw {
+                color: #ff7b72;
+            }
+            .ty {
+                color: #79c0ff;
+            }
+            .fn {
+                color: #d2a8ff;
+            }
+            .cm {
+                color: #8b949e;
+                font-style: italic;
+            }
+            .str {
+                color: #a5d6ff;
+            }
+            .nm {
+                color: #ffa657;
+            }
+            .table-wrap {
+                overflow-x: auto;
+                margin-top: 1rem;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 0.88rem;
+            }
+            th {
+                background: var(--card);
+                color: var(--primary);
+                font-weight: 700;
+                text-align: left;
+                padding: 0.7rem 1rem;
+                border-bottom: 2px solid var(--border);
+            }
+            td {
+                padding: 0.65rem 1rem;
+                border-bottom: 1px solid var(--border);
+                color: var(--text-muted);
+                vertical-align: top;
+            }
+            tr:last-child td {
+                border-bottom: none;
+            }
+            tr:hover td {
+                background: rgba(255, 255, 255, 0.02);
+            }
+            .badge {
+                display: inline-block;
+                padding: 0.2rem 0.6rem;
+                border-radius: 20px;
+                font-size: 0.75rem;
+                font-weight: 600;
+            }
+            .badge-blue {
+                background: rgba(88, 166, 255, 0.15);
+                color: var(--primary);
+            }
+            .badge-green {
+                background: rgba(63, 185, 80, 0.15);
+                color: var(--accent2);
+            }
+            .badge-orange {
+                background: rgba(255, 166, 87, 0.15);
+                color: var(--accent4);
+            }
+            .badge-red {
+                background: rgba(247, 129, 102, 0.15);
+                color: var(--accent);
+            }
+            .badge-purple {
+                background: rgba(210, 168, 255, 0.15);
+                color: var(--accent3);
+            }
+            .yt-wrap {
+                position: relative;
+                padding-bottom: 56.25%;
+                height: 0;
+                border-radius: var(--radius);
+                overflow: hidden;
+                border: 1px solid var(--border);
+            }
+            .yt-wrap iframe {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+            .highlight {
+                background: var(--primary-glow);
+                border: 1px solid rgba(88, 166, 255, 0.3);
+                border-radius: var(--radius);
+                padding: 1.25rem 1.5rem;
+                margin-top: 1rem;
+            }
+            .highlight p {
+                font-size: 0.95rem;
+            }
+            .highlight strong {
+                color: var(--primary);
+            }
+            .steps {
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+                margin-top: 1rem;
+            }
+            .step {
+                display: flex;
+                gap: 1rem;
+                align-items: flex-start;
+                background: var(--card);
+                border: 1px solid var(--border);
+                border-radius: var(--radius);
+                padding: 1rem 1.25rem;
+            }
+            .step-num {
+                min-width: 2rem;
+                height: 2rem;
+                background: var(--primary);
+                color: #000;
+                border-radius: 50%;
+                font-weight: 800;
+                font-size: 0.85rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .step-body h4 {
+                font-size: 0.95rem;
+                font-weight: 700;
+                margin-bottom: 0.25rem;
+            }
+            .step-body p {
+                color: var(--text-muted);
+                font-size: 0.88rem;
+            }
+            footer {
+                border-top: 1px solid var(--border);
+                padding: 2rem;
+                text-align: center;
+                color: var(--text-muted);
+                font-size: 0.85rem;
+            }
+            footer a {
+                color: var(--primary);
+                text-decoration: none;
+            }
+            code {
+                background: rgba(88, 166, 255, 0.1);
+                color: var(--primary);
+                padding: 0.1em 0.4em;
+                border-radius: 4px;
+                font-size: 0.88em;
+                font-family: monospace;
+            }
+            @keyframes fadeUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            .hero > * {
+                animation: fadeUp 0.6s ease both;
+            }
+            .hero > *:nth-child(1) {
+                animation-delay: 0.1s;
+            }
+            .hero > *:nth-child(2) {
+                animation-delay: 0.2s;
+            }
+            .hero > *:nth-child(3) {
+                animation-delay: 0.3s;
+            }
+            .hero > *:nth-child(4) {
+                animation-delay: 0.4s;
+            }
+        </style>
+    <style>
+html{scroll-padding-top:115px} .hero{padding:3rem 1.5rem 2rem}.hero p{max-width:800px}.hero h1{font-size:clamp(2rem,5vw,3rem)}.exam-content{font-size:1rem;line-height:1.95}.exam-content p{margin:0 0 1.1rem}.exam-content h3{font-size:1.2rem;margin:1.8rem 0 .9rem;color:var(--primary)}.exam-content ul,.exam-content ol{padding-left:1.6rem;margin:1rem 0 1.3rem}.exam-content li{margin:.55rem 0}.exam-content strong{color:var(--text)}.exam-content code{overflow-wrap:anywhere}.exam-content pre{background:#010409;border:1px solid var(--border);border-radius:var(--radius);padding:1.3rem;overflow:auto;line-height:1.65;margin:1.2rem 0}.exam-content pre code{white-space:pre;overflow-wrap:normal;background:none;padding:0;color:#c6e7ff;font-size:.9rem}.exam-content table{font-size:.95rem;line-height:1.8}.exam-content td{color:#b7c4d3;min-width:130px}.table-wrap{margin:1.25rem 0}.reading-map{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}.reading-map a{color:var(--text);text-decoration:none}.reading-map .card h3{margin:0 0 .5rem;color:var(--primary)}.reading-map .card p{font-size:1rem;color:#b7c4d3}.scope-note{margin:1.5rem 0;line-height:1.9}.toc{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem 1.5rem}.toc a{color:var(--text-muted);text-decoration:none;font-size:1rem;line-height:1.8}.toc a:hover{color:var(--primary)}.toc span{color:var(--primary);margin-right:.5rem;font-family:monospace}.reference details{margin-top:1.5rem}.reference summary{cursor:pointer;font-size:1.1rem;color:var(--primary);padding:1rem;background:var(--card);border:1px solid var(--border);border-radius:var(--radius)}.reference section{padding:2rem 0}.reference .section-label{display:none}.reference .section-header p{font-size:1rem}.section-label{font-size:.875rem}.nav-links a{font-size:.9rem}a:focus-visible,summary:focus-visible{outline:3px solid var(--accent4);outline-offset:4px}.skip-link{position:fixed;left:10px;top:-100px;z-index:110;background:var(--card);color:var(--primary);padding:12px}.skip-link:focus{top:10px}@media(max-width:650px){nav{padding:.8rem 1rem;gap:.6rem}.nav-links{margin-left:0;gap:.2rem}.nav-links a{padding:.25rem .45rem}.container{padding:0 1.1rem}.toc{grid-template-columns:1fr}.exam-content pre{padding:1rem}.section-header h2{font-size:1.5rem}html{scroll-padding-top:155px}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hero>*{animation:none}}@media print{nav,.hero-sources,.reference{display:none}body{background:#fff;color:#111}.hero h1{-webkit-text-fill-color:#111}.hero p,.exam-content strong,.exam-content td,.toc a{color:#111}.exam-content pre{background:#eee}.exam-content pre code{color:#111;white-space:pre-wrap}.table-wrap{overflow:visible}section{break-inside:auto}.section-header{break-after:avoid}}
+</style>
+</head>
+    <body><a class="skip-link" href="#contents">ข้ามไปสารบัญ</a><nav aria-label="เมนูหลัก"><span class="nav-brand">&#9939; Blockchain · ปลายภาค</span><div class="nav-links"><a href="{{LIGHT_URL}}">เวอร์ชันอ่านสบาย</a><a href="#intro">เริ่มทวน</a><a href="#solidity">Solidity</a><a href="#modifier">Modifier</a><a href="#workshop">EasyBank</a><a href="#complicated-bank">ComplicatedBank</a><a href="#enum-array">Enum / Array</a><a href="#exam">แนวอัตนัย</a><a href="#blockchain">พื้นฐาน</a><a href="#contents">สารบัญ</a></div></nav><header class="hero" id="top"><div class="hero-badge">สรุปสอบปลายภาค · ภาษาไทย · เน้นอัตนัย</div><h1>Blockchain Technology<br>สรุปปลายภาคแบบละเอียด</h1><p>เข้าใจ Solidity และ Smart Contract ผ่านการฝากถอน การกำหนดสิทธิ และดอกเบี้ยรวม พร้อมอ่านโค้ดทีละส่วน ตัวอย่างคำนวณ และแนวคำตอบข้อเขียน</p><div class="hero-sources"><div class="source-chip">[69] BC-AfterGRAD.pdf</div><div class="source-chip">_[67-50] Smart Contract (Cont.).pdf</div><div class="source-chip">26 Aug 2026 [67] of BC-2.pdf</div><div class="source-chip">[69] of BC-1.pdf</div></div></header><main class="container"><section id="contents"><div class="section-header"><div class="section-label">อ่านเพื่อสอบอัตนัย</div><h2>เลือกบทที่ต้องการทบทวน</h2><p>เน้นเนื้อหาในเอกสารช่วงท้าย แล้วทบทวนพื้นฐานจากกลางภาคประกอบ</p></div><div class="reading-map"><a class="card card-blue" href="#workshop"><h3>1. ฝาก · อ่านยอด · ถอน</h3><p>อธิบาย mapping, msg.sender, msg.value และลำดับถอน</p></a><a class="card card-purple" href="#complicated-bank"><h3>2. สิทธิและดอกเบี้ยรวม</h3><p>Constructor, modifier, owner, array และ loop</p></a><a class="card card-green" href="#exam"><h3>3. ฝึกเขียนคำตอบ</h3><p>แนวตอบแบบยาว พร้อมคำสำคัญสำหรับตรวจคำตอบ</p></a></div><div class="highlight scope-note"><p><strong>ขอบเขตสรุป:</strong> เอกสารไม่มีประกาศขอบเขตปลายภาคหรือข้อสอบจริง คำถามในหน้านี้เป็นแบบฝึกจากบทเรียน โดยเน้น Solidity และ Workshop ช่วงท้าย ส่วน Voting.sol และ Lottery.sol มีเพียงชื่อกับลิงก์ในสไลด์ จึงไม่อ้างรายละเอียดโค้ดที่ไม่ได้ให้มา</p></div><div class="toc"><a href="#intro"><span>01</span>ลำดับอ่านเพื่อเตรียมตอบอัตนัย</a><a href="#solidity"><span>02</span>Smart Contract, Solidity, ABI และ EVM</a><a href="#calling"><span>03</span>Calling กับ Sending และ Gas</a><a href="#variables"><span>04</span>ชนิดข้อมูลและตัวแปร</a><a href="#visibility"><span>05</span>Visibility: private, internal, external, public</a><a href="#functions"><span>06</span>Constructor, view, payable และค่าพิเศษ</a><a href="#modifier"><span>07</span>Modifier และ require</a><a href="#workshop"><span>08</span>EasyBank: อธิบายฝาก อ่านยอด และถอน</a><a href="#complicated-bank"><span>09</span>ComplicatedBank และการคำนวณดอกเบี้ย</a><a href="#enum-array"><span>10</span>Enum และ Array</a><a href="#testing"><span>11</span>ขั้นตอนทดสอบและ Deploy</a><a href="#blockchain"><span>12</span>พื้นฐาน Blockchain สำหรับข้ออธิบาย</a><a href="#bitcoin"><span>13</span>Bitcoin, Halving และ Lightning Network</a><a href="#pitfalls"><span>14</span>จุดที่ควรแก้ความเข้าใจก่อนจำจากสไลด์</a><a href="#practice"><span>15</span>แบบฝึกอัตนัยก่อนสอบ</a><a href="#code-reading"><span>16</span>อ่านโค้ด Solidity ทีละส่วน: จากโครงสร้างถึงการทำงาน</a><a href="#complete-bank"><span>17</span>ตัวอย่างธนาคารครบชุดสำหรับใช้ฝึกอธิบาย</a><a href="#walkthrough"><span>18</span>จำลองการฝาก ถอน และดอกเบี้ย 5 บัญชี</a><a href="#debugging"><span>19</span>แบบฝึกหาข้อผิดพลาดในโค้ด</a><a href="#enum-example"><span>20</span>Enum: อ่านเงื่อนไขก่อนเปลี่ยนสถานะ</a><a href="#exam"><span>21</span>แนวตอบอัตนัยแบบยาวพร้อมโครงคะแนน</a><a href="#calculation"><span>22</span>แบบฝึกคำนวณพร้อมวิธีทำ</a><a href="#review"><span>23</span>แผนทบทวนก่อนสอบ</a></div></section><section id="intro"><div class="section-header"><div class="section-label">บทที่ 01 · สรุปปลายภาค</div><h2>ลำดับอ่านเพื่อเตรียมตอบอัตนัย</h2></div><div class="exam-content">{{CHAPTER_1}}</div></section><section id="solidity"><div class="section-header"><div class="section-label">บทที่ 02 · สรุปปลายภาค</div><h2>Smart Contract, Solidity, ABI และ EVM</h2></div><div class="exam-content">{{CHAPTER_2}}</div></section><section id="calling"><div class="section-header"><div class="section-label">บทที่ 03 · สรุปปลายภาค</div><h2>Calling กับ Sending และ Gas</h2></div><div class="exam-content">{{CHAPTER_3}}</div></section><section id="variables"><div class="section-header"><div class="section-label">บทที่ 04 · สรุปปลายภาค</div><h2>ชนิดข้อมูลและตัวแปร</h2></div><div class="exam-content">{{CHAPTER_4}}</div></section><section id="visibility"><div class="section-header"><div class="section-label">บทที่ 05 · สรุปปลายภาค</div><h2>Visibility: private, internal, external, public</h2></div><div class="exam-content">{{CHAPTER_5}}</div></section><section id="functions"><div class="section-header"><div class="section-label">บทที่ 06 · สรุปปลายภาค</div><h2>Constructor, view, payable และค่าพิเศษ</h2></div><div class="exam-content">{{CHAPTER_6}}</div></section><section id="modifier"><div class="section-header"><div class="section-label">บทที่ 07 · สรุปปลายภาค</div><h2>Modifier และ require</h2></div><div class="exam-content">{{CHAPTER_7}}</div></section><section id="workshop"><div class="section-header"><div class="section-label">บทที่ 08 · สรุปปลายภาค</div><h2>EasyBank: อธิบายฝาก อ่านยอด และถอน</h2></div><div class="exam-content">{{CHAPTER_8}}</div></section><section id="complicated-bank"><div class="section-header"><div class="section-label">บทที่ 09 · สรุปปลายภาค</div><h2>ComplicatedBank และการคำนวณดอกเบี้ย</h2></div><div class="exam-content">{{CHAPTER_9}}</div></section><section id="enum-array"><div class="section-header"><div class="section-label">บทที่ 10 · สรุปปลายภาค</div><h2>Enum และ Array</h2></div><div class="exam-content">{{CHAPTER_10}}</div></section><section id="testing"><div class="section-header"><div class="section-label">บทที่ 11 · สรุปปลายภาค</div><h2>ขั้นตอนทดสอบและ Deploy</h2></div><div class="exam-content">{{CHAPTER_11}}</div></section><section id="blockchain"><div class="section-header"><div class="section-label">บทที่ 12 · สรุปปลายภาค</div><h2>พื้นฐาน Blockchain สำหรับข้ออธิบาย</h2></div><div class="exam-content">{{CHAPTER_12}}</div></section><section id="bitcoin"><div class="section-header"><div class="section-label">บทที่ 13 · สรุปปลายภาค</div><h2>Bitcoin, Halving และ Lightning Network</h2></div><div class="exam-content">{{CHAPTER_13}}</div></section><section id="pitfalls"><div class="section-header"><div class="section-label">บทที่ 14 · สรุปปลายภาค</div><h2>จุดที่ควรแก้ความเข้าใจก่อนจำจากสไลด์</h2></div><div class="exam-content">{{CHAPTER_14}}</div></section><section id="practice"><div class="section-header"><div class="section-label">บทที่ 15 · สรุปปลายภาค</div><h2>แบบฝึกอัตนัยก่อนสอบ</h2></div><div class="exam-content">{{CHAPTER_15}}</div></section><section id="code-reading"><div class="section-header"><div class="section-label">บทที่ 16 · สรุปปลายภาค</div><h2>อ่านโค้ด Solidity ทีละส่วน: จากโครงสร้างถึงการทำงาน</h2></div><div class="exam-content">{{CHAPTER_16}}</div></section><section id="complete-bank"><div class="section-header"><div class="section-label">บทที่ 17 · สรุปปลายภาค</div><h2>ตัวอย่างธนาคารครบชุดสำหรับใช้ฝึกอธิบาย</h2></div><div class="exam-content">{{CHAPTER_17}}</div></section><section id="walkthrough"><div class="section-header"><div class="section-label">บทที่ 18 · สรุปปลายภาค</div><h2>จำลองการฝาก ถอน และดอกเบี้ย 5 บัญชี</h2></div><div class="exam-content">{{CHAPTER_18}}</div></section><section id="debugging"><div class="section-header"><div class="section-label">บทที่ 19 · สรุปปลายภาค</div><h2>แบบฝึกหาข้อผิดพลาดในโค้ด</h2></div><div class="exam-content">{{CHAPTER_19}}</div></section><section id="enum-example"><div class="section-header"><div class="section-label">บทที่ 20 · สรุปปลายภาค</div><h2>Enum: อ่านเงื่อนไขก่อนเปลี่ยนสถานะ</h2></div><div class="exam-content">{{CHAPTER_20}}</div></section><section id="exam"><div class="section-header"><div class="section-label">บทที่ 21 · สรุปปลายภาค</div><h2>แนวตอบอัตนัยแบบยาวพร้อมโครงคะแนน</h2></div><div class="exam-content">{{CHAPTER_21}}</div></section><section id="calculation"><div class="section-header"><div class="section-label">บทที่ 22 · สรุปปลายภาค</div><h2>แบบฝึกคำนวณพร้อมวิธีทำ</h2></div><div class="exam-content">{{CHAPTER_22}}</div></section><section id="review"><div class="section-header"><div class="section-label">บทที่ 23 · สรุปปลายภาค</div><h2>แผนทบทวนก่อนสอบ</h2></div><div class="exam-content">{{CHAPTER_23}}</div></section><section class="reference" id="midterm-reference"><div class="section-header"><div class="section-label">เนื้อหาทบทวนเดิม</div><h2>เนื้อหาเสริมจากหน้าเว็บกลางภาค</h2><p>เก็บหัวข้อ ERC, NFT และวิดีโอเดิมไว้ให้ทบทวนเพิ่มเติม เอกสารปลายภาคที่มีไม่ได้ระบุหัวข้อเหล่านี้เป็นขอบเขตสอบ</p></div><details><summary>เปิดเนื้อหา ERC, NFT และวิดีโอเดิม</summary><section id="erc">
+                <div class="section-header">
+                    <div class="section-label">ส่วนที่ 11</div>
+                    <h2>
+                        &#128176; ERC Token Standards: ERC-20 / ERC-721 /
+                        ERC-1155
+                    </h2>
+                    <p>
+                        ERC (Ethereum Request for Comments) คือมาตรฐาน interface
+                        ของ Smart Contract บน Ethereum สำหรับ Token
+                    </p>
+                </div>
+
+                <div class="grid grid-3" style="margin-bottom: 1.5rem">
+                    <div class="card card-blue">
+                        <div class="card-icon">&#128176;</div>
+                        <h3>ERC-20 — Fungible Token</h3>
+                        <p style="margin-bottom: 0.75rem">
+                            Token แต่ละหน่วย <strong>ทดแทนกันได้</strong> เช่น 1
+                            Token A = 1 Token A
+                        </p>
+                        <p
+                            style="
+                                margin-bottom: 0.5rem;
+                                font-size: 0.85rem;
+                                color: var(--primary);
+                            "
+                        >
+                            Functions หลัก:
+                        </p>
+                        <ul>
+                            <li>
+                                <code>totalSupply()</code> — จำนวน Token ทั้งหมด
+                            </li>
+                            <li>
+                                <code>balanceOf(address)</code> — ยอด Token ของ
+                                address
+                            </li>
+                            <li>
+                                <code>transfer(to, amount)</code> — โอน Token
+                            </li>
+                            <li>
+                                <code>approve(spender, amount)</code> — อนุญาต
+                                spender
+                            </li>
+                            <li>
+                                <code>transferFrom(from, to, amount)</code> —
+                                โอนตาม allowance
+                            </li>
+                        </ul>
+                        <div
+                            style="
+                                margin-top: 0.75rem;
+                                font-size: 0.82rem;
+                                color: var(--accent4);
+                            "
+                        >
+                            &#9758; เหรียญ, utility token, governance token,
+                            คะแนน
+                        </div>
+                    </div>
+                    <div class="card card-purple">
+                        <div class="card-icon">&#127912;</div>
+                        <h3>ERC-721 — Non-Fungible Token</h3>
+                        <p style="margin-bottom: 0.75rem">
+                            แต่ละ Token มี
+                            <strong>tokenId เฉพาะ</strong> และมีเจ้าของชัดเจน —
+                            ทดแทนกันไม่ได้
+                        </p>
+                        <p
+                            style="
+                                margin-bottom: 0.5rem;
+                                font-size: 0.85rem;
+                                color: var(--primary);
+                            "
+                        >
+                            Functions หลัก:
+                        </p>
+                        <ul>
+                            <li>
+                                <code>ownerOf(tokenId)</code> — เจ้าของ Token ID
+                                นั้น
+                            </li>
+                            <li>
+                                <code>balanceOf(owner)</code> — นับ NFT ที่
+                                owner ถือ
+                            </li>
+                            <li>
+                                <code>safeTransferFrom(...)</code> — โอน NFT
+                                อย่างปลอดภัย
+                            </li>
+                            <li>
+                                <code>tokenURI(tokenId)</code> — ชี้ไปยัง
+                                Metadata
+                            </li>
+                        </ul>
+                        <div
+                            style="
+                                margin-top: 0.75rem;
+                                font-size: 0.82rem;
+                                color: var(--accent3);
+                            "
+                        >
+                            &#9758; งานศิลป์, ของสะสม, ใบรับรอง
+                        </div>
+                    </div>
+                    <div class="card card-green">
+                        <div class="card-icon">&#127918;</div>
+                        <h3>ERC-1155 — Multi Token Standard</h3>
+                        <p style="margin-bottom: 0.75rem">
+                            Contract เดียวรองรับ Token
+                            <strong>หลายชนิด</strong> แต่ละ tokenId
+                            มีจำนวนมากกว่า 1 ได้
+                        </p>
+                        <ul>
+                            <li>
+                                Fungible, Non-Fungible, Semi-Fungible ในที่เดียว
+                            </li>
+                            <li>
+                                รองรับ
+                                <strong>Batch Transfer</strong> ช่วยลดจำนวน
+                                Transaction
+                            </li>
+                            <li>
+                                ตัวอย่าง:
+                                <code>_mint(msg.sender, 1, 10, "")</code> = mint
+                                tokenId=1 จำนวน 10 หน่วย
+                            </li>
+                        </ul>
+                        <div
+                            style="
+                                margin-top: 0.75rem;
+                                font-size: 0.82rem;
+                                color: var(--accent2);
+                            "
+                        >
+                            &#9758; เกม, ไอเทมหลายชนิด, Gold Coin, Sword, Ticket
+                            ใน contract เดียว
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="margin-bottom: 0.75rem; font-size: 1.1rem">
+                    &#128202; ตารางเปรียบเทียบ ERC
+                </h3>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>หัวข้อ</th>
+                                <th>ERC-20</th>
+                                <th>ERC-721</th>
+                                <th>ERC-1155</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ประเภท</td>
+                                <td>
+                                    <span class="badge badge-blue"
+                                        >Fungible</span
+                                    >
+                                </td>
+                                <td>
+                                    <span class="badge badge-purple"
+                                        >Non-Fungible</span
+                                    >
+                                </td>
+                                <td>
+                                    <span class="badge badge-green"
+                                        >Multi-token</span
+                                    >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>แต่ละหน่วยเหมือนกัน?</td>
+                                <td>&#9989; ใช่</td>
+                                <td>&#10060; ไม่ใช่</td>
+                                <td>ขึ้นกับ tokenId</td>
+                            </tr>
+                            <tr>
+                                <td>Token ID</td>
+                                <td>ไม่เน้น tokenId รายชิ้น</td>
+                                <td>ทุก NFT มี tokenId</td>
+                                <td>ทุกชนิดใช้ tokenId</td>
+                            </tr>
+                            <tr>
+                                <td>จำนวนต่อ ID</td>
+                                <td>ยอดรวมทั้งหมด</td>
+                                <td>ปกติ 1 เจ้าของต่อ tokenId</td>
+                                <td>1 หรือหลายหน่วยต่อ tokenId</td>
+                            </tr>
+                            <tr>
+                                <td>Batch Transfer</td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>
+                                    <span class="badge badge-green"
+                                        >&#9989; รองรับ</span
+                                    >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>เหมาะกับ</td>
+                                <td>เหรียญ/คะแนน</td>
+                                <td>งานศิลป์/ของสะสม</td>
+                                <td>เกม/ไอเทมจำนวนมาก</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="highlight" style="margin-top: 1rem">
+                    <p>
+                        &#128161; <strong>Mnemonic จำง่าย:</strong>
+                        <strong>20</strong> = Money (เหรียญเหมือนกัน)
+                        &nbsp;|&nbsp; <strong>721</strong> = One-by-one NFT
+                        (แต่ละ tokenId เฉพาะ) &nbsp;|&nbsp;
+                        <strong>1155</strong> = Many-in-one (หลายชนิดใน contract
+                        เดียว)
+                    </p>
+                </div>
+            </section><section id="nft">
+                <div class="section-header">
+                    <div class="section-label">ส่วนที่ 12</div>
+                    <h2>&#127912; NFT และ Metadata</h2>
+                    <p>
+                        NFT (Non-Fungible Token) คือ Token
+                        ที่ใช้แทนสิทธิ์หรือรายการดิจิทัลที่มีเอกลักษณ์เฉพาะ
+                    </p>
+                </div>
+
+                <div class="highlight" style="margin-bottom: 1.5rem">
+                    <p>
+                        &#128683; <strong>จุดที่มักเข้าใจผิด:</strong> NFT
+                        ไม่จำเป็นต้องเป็น "รูปภาพที่เก็บอยู่บน Blockchain" — ตัว
+                        Token บนเชนมักเก็บเพียง tokenId, owner และ URI ส่วนรูป,
+                        ชื่อ, description มักอยู่ใน
+                        <strong>metadata ภายนอก</strong> เช่น IPFS หรือ Web
+                        Server
+                    </p>
+                </div>
+
+                <div class="grid grid-2" style="margin-bottom: 1.5rem">
+                    <div class="card card-purple">
+                        <div class="card-icon">&#128196;</div>
+                        <h3>Metadata JSON</h3>
+                        <p style="margin-bottom: 0.75rem">
+                            Metadata อยู่ในรูป JSON ที่ Smart Contract ใช้ URI
+                            ชี้ไป
+                        </p>
+                        <div class="code-block" style="font-size: 0.82rem">
+                            { <span class="str">"name"</span>:
+                            <span class="str">"MaiyNFT"</span>,
+                            <span class="str">"description"</span>:
+                            <span class="str">"My first NFT"</span>,
+                            <span class="str">"image"</span>:
+                            <span class="str">"https://.../image.png"</span> }
+                        </div>
+                    </div>
+                    <div class="card card-blue">
+                        <div class="card-icon">&#128247;</div>
+                        <h3>On-chain vs Off-chain Metadata</h3>
+                        <div class="table-wrap" style="margin-top: 0.5rem">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>แบบ</th>
+                                        <th>ข้อดี</th>
+                                        <th>ข้อควรระวัง</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>On-chain</td>
+                                        <td>คงอยู่ตาม Blockchain</td>
+                                        <td>ใช้ Gas/Storage สูง</td>
+                                    </tr>
+                                    <tr>
+                                        <td>IPFS</td>
+                                        <td>ลดค่าใช้จ่าย เก็บไฟล์ใหญ่ได้</td>
+                                        <td>ต้องดูแล URI และ pin ข้อมูล</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Web/GitHub</td>
+                                        <td>ทำง่าย เหมาะทดลอง</td>
+                                        <td>เจ้าของอาจแก้/ลบไฟล์ได้</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="margin-bottom: 0.75rem; font-size: 1.1rem">
+                    &#128640; Workflow สร้าง NFT (ERC-1155) จากใบงาน
+                </h3>
+                <div class="steps" style="margin-bottom: 1.5rem">
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <div class="step-body">
+                            <h4>
+                                สร้าง ERC-1155 Contract ใน Remix / OpenZeppelin
+                            </h4>
+                            <p>ใช้ OpenZeppelin เป็น Base เพื่อความปลอดภัย</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <div class="step-body">
+                            <h4>เตรียมรูป NFT และ Metadata JSON ใน GitHub</h4>
+                            <p>
+                                ใช้ Raw URL ของรูปใน JSON และ Raw URL ของ JSON
+                                เป็น URI
+                            </p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <div class="step-body">
+                            <h4>Mint Token</h4>
+                            <p>
+                                <code>_mint(msg.sender, 1, 10, "")</code> = mint
+                                tokenId=1 จำนวน 10 หน่วย
+                            </p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">4</div>
+                        <div class="step-body">
+                            <h4>Compile & Deploy บน Sepolia ผ่าน MetaMask</h4>
+                            <p>ยืนยัน Transaction จ่าย Gas ด้วย SepoliaETH</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">5</div>
+                        <div class="step-body">
+                            <h4>Verify Source Code บน Sepolia Etherscan</h4>
+                            <p>
+                                ช่วยให้ผู้ใช้ตรวจสอบว่า source code ตรงกับ
+                                bytecode ที่ deploy ไว้
+                            </p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">6</div>
+                        <div class="step-body">
+                            <h4>Import NFT & ทดสอบส่งไปยัง Wallet อื่น</h4>
+                            <p>ตรวจสอบผ่าน MetaMask และ Sepolia Etherscan</p>
+                        </div>
+                    </div>
+                </div>
+            </section><section id="video">
+                <div class="section-header">
+                    <div class="section-label">แหล่งอ้างอิงวิดีโอ</div>
+                    <h2>
+                        &#9654; "How does a blockchain work" — Simply Explained
+                    </h2>
+                    <p>
+                        วิดีโออธิบาย Blockchain
+                        อย่างง่ายที่ได้รับความนิยมมากที่สุด
+                    </p>
+                </div>
+                <div class="yt-wrap">
+                    <iframe
+                        src="https://www.youtube.com/embed/SSo_EIwHSd4"
+                        title="How does a blockchain work"
+                        frameborder="0"
+                        allow="
+                            accelerometer;
+                            autoplay;
+                            clipboard-write;
+                            encrypted-media;
+                            gyroscope;
+                            picture-in-picture;
+                        "
+                        allowfullscreen
+                    ></iframe>
+                </div>
+                <div class="grid grid-3" style="margin-top: 1.5rem">
+                    <div class="card card-blue">
+                        <div class="card-icon">&#128214;</div>
+                        <h3>Basic Definitions</h3>
+                        <p>อธิบายว่า Blockchain คืออะไร และทำงานอย่างไร</p>
+                    </div>
+                    <div class="card card-green">
+                        <div class="card-icon">&#128161;</div>
+                        <h3>Core Concepts</h3>
+                        <p>
+                            Blockchain ไม่ได้ใช้เฉพาะ Cryptocurrency
+                            แต่มีประโยชน์หลากหลาย
+                        </p>
+                    </div>
+                    <div class="card card-purple">
+                        <div class="card-icon">&#127760;</div>
+                        <h3>Real-world Applications</h3>
+                        <p>
+                            Smart Contracts, Supply Chain, Healthcare และอื่นๆ
+                        </p>
+                    </div>
+                </div>
+            </section></details></section></main><footer><p>สรุปสอบปลายภาค Blockchain · จากเอกสารประกอบการเรียน 4 ไฟล์</p><p style="margin-top:.5rem">แนวคำตอบจัดเพื่อฝึกอัตนัย ไม่ใช่ข้อสอบจริง · ตัวอย่างโค้ดเพิ่มเติมระบุไว้ในแต่ละบท</p><p style="margin-top:.7rem"><a href="#top">กลับไปต้นหน้า</a></p></footer></body></html>
